@@ -1,0 +1,34 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+message="$(cat $1)"
+requiredPattern="^(feat|fix|build|ci|docs|perf|refactor|style|test|chore|etc):.*$"
+if ! [[ $message =~ $requiredPattern ]];
+then
+  echo "=========================================================================="
+  echo "======================   🚨 WRONG COMMIT MESSAGE!   ======================"
+  echo "=========================================================================="
+  echo "== Format should be => [header]: [What was done for Why]                =="
+  echo "== Allowed Headers:                                                     =="
+  echo "==  feat, fix, build, ci, docs, perf, refactor, style, test, chore, etc =="
+  echo "== EXAMPLE => feat: Google login                                        =="
+  echo "=========================================================================="
+  echo "== Your commit message was =>" $message 
+  echo "== For more information, check script in .husky/commit-msg or README.md =="
+  echo "=========================================================================="
+  exit 1
+else
+  echo "=========================================================================="
+  echo "=======================      COMMIT CREATED!!      ======================="
+  echo "=========================================================================="
+fi
+
+# build: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+# ci: Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
+# docs: Documentation only changes
+# feat: A new feature
+# fix: A bug fix
+# perf: A code change that improves performance
+# refactor: A code change that neither fixes a bug nor adds a feature
+# style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+# test: Adding missing tests or correcting existing tests
