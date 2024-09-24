@@ -9,6 +9,7 @@
     "test": "jest --passWithNoTests",
     "test:watch": "jest --passWithNoTests --watch",
     "format": "prettier --cache --write .",
+    "format-all": "prettier --write .",
     "lint": "next lint",
     "prepare": "husky install"
   },
