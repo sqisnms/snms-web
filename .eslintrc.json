@@ -32,7 +32,20 @@
         "json": "never"
       }
     ],
-    "no-console": "error"
+    "no-console": "error",
+    /* 이 규칙은 form label이 form control과 관련이 있는지 (즉, label이 어떤 form input을 설명하고 있는지) 확인한다
+     * 이 규칙은 각각 2개의 구성 요소가 있는데,
+     *  1. some은 규칙이 하나 이상 만족되어야 함을 의미한다. 즉, nesting과 id 중 하나만 만족해도 괜찮다는 것.
+     *  2. ["nesting", "id"]은 이 규칙이 어떻게 적용되는지를 정의한다. 여기서 nesting과 id는 두 가지 검사 방법을 나타낸다.
+     *   - nesting: <label> 태그가 form control을 직접 감싸고 있는지 확인
+     *   - id: <label> 태그가 form control과 htmlFor/id 속성을 통해 연결되어 있는지 확인
+     */
+    "jsx-a11y/label-has-associated-control": [
+      2,
+      {
+        "some": ["nesting", "id"]
+      }
+    ]
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
