@@ -25,6 +25,7 @@ const PasswordSchema = z
   .min(6, { message: 'Password must be at least 6 characters long.' });
 const NameSchema = z.string().min(1, { message: 'Name cannot be empty' });
 
+// eslint-disable-next-line consistent-return
 export async function signUp(prevState: string | undefined, formData: FormData) {
   // 각 필드 유효성 검사
   const emailValidation = EmailSchema.safeParse(formData.get('email'));
