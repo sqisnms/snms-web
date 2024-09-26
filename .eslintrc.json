@@ -32,6 +32,7 @@
         "json": "never"
       }
     ],
+    "import/prefer-default-export": "off",
     "no-console": "error",
     /* 이 규칙은 form label이 form control과 관련이 있는지 (즉, label이 어떤 form input을 설명하고 있는지) 확인한다
      * 이 규칙은 각각 2개의 구성 요소가 있는데,
