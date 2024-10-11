@@ -21,6 +21,7 @@ function LoginButton() {
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+
   const searchParams = useSearchParams();
   const signup = searchParams.get('signup');
   const signupEmail = searchParams.get('email');

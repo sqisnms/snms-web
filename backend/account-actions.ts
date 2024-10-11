@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { revalidatePath, unstable_noStore as noStore } from 'next/cache';
 import { redirect } from 'next/navigation';
+// eslint-disable-next-line import/no-cycle
 import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
 import bcrypt from 'bcrypt';
@@ -52,7 +53,7 @@ export async function signUp(prevState: string | undefined, formData: FormData) 
   try {
     // 이메일 중복 검사
     const existingUser = await sql`SELECT * FROM users WHERE email = ${email}`;
-    if (existingUser.rowCount > 0) {
+    if (existingUser.rowCount !== null && existingUser.rowCount > 0) {
       return 'Email already exists.';
     }
 
@@ -70,11 +71,14 @@ export async function signUp(prevState: string | undefined, formData: FormData) 
 
   revalidatePath('/login');
   redirect(`/login?signup=success&email=${email}`);
+
+  return 'success';
 }
 
 export async function authenticate(prevState: string | undefined, formData: FormData) {
   try {
     await signIn('credentials', formData);
+    return 'success';
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -118,7 +122,8 @@ export async function fetchLoggedInUser(email: string) {
  * 로그아웃을 수행하는 함수
  */
 export async function performLogout() {
-  'use server'; // Next.js 서버 사이드 코드 표시
+  'use server';
+
   try {
     await signOut(); // 로그아웃 실행
     console.log('Successfully logged out');

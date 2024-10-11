@@ -1,5 +1,6 @@
 import SNMSLogo from '@/ui/logo';
 import LoginForm from '@/ui/account/login-form';
+import { Suspense } from 'react';
 
 export default function LoginPage() {
   return (
@@ -8,7 +9,9 @@ export default function LoginPage() {
         <div className='flex h-20 w-full items-end rounded-lg bg-blue-500 p-3 md:h-36'>
           <SNMSLogo />
         </div>
-        <LoginForm />
+        <Suspense fallback={<div>Loading...</div>}>
+          <LoginForm />
+        </Suspense>
       </div>
     </main>
   );
