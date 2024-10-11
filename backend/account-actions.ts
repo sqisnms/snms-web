@@ -1,13 +1,16 @@
 'use server';
 
 import { z } from 'zod';
+import { revalidatePath, unstable_noStore as noStore } from 'next/cache';
+import { redirect } from 'next/navigation';
+// eslint-disable-next-line import/no-cycle
+import { signIn, signOut } from '@/auth';
+import { AuthError } from 'next-auth';
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 
 import { sql } from '@vercel/postgres';
 import type { User } from '@/types/definitions';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 export async function getUser(email: string): Promise<User | undefined> {
   try {
@@ -19,11 +22,11 @@ export async function getUser(email: string): Promise<User | undefined> {
   }
 }
 
-const EmailSchema = z.string().email({ message: 'Invalid email address' });
+const EmailSchema = z.string().email({ message: 'Invalid email address.' });
 const PasswordSchema = z
   .string()
   .min(6, { message: 'Password must be at least 6 characters long.' });
-const NameSchema = z.string().min(1, { message: 'Name cannot be empty' });
+const NameSchema = z.string().min(1, { message: 'Name cannot be empty.' });
 
 export async function signUp(prevState: string | undefined, formData: FormData) {
   // 각 필드 유효성 검사
@@ -60,6 +63,7 @@ export async function signUp(prevState: string | undefined, formData: FormData) 
       INSERT INTO users (name, email, password, auth_key)
       VALUES (${name}, ${email}, ${hashedPassword}, ${authKey})
     `;
+    // return 'User successfully created.';
   } catch (error) {
     console.error('Database error:', error);
     return 'Failed to create user.';
@@ -67,4 +71,63 @@ export async function signUp(prevState: string | undefined, formData: FormData) 
 
   revalidatePath('/login');
   redirect(`/login?signup=success&email=${email}`);
+
+  return 'success';
+}
+
+export async function authenticate(prevState: string | undefined, formData: FormData) {
+  try {
+    await signIn('credentials', formData);
+    return 'success';
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Invalid credentials.';
+        default:
+          return 'Something went wrong.';
+      }
+    }
+    throw error;
+  }
+}
+
+export async function deleteUser(email: string) {
+  console.info('deleteUser:', email);
+  try {
+    // 데이터베이스에서 사용자 삭제
+    await sql`DELETE FROM users WHERE email = ${email}`;
+    // 필요한 경우 캐시 무효화 및 추가 작업 수행
+
+    return { message: 'Deleted User.' };
+  } catch (error) {
+    console.error('Database error:', error);
+    return { message: 'Database Error: Failed to Delete User.' };
+  }
+}
+
+export async function fetchLoggedInUser(email: string) {
+  noStore();
+
+  try {
+    const user = await sql`SELECT * FROM users WHERE email = ${email}`;
+    return user.rows[0] as User;
+  } catch (error) {
+    console.error('Failed to fetch user:', error);
+    throw new Error('Failed to fetch user.');
+  }
+}
+
+/**
+ * 로그아웃을 수행하는 함수
+ */
+export async function performLogout() {
+  'use server';
+
+  try {
+    await signOut(); // 로그아웃 실행
+    console.log('Successfully logged out');
+  } catch (error) {
+    console.error('Logout failed:', error);
+  }
 }
