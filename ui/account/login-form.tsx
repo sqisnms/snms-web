@@ -1,12 +1,12 @@
 "use client"
 
-import { AtSymbolIcon, KeyIcon, ExclamationCircleIcon } from "@heroicons/react/24/outline"
-import { ArrowRightIcon } from "@heroicons/react/20/solid"
-import { Button } from "@/ui/component/button"
-import { useFormState, useFormStatus } from "react-dom"
 import { authenticate } from "@/backend/account-actions"
+import { Button } from "@/ui/component/button"
+import { ArrowRightIcon } from "@heroicons/react/20/solid"
+import { AtSymbolIcon, ExclamationCircleIcon, KeyIcon } from "@heroicons/react/24/outline"
 import { useSearchParams } from "next/navigation"
-import React, { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
+import { useFormState, useFormStatus } from "react-dom"
 
 function LoginButton() {
   const { pending } = useFormStatus()
@@ -23,8 +23,8 @@ export default function LoginForm() {
   const [errorMessage, dispatch] = useFormState(authenticate, undefined)
 
   const searchParams = useSearchParams()
-  const signup = searchParams.get("signup")
-  const signupEmail = searchParams.get("email")
+  const signup = searchParams?.get("signup") ?? ""
+  const signupEmail = searchParams?.get("email") ?? ""
 
   // 쿼리 파라미터에서 이메일 값을 받아와서 상태를 설정합니다.
   useEffect(() => {

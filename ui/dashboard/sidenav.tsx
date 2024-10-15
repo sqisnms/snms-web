@@ -1,6 +1,6 @@
+import { LogoutButton } from "@/ui/account/logout-form"
 import NavLinks from "@/ui/dashboard/nav-links"
 import SNMSLogo from "@/ui/logo"
-import { LogoutButton } from "@/ui/account/logout-form"
 
 export default function SideNav() {
   return (
@@ -13,7 +13,7 @@ export default function SideNav() {
       {/* 내비게이션 링크 및 로그아웃 버튼 */}
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks />
-        <div className="hidden grow bg-gray-50 md:block md:h-auto md:rounded-md"></div>
+        <div className="hidden grow bg-gray-50 md:block md:h-auto md:rounded-md" />
         <LogoutButton />
       </div>
     </div>
