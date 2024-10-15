@@ -3,7 +3,7 @@
 import { unstable_noStore as noStore } from "next/cache"
 import { z } from "zod"
 // eslint-disable-next-line import/no-cycle
-import { signIn, signOut } from "@/auth"
+import { signIn, signOut } from "auth"
 import bcrypt from "bcrypt"
 import { AuthError } from "next-auth"
 import { v4 as uuidv4 } from "uuid"

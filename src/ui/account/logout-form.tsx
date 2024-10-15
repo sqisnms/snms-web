@@ -1,7 +1,6 @@
-import React from "react"
-import { PowerIcon } from "@heroicons/react/24/outline"
-import { signOut } from "@/auth"
 import { Button } from "@/ui/component/button"
+import { PowerIcon } from "@heroicons/react/24/outline"
+import { signOut } from "auth"
 
 export default function LogoutForm() {
   return (
