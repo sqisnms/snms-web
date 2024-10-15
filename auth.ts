@@ -3,7 +3,7 @@ import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { z } from "zod"
 // eslint-disable-next-line import/no-cycle
-import { getUser } from "@/backend/account-actions"
+import { getUser } from "@/actions/account-actions"
 import { authConfig } from "./auth.config"
 
 export const { auth, signIn, signOut } = NextAuth({

@@ -1,4 +1,4 @@
-import { Button } from "@/ui/component/button"
+import { Button } from "@/components/common/button"
 import { PowerIcon } from "@heroicons/react/24/outline"
 import { signOut } from "auth"
 

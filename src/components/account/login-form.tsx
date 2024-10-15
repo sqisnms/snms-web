@@ -1,7 +1,7 @@
 "use client"
 
-import { authenticate } from "@/backend/account-actions"
-import { Button } from "@/ui/component/button"
+import { authenticate } from "@/actions/account-actions"
+import { Button } from "@/components/common/button"
 import { ArrowRightIcon } from "@heroicons/react/20/solid"
 import { AtSymbolIcon, ExclamationCircleIcon, KeyIcon } from "@heroicons/react/24/outline"
 import { useSearchParams } from "next/navigation"

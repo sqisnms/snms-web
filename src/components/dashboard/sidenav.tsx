@@ -1,6 +1,6 @@
-import { LogoutButton } from "@/ui/account/logout-form"
-import NavLinks from "@/ui/dashboard/nav-links"
-import SNMSLogo from "@/ui/logo"
+import { LogoutButton } from "@/components/account/logout-form"
+import NavLinks from "@/components/dashboard/nav-links"
+import SNMSLogo from "@/components/logo"
 
 export default function SideNav() {
   return (

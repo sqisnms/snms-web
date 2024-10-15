@@ -1,8 +1,8 @@
-import SNMSLogo from "@/ui/logo"
+import { shimmer } from "@/components/animations"
+import SNMSLogo from "@/components/logo"
 import { ArrowRightIcon, UserPlusIcon } from "@heroicons/react/24/outline"
-import Link from "next/link"
 import Image from "next/image"
-import { shimmer } from "@/ui/animations"
+import Link from "next/link"
 
 export default function Page() {
   return (

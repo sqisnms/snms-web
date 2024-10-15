@@ -1,5 +1,5 @@
-import SignUpForm from "@/ui/account/signup-form"
-import SNMSLogo from "@/ui/logo"
+import SignUpForm from "@/components/account/signup-form"
+import SNMSLogo from "@/components/logo"
 
 export default function LoginPage() {
   return (

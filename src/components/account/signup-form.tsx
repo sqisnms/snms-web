@@ -1,16 +1,16 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import { signUp } from "@/actions/account-actions"
+import { Button } from "@/components/common/button"
 import {
-  UserPlusIcon,
   AtSymbolIcon,
-  KeyIcon,
   ExclamationCircleIcon,
+  KeyIcon,
   UserIcon,
+  UserPlusIcon,
 } from "@heroicons/react/24/outline"
-import { Button } from "@/ui/component/button"
+import { useEffect, useState } from "react"
 import { useFormState, useFormStatus } from "react-dom"
-import { signUp } from "@/backend/account-actions"
 
 function SignUpButton() {
   const { pending } = useFormStatus()
