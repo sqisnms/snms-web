@@ -2,6 +2,7 @@
   "name": "snms-web",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +12,9 @@
     "format": "prettier --cache --write .",
     "format-all": "prettier --write .",
     "lint": "next lint",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "dev-server": "env-cmd -f .env.dev next dev",
+    "prod-server": "env-cmd -f .env.prod next start"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,css,scss}": [
@@ -26,8 +29,10 @@
     "@vercel/postgres": "^0.10.0",
     "bcrypt": "^5.1.1",
     "clsx": "^2.1.1",
+    "env-cmd": "^10.1.0",
     "next": "^14",
     "next-auth": "^5.0.0-beta.21",
+    "pg": "^8.13.0",
     "react": "^18",
     "react-dom": "^18",
     "sharp": "^0.33.5",
