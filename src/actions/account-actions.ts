@@ -9,11 +9,11 @@ import { AuthError } from "next-auth"
 import { v4 as uuidv4 } from "uuid"
 
 import type { User } from "@/types/user"
-import pool from "@/utils/db"
+import { postgres } from "@/utils/db"
 
 export async function getUser(email: string): Promise<User | undefined> {
   try {
-    const user = await pool.query<User>("SELECT * FROM users WHERE email=$1", [email])
+    const user = await postgres.query<User>("SELECT * FROM users WHERE email=$1", [email])
     return user.rows[0]
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -52,7 +52,7 @@ export async function signUp(prevState: string | undefined, formData: FormData) 
 
   try {
     // 이메일 중복 검사
-    const existingUser = await pool.query("SELECT * FROM users WHERE email = $1", [email])
+    const existingUser = await postgres.query("SELECT * FROM users WHERE email = $1", [email])
     if (existingUser.rowCount !== null && existingUser.rowCount > 0) {
       return "Email already exists."
     }
@@ -67,7 +67,7 @@ export async function signUp(prevState: string | undefined, formData: FormData) 
 
     const values = [name, email, hashedPassword, authKey]
 
-    await pool.query(query, values)
+    await postgres.query(query, values)
     return "User successfully created."
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -98,7 +98,7 @@ export async function deleteUser(email: string) {
   console.info("deleteUser:", email)
   try {
     // 데이터베이스에서 사용자 삭제
-    await pool.query("DELETE FROM users WHERE email = $1", [email])
+    await postgres.query("DELETE FROM users WHERE email = $1", [email])
     // 필요한 경우 캐시 무효화 및 추가 작업 수행
 
     return { message: "Deleted User." }
@@ -113,7 +113,7 @@ export async function fetchLoggedInUser(email: string) {
   noStore()
 
   try {
-    const user = await pool.query("SELECT * FROM users WHERE email = $1", [email])
+    const user = await postgres.query("SELECT * FROM users WHERE email = $1", [email])
     return user.rows[0] as User
   } catch (error) {
     // eslint-disable-next-line no-console

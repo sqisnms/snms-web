@@ -1,19 +1,23 @@
-// import { auth } from '@/auth';
+import { ClickHouseSample } from "@/components/sample/ClickHouseSample"
+import { MariaDBSample } from "@/components/sample/MariaDBSample"
+import { PostgresSample } from "@/components/sample/PostgresSample"
 
 export default function Page() {
-  // const session = await auth(); // 세션처리 추후 개발
-
   return (
     <div>
       <h1>Grafana Dashboard</h1>
       <iframe
-        title="서버자원 모니터링"
-        // src="api/grafana2/d/ae0ijnes4j7cwe/server-resource?orgId=1&kiosk&from=now-24h&to=now&theme=light&refresh=5s"
-        src="http://ktoss.iptime.org:53000/d/ae0ijnes4j7cwe/server-resource?orgId=1&kiosk&from=now-24h&to=now&theme=light&refresh=5s"
         width="100%"
         height="600"
-        frameBorder="0"
+        title="서버자원 모니터링"
+        src="grafana/public-dashboards/e3c44e0241b045f79980576d0e2d9229?orgId=1"
       />
+      <div>
+        <h2>데이터베이스 통계</h2>
+        <PostgresSample />
+        <ClickHouseSample />
+        <MariaDBSample />
+      </div>
     </div>
   )
 }

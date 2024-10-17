@@ -1,9 +1,18 @@
-// lib/db.ts
+import { createClient } from "@clickhouse/client"
+import mysql from "mysql2/promise"
 import { Pool } from "pg"
 
 // PostgreSQL 연결 설정
-const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL, // 환경 변수에서 가져온 연결 URL
+const postgres = new Pool({
+  connectionString: process.env.POSTGRES_URL,
 })
 
-export default pool // Pool 객체를 내보내서 재사용 가능하게 함
+// ClickHouse 연결 설정
+const clickhouse = createClient({
+  url: process.env.CLICKHOUSE_URL,
+})
+
+// MariaDB 연결 설정
+const mariadb = mysql.createPool(process.env.MARIADB_URL ?? "")
+
+export { clickhouse, mariadb, postgres }

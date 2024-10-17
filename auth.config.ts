@@ -8,7 +8,10 @@ export const authConfig = {
     // 요청이 인증되었는지 확인하는 콜백 함수
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user // 사용자가 로그인했는지 여부 확인 !!는 boolean형으로 확실히 명시하기 위하여
-      const isLoginPage = nextUrl.pathname.startsWith("/login")
+      const isLoginPage =
+        nextUrl.pathname === "/" ||
+        nextUrl.pathname.startsWith("/login") ||
+        nextUrl.pathname.startsWith("/signup")
       if (isLoginPage) {
         // 로그인 페이지는 누구나 접근 가능
         return true
