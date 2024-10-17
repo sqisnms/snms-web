@@ -33,7 +33,7 @@
       }
     ],
     "import/prefer-default-export": "off",
-    "no-console": "error",
+    "no-console": "off",
     /* 이 규칙은 form label이 form control과 관련이 있는지 (즉, label이 어떤 form input을 설명하고 있는지) 확인한다
      * 이 규칙은 각각 2개의 구성 요소가 있는데,
      *  1. some은 규칙이 하나 이상 만족되어야 함을 의미한다. 즉, nesting과 id 중 하나만 만족해도 괜찮다는 것.
