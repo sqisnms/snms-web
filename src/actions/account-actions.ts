@@ -8,8 +8,8 @@ import bcrypt from "bcrypt"
 import { AuthError } from "next-auth"
 import { v4 as uuidv4 } from "uuid"
 
+import { postgres } from "@/config/db"
 import type { User } from "@/types/user"
-import { postgres } from "@/utils/db"
 
 export async function getUser(email: string): Promise<User | undefined> {
   try {
