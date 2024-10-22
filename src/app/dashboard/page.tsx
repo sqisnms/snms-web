@@ -1,6 +1,10 @@
-import { ClickHouseSample } from "@/components/sample/ClickHouseSample"
-import { MariaDBSample } from "@/components/sample/MariaDBSample"
-import { PostgresSample } from "@/components/sample/PostgresSample"
+"use client"
+
+import {
+  ClickHouseQuerySample,
+  MariaDBQuerySample,
+  PostgresQuerySample,
+} from "@/components/sample/Sample"
 
 export default function Page() {
   return (
@@ -14,9 +18,9 @@ export default function Page() {
       />
       <div>
         <h2>데이터베이스 통계</h2>
-        <PostgresSample />
-        <ClickHouseSample />
-        <MariaDBSample />
+        <PostgresQuerySample />
+        <ClickHouseQuerySample />
+        <MariaDBQuerySample />
       </div>
     </div>
   )

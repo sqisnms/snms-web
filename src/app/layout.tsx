@@ -1,5 +1,6 @@
 import { notoSansKR } from "@/components/styles/fonts"
 import "@/components/styles/globals.css"
+import ReactQueryProvider from "@/config/ReactQueryProvider"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -15,7 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${notoSansKR.className} antialiased`}>{children}</body>
+      <body className={`${notoSansKR.className} antialiased`}>
+        <ReactQueryProvider>{children}</ReactQueryProvider>
+      </body>
     </html>
   )
 }
