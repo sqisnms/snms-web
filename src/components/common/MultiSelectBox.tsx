@@ -34,9 +34,13 @@ const chipColors: Array<
   "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"
 > = ["primary", "secondary", "error", "info", "success", "warning"]
 
-const MultiSelectBox = (props: MultiSelectBoxProps) => {
-  const { label, selectedItems, setSelectedItems, options, allOptionCode } = props
-
+function MultiSelectBox({
+  label,
+  selectedItems,
+  setSelectedItems,
+  options,
+  allOptionCode = "",
+}: MultiSelectBoxProps) {
   const handleChange = (event: SelectChangeEvent<string[]>) => {
     const {
       target: { value },
@@ -49,10 +53,12 @@ const MultiSelectBox = (props: MultiSelectBoxProps) => {
       if (!prevSelected && nowSelected) {
         setSelectedItems([allOptionCode])
         return
-      } else if (prevSelected && nowSelected) {
+      }
+      if (prevSelected && nowSelected) {
         setSelectedItems(selectedValues.filter((item) => item !== allOptionCode))
         return
-      } else if (selectedValues.length === 0) {
+      }
+      if (selectedValues.length === 0) {
         setSelectedItems([allOptionCode])
         return
       }
@@ -100,6 +106,10 @@ const MultiSelectBox = (props: MultiSelectBoxProps) => {
       </FormControl>
     </Box>
   )
+}
+
+MultiSelectBox.defaultProps = {
+  allOptionCode: "",
 }
 
 export default MultiSelectBox
