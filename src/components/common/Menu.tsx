@@ -62,7 +62,9 @@ export default function Menu({ menuData }: { menuData: MenuType[] }) {
 
   return (
     <div className="flex items-center">
-      <Image src="/logo_w.svg" width={130} height={40} alt="Logo" className="mr-10 h-8" />
+      <Link href="/">
+        <Image src="/logo_w.svg" width={130} height={40} alt="Logo" className="mr-10 h-8" />
+      </Link>
       <nav className="relative flex space-x-6">
         {menuData
           .filter((item) => item.UPPER_MENU_ID === null)

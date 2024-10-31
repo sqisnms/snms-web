@@ -3,11 +3,12 @@
 import { dashboardSelectedAtom } from "@/atom/dashboardAtom"
 import { TopTable } from "@/components/dashboard/TopTable"
 import { ClickHouseQuerySample, PostgresQuerySample } from "@/components/sample/Sample"
+import { useContextPath } from "@/config/Providers"
 import { useAtom } from "jotai"
 
 export default function Page() {
   const [selected] = useAtom(dashboardSelectedAtom)
-  // const contextPath = useContextPath()
+  const contextPath = useContextPath()
 
   return (
     <div>
@@ -17,7 +18,9 @@ export default function Page() {
         width="100%"
         height="600"
         title="서버자원 모니터링"
-        src={`http://ktoss.iptime.org:53000/d/ae0ijnes4j7cwe/snms-server-resource?orgId=1&refresh=auto&kiosk${selected}`}
+        src={`${
+          contextPath
+        }/grafana/d/ae0ijnes4j7cwe/snms-server-resource?orgId=1&refresh=auto&kiosk${selected}`}
         // src={`${
         //   contextPath
         // }/grafana/d/ae0yw793f2800a/new-dashboard?orgId=1&from=1729567451243&to=1729589051243&refresh=auto&kiosk${selected}`}
