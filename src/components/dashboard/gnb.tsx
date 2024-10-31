@@ -24,7 +24,7 @@ function GNB() {
     <header className="bg-primary text-white">
       <div className="container mx-auto flex h-16 items-center justify-between">
         <div className="flex items-center">
-          <Image src="/logo_w.svg" alt="Logo" className="mr-10 h-8" />
+          <Image src="/logo_w.svg" width="160" height="80" alt="Logo" className="mr-10 h-8" />
           <nav className="relative flex space-x-6">
             {["대시보드", "감사", "운영", "분석", "SR관리", "시스템관리"].map((menu) => (
               <div
@@ -77,14 +77,20 @@ function GNB() {
         {/* Right Icons */}
         <div className="flex items-center space-x-4">
           <button type="button">
-            <Image src="/ic_setting.png" alt="Settings" className="h-6" />
+            <Image src="/ic_setting.png" width={32} height={32} alt="Settings" className="h-6" />
           </button>
           <button type="button">
-            <Image src="/ic_search.png" alt="Search" className="h-6" />
+            <Image src="/ic_search.png" width={32} height={32} alt="Search" className="h-6" />
           </button>
           <span>홍길동님</span>
           <button type="button" className="flex items-center">
-            <Image src="/ic_logout.png" alt="Logout" className="ml-2 h-6 rounded-full" />
+            <Image
+              src="/ic_logout.png"
+              width={32}
+              height={32}
+              alt="Logout"
+              className="ml-2 h-6 rounded-full"
+            />
           </button>
         </div>
       </div>
