@@ -8,7 +8,7 @@ export function LogoutButton() {
       action={async () => {
         "use server"
 
-        await signOut()
+        await signOut({ redirectTo: "/login", redirect: true })
       }}
     >
       <button type="submit" className="flex items-center">

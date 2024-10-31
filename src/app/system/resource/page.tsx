@@ -1,18 +1,20 @@
 "use client"
 
-import { dashboardSelectedAtom } from "@/atom/dashboardAtom"
-import { TopTable } from "@/components/dashboard/TopTable"
+import { grafanaServerProcessParamAtom } from "@/atom/dashboardAtom"
+import { ResourceOption } from "@/components/dashboard/ResourceOption"
 import { useContextPath } from "@/config/Providers"
 import { useAtom } from "jotai"
 
 export default function Page() {
-  const [selected] = useAtom(dashboardSelectedAtom)
+  const [selected] = useAtom(grafanaServerProcessParamAtom)
   const contextPath = useContextPath()
+  console.log(selected)
   return (
     <div>
       <h1>서버자원관리</h1>
-      <div style={{ width: 50, height: 50 }} />
-      <TopTable />
+      <div style={{ width: 50, height: 20 }} />
+      <ResourceOption />
+      <div style={{ width: 50, height: 20 }} />
       <iframe
         width="100%"
         height="600"

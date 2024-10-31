@@ -15,6 +15,7 @@ export async function getMenu() {
         "LEAF_NODE_YN_CODE"
       FROM "COMDB"."TBD_COM_CONF_MENU"
       WHERE "UPPER_MENU_ID" IS NULL
+      AND COALESCE("USE_YN_CODE", 'N') = 'Y'
       UNION ALL
       -- 재귀적으로 하위 노드를 찾음 (RECURSIVE PART)
       SELECT
@@ -26,6 +27,7 @@ export async function getMenu() {
         child."LEAF_NODE_YN_CODE"
       FROM "COMDB"."TBD_COM_CONF_MENU" child
       JOIN menu_tree parent ON parent."MENU_ID" = child."UPPER_MENU_ID"
+      WHERE COALESCE(child."USE_YN_CODE", 'N') = 'Y'
     )
     SELECT
       "MENU_ID",
