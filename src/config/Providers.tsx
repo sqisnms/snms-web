@@ -2,9 +2,16 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-import { useState } from "react"
+import { SessionProvider } from "next-auth/react"
+import { createContext, useContext, useState } from "react"
 
-export default function ReactQueryProvider({ children }: { children: React.ReactNode }) {
+const ContextPathContext = createContext<string>("")
+
+export const useContextPath = () => {
+  return useContext(ContextPathContext)
+}
+
+export default function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -21,10 +28,16 @@ export default function ReactQueryProvider({ children }: { children: React.React
       }),
   )
 
+  const contextPath = process.env.NEXT_PUBLIC_CONTEXT_PATH || ""
+
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ContextPathContext.Provider value={contextPath}>
+        <SessionProvider>
+          {children}
+          <ReactQueryDevtools initialIsOpen={false} />
+        </SessionProvider>
+      </ContextPathContext.Provider>
     </QueryClientProvider>
   )
 }
