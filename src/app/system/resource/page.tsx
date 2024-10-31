@@ -1,12 +1,12 @@
 "use client"
 
-import { grafanaServerProcessParamAtom } from "@/atom/dashboardAtom"
+import { grafanaServerResourceParamAtom } from "@/atom/dashboardAtom"
 import { ResourceOption } from "@/components/dashboard/ResourceOption"
 import { useContextPath } from "@/config/Providers"
 import { useAtom } from "jotai"
 
 export default function Page() {
-  const [selected] = useAtom(grafanaServerProcessParamAtom)
+  const [selected] = useAtom(grafanaServerResourceParamAtom)
   const contextPath = useContextPath()
   console.log(selected)
   return (
