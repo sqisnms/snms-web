@@ -15,7 +15,7 @@ interface MultiSelectBoxProps {
   options: Partial<CommonCode>[]
   selectedItems: string[]
   setSelectedItems: (items: string[]) => void
-  allOptionCode?: string
+  allOptionCode: string | undefined
 }
 
 const ITEM_HEIGHT = 48
@@ -39,7 +39,7 @@ function MultiSelectBox({
   selectedItems,
   setSelectedItems,
   options,
-  allOptionCode = "",
+  allOptionCode,
 }: MultiSelectBoxProps) {
   const handleChange = (event: SelectChangeEvent<string[]>) => {
     const {
@@ -106,10 +106,6 @@ function MultiSelectBox({
       </FormControl>
     </Box>
   )
-}
-
-MultiSelectBox.defaultProps = {
-  allOptionCode: "",
 }
 
 export default MultiSelectBox
