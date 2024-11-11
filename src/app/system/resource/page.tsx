@@ -13,7 +13,7 @@ export default function Page() {
       {/* <ResourceOption /> */}
       <div style={{ width: 50, height: 20 }} />
       <GrafanaIframe
-        src="/grafana/d/ae0ijnes4j7cwe/snms-server-resource?orgId=1&refresh=auto&kiosk"
+        src="/grafana/d/ae0ijnes4j7cwe/snms-server-resource?orgId=1&refresh=auto&kiosk&autofitpanels=true"
         selected={selected}
         title="서버자원관리"
       />

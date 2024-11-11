@@ -8,6 +8,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material"
 import { useEffect, useState } from "react"
 
@@ -93,30 +94,38 @@ export function EquipTable({ selectedEquipTypeCode }: EquipTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {equips.map((equip) => (
-            <TableRow key={equip.EQUIP_ID}>
-              {columns.map((column) => {
-                const value = equip[column.name as keyof EquipType]
-
-                // 날짜 컬럼 처리
-                if (column.name.toLowerCase().includes("date")) {
-                  return (
-                    <TableCell key={column.name} className="whitespace-nowrap">
-                      {formatDate(String(value))}
-                    </TableCell>
-                  )
-                }
-
-                // 일반 값 처리
-                if (value !== null && value !== undefined) {
-                  return <TableCell key={column.name}>{String(value)}</TableCell>
-                }
-
-                // 값이 null 또는 undefined인 경우
-                return <TableCell key={column.name}>N/A</TableCell>
-              })}
+          {equips.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={columns.length} align="center">
+                <Typography variant="body1">좌측 분류에서 선택해주세요</Typography>
+              </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            equips.map((equip) => (
+              <TableRow key={equip.EQUIP_ID}>
+                {columns.map((column) => {
+                  const value = equip[column.name as keyof EquipType]
+
+                  // 날짜 컬럼 처리
+                  if (column.name.toLowerCase().includes("date")) {
+                    return (
+                      <TableCell key={column.name} className="whitespace-nowrap">
+                        {formatDate(String(value))}
+                      </TableCell>
+                    )
+                  }
+
+                  // 일반 값 처리
+                  if (value !== null && value !== undefined) {
+                    return <TableCell key={column.name}>{String(value)}</TableCell>
+                  }
+
+                  // 값이 null 또는 undefined인 경우
+                  return <TableCell key={column.name}>N/A</TableCell>
+                })}
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </TableContainer>
