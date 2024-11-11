@@ -21,7 +21,7 @@ export function GrafanaIframe({ src, selected, title }: GrafanaIframeProps) {
           const targetDiv = doc.querySelector(".react-grid-layout")
           if (targetDiv) {
             const divHeight = targetDiv.getBoundingClientRect().height
-            iframe.style.height = `${divHeight + 32}px`
+            iframe.style.height = `${divHeight + 32 + 32 + 16 + 8}px`
           } else {
             console.warn("Target div not found")
           }
