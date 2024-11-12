@@ -2,7 +2,6 @@
 
 import { grafanaServerProcessParamAtom } from "@/atom/dashboardAtom"
 import { GrafanaIframe } from "@/components/dashboard/GrafanaIframe"
-import { ProcessOption } from "@/components/dashboard/ProcessOption"
 import { useAtom } from "jotai"
 
 export default function Page() {
@@ -11,10 +10,10 @@ export default function Page() {
     <div>
       <h1>서버프로세스관리</h1>
       <div style={{ width: 50, height: 20 }} />
-      <ProcessOption />
+      {/* <ProcessOption /> */}
       <div style={{ width: 50, height: 20 }} />
       <GrafanaIframe
-        src="/grafana/d/be1q2wlewne9sc/snms-server-process?orgId=1&refresh=auto&kiosk"
+        src="/grafana/d/be1q2wlewne9sc/snms-server-process?orgId=1&refresh=auto&kiosk&autofitpanels=true"
         selected={selected}
         title="서버프로세스관리"
       />

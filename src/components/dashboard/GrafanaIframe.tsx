@@ -1,5 +1,5 @@
 import { useContextPath } from "@/config/Providers"
-import { useCallback, useEffect, useRef } from "react"
+import { useRef } from "react"
 
 interface GrafanaIframeProps {
   src: string
@@ -10,45 +10,48 @@ interface GrafanaIframeProps {
 export function GrafanaIframe({ src, selected, title }: GrafanaIframeProps) {
   const contextPath = useContextPath()
   const iframeRef = useRef<HTMLIFrameElement | null>(null)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  const adjustHeight = useCallback(() => {
-    const iframe = iframeRef.current
-    if (iframe) {
-      try {
-        const doc = iframe.contentWindow?.document
-        if (doc?.readyState === "complete") {
-          const targetDiv = doc.querySelector(".react-grid-layout")
-          if (targetDiv) {
-            const divHeight = targetDiv.getBoundingClientRect().height
-            iframe.style.height = `${divHeight + 32}px`
-          } else {
-            console.warn("Target div not found")
-          }
-        }
-      } catch (error) {
-        console.error("Error accessing iframe content:", error)
-      }
-    }
-  }, [])
+  // height 자동조정 스크립트. 11버전으로 가면서(autofitheight) 필요없어짐.
 
-  useEffect(() => {
-    const iframe = iframeRef.current
-    if (iframe) {
-      adjustHeight()
+  // const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-      intervalRef.current = setInterval(adjustHeight, 1000)
+  // const adjustHeight = useCallback(() => {
+  //   const iframe = iframeRef.current
+  //   if (iframe) {
+  //     try {
+  //       const doc = iframe.contentWindow?.document
+  //       if (doc?.readyState === "complete") {
+  //         const targetDiv = doc.querySelector(".react-grid-layout")
+  //         if (targetDiv) {
+  //           const divHeight = targetDiv.getBoundingClientRect().height
+  //           iframe.style.height = `${divHeight + 32 + 32 + 16 + 8}px`
+  //         } else {
+  //           console.warn("Target div not found")
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error accessing iframe content:", error)
+  //     }
+  //   }
+  // }, [])
 
-      iframe.onload = adjustHeight
+  // useEffect(() => {
+  //   const iframe = iframeRef.current
+  //   if (iframe) {
+  //     adjustHeight()
 
-      window.addEventListener("resize", adjustHeight)
-    }
+  //     intervalRef.current = setInterval(adjustHeight, 1000)
 
-    return () => {
-      window.removeEventListener("resize", adjustHeight)
-      if (intervalRef.current) clearInterval(intervalRef.current)
-    }
-  }, [adjustHeight, selected])
+  //     iframe.onload = adjustHeight
+
+  //     window.addEventListener("resize", adjustHeight)
+  //   }
+
+  //   return () => {
+  //     window.removeEventListener("resize", adjustHeight)
+  //     if (intervalRef.current) clearInterval(intervalRef.current)
+  //   }
+  // }, [adjustHeight, selected])
 
   return (
     <iframe

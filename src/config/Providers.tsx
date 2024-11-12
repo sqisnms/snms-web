@@ -41,13 +41,37 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   )
   //
 
-  // MUI 버튼 자동대문자 변환 방지
+  // MUI
   const theme = createTheme({
     components: {
+      // 버튼 자동대문자 변환 방지
       MuiButton: {
         styleOverrides: {
           root: {
             textTransform: "none",
+          },
+        },
+      },
+      // TextField label 위치 안맞는 현상 수정
+      MuiTextField: {
+        defaultProps: {
+          slotProps: {
+            inputLabel: {
+              sx: {
+                // 기본 상태에서 레이블 위치 조정
+                top: "-7px",
+                // shrink 상태일 때 레이블 위치 조정
+                "&.MuiInputLabel-shrink": {
+                  transform: "translate(15px, -1.5px)", // 위로 살짝 이동
+                  fontSize: "0.75rem", // 글자 크기를 줄임
+                },
+              },
+            },
+          },
+        },
+        styleOverrides: {
+          root: {
+            marginTop: "7px", // 모든 TextField에 상단 마진 적용. shrink 상태의 텍스트가 가려지지 않도록
           },
         },
       },

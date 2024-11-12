@@ -2,7 +2,6 @@
 
 import { grafanaServerResourceParamAtom } from "@/atom/dashboardAtom"
 import { GrafanaIframe } from "@/components/dashboard/GrafanaIframe"
-import { ResourceOption } from "@/components/dashboard/ResourceOption"
 import { useAtom } from "jotai"
 
 export default function Page() {
@@ -11,10 +10,10 @@ export default function Page() {
     <div>
       <h1>서버자원관리</h1>
       <div style={{ width: 50, height: 20 }} />
-      <ResourceOption />
+      {/* <ResourceOption /> */}
       <div style={{ width: 50, height: 20 }} />
       <GrafanaIframe
-        src="/grafana/d/ae0ijnes4j7cwe/snms-server-resource?orgId=1&refresh=auto&kiosk"
+        src="/grafana/d/ae0ijnes4j7cwe/snms-server-resource?orgId=1&refresh=auto&kiosk&autofitpanels=true"
         selected={selected}
         title="서버자원관리"
       />
