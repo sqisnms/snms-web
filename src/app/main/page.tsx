@@ -5,16 +5,9 @@ import AddIcon from "@mui/icons-material/Add"
 import FileDownloadIcon from "@mui/icons-material/FileDownload"
 import { Box, Button, Grid, Typography } from "@mui/material"
 import Image from "next/image"
-import React, { SyntheticEvent, useState } from "react"
+import React from "react"
 
-// eslint-disable-next-line react/function-component-definition
 const DashboardLayout: React.FC = () => {
-  const [tabValue, setTabValue] = useState(0)
-
-  const handleTabChange = (event: SyntheticEvent, newValue: number) => {
-    setTabValue(newValue)
-  }
-
   return (
     <div className="flex h-screen flex-col">
       {/* Banner */}
@@ -47,7 +40,7 @@ const DashboardLayout: React.FC = () => {
             <Box className="mb-3 flex items-center justify-between">
               <Typography variant="h6" className="font-bold">
                 공지사항
-              </Typography>{" "}
+              </Typography>
               <Button size="small" variant="text" className="text-primary">
                 <Box className="flex items-center">
                   <AddIcon fontSize="small" />
@@ -58,7 +51,6 @@ const DashboardLayout: React.FC = () => {
             <ul className="space-y-2">
               <li className="flex cursor-pointer justify-between hover:text-primary">
                 <span className="w-9/12 truncate">[공지] 5G 공통망 메뉴 위치 변경 안내</span>
-
                 <span className="min-w-min whitespace-nowrap text-sm text-gray-500">
                   2024-11-01
                 </span>
@@ -67,14 +59,12 @@ const DashboardLayout: React.FC = () => {
                 <span className="w-9/12 truncate">
                   [신규기능] 무선액세스망장비 제원입력관리 기능 배포완료
                 </span>
-
                 <span className="min-w-min whitespace-nowrap text-sm text-gray-500">
                   2024-10-15
                 </span>
               </li>
               <li className="flex cursor-pointer justify-between hover:text-primary">
                 <span className="w-9/12 truncate">5G NMS Fastview kibana 편집 방법 안내</span>
-
                 <span className="min-w-min whitespace-nowrap text-sm text-gray-500">
                   2024-09-30
                 </span>
@@ -92,14 +82,14 @@ const DashboardLayout: React.FC = () => {
             <Box className="mb-3 flex items-center justify-between">
               <Typography variant="h6" className="font-bold">
                 메뉴얼(SOP)
-              </Typography>{" "}
+              </Typography>
               <Button size="small" variant="text" className="text-primary">
                 <Box className="flex items-center">
                   <AddIcon fontSize="small" />
                   <span className="text-base">More</span>
                 </Box>
               </Button>
-            </Box>{" "}
+            </Box>
             <ul className="space-y-2">
               <li className="flex cursor-pointer justify-between hover:text-primary">
                 <span className="w-9/12 truncate">
@@ -135,11 +125,10 @@ const DashboardLayout: React.FC = () => {
             md={4}
             className="border-gray-300 !px-1 !pb-6 !pt-4 md:!pb-2 md:!pl-6 md:!pt-1"
           >
-            {" "}
             <Box className="mb-3 flex items-center justify-between">
               <Typography variant="h6" className="font-bold">
                 작업계획
-              </Typography>{" "}
+              </Typography>
               <Button size="small" variant="text" className="text-primary">
                 <Box className="flex items-center">
                   <AddIcon fontSize="small" />
@@ -171,7 +160,6 @@ const DashboardLayout: React.FC = () => {
         </Grid>
 
         <Box className="flex flex-col bg-gray-100 px-6 py-8 md:flex-row">
-          {/* 자료실 */}{" "}
           <Typography variant="h6" className="w-full font-bold md:w-24">
             자료실
           </Typography>
@@ -192,7 +180,6 @@ const DashboardLayout: React.FC = () => {
         </Box>
 
         <Box className="flex flex-col px-6 py-8 md:flex-row">
-          {/* FAQ */}
           <Typography variant="h6" className="w-full font-bold md:w-24">
             FAQ
           </Typography>
