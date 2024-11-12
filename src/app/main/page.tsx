@@ -5,9 +5,9 @@ import AddIcon from "@mui/icons-material/Add"
 import FileDownloadIcon from "@mui/icons-material/FileDownload"
 import { Box, Button, Grid, Typography } from "@mui/material"
 import Image from "next/image"
-import React from "react"
 
-const DashboardLayout: React.FC = () => {
+// 함수 선언 방식으로 컴포넌트 정의
+function DashboardLayout() {
   return (
     <div className="flex h-screen flex-col">
       {/* Banner */}
