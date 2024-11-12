@@ -21,6 +21,10 @@ const config: Config = {
         "gradient-shimmer":
           "linear-gradient(to right, transparent, rgba(255, 255, 255, 0.6), transparent",
       },
+      width: {
+        "128": "32rem", // 512px
+        "192": "48rem", // 768px
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],

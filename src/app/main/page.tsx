@@ -1,9 +1,8 @@
 "use client"
 
+import { MiniBoard } from "@/components/main/MiniBoard"
 import { notoSansKR } from "@/styles/fonts"
-import AddIcon from "@mui/icons-material/Add"
-import FileDownloadIcon from "@mui/icons-material/FileDownload"
-import { Box, Button, Grid, Typography } from "@mui/material"
+import { Box, Grid, Typography } from "@mui/material"
 import Image from "next/image"
 
 // 함수 선언 방식으로 컴포넌트 정의
@@ -37,39 +36,7 @@ function DashboardLayout() {
             md={4}
             className="border-b border-gray-300 !px-1 !pt-1 pb-6 md:border-b-0 md:border-r md:!pb-2 md:!pr-6"
           >
-            <Box className="mb-3 flex items-center justify-between">
-              <Typography variant="h6" className="font-bold">
-                공지사항
-              </Typography>
-              <Button size="small" variant="text" className="text-primary">
-                <Box className="flex items-center">
-                  <AddIcon fontSize="small" />
-                  <span className="text-base">More</span>
-                </Box>
-              </Button>
-            </Box>
-            <ul className="space-y-2">
-              <li className="flex cursor-pointer justify-between hover:text-primary">
-                <span className="w-9/12 truncate">[공지] 5G 공통망 메뉴 위치 변경 안내</span>
-                <span className="min-w-min whitespace-nowrap text-sm text-gray-500">
-                  2024-11-01
-                </span>
-              </li>
-              <li className="flex cursor-pointer justify-between hover:text-primary">
-                <span className="w-9/12 truncate">
-                  [신규기능] 무선액세스망장비 제원입력관리 기능 배포완료
-                </span>
-                <span className="min-w-min whitespace-nowrap text-sm text-gray-500">
-                  2024-10-15
-                </span>
-              </li>
-              <li className="flex cursor-pointer justify-between hover:text-primary">
-                <span className="w-9/12 truncate">5G NMS Fastview kibana 편집 방법 안내</span>
-                <span className="min-w-min whitespace-nowrap text-sm text-gray-500">
-                  2024-09-30
-                </span>
-              </li>
-            </ul>
+            <MiniBoard section="NOTICE" label="공지사항" />
           </Grid>
 
           {/* 메뉴얼(SOP) */}
@@ -79,43 +46,7 @@ function DashboardLayout() {
             md={4}
             className="border-b border-gray-300 !px-1 !pb-6 !pt-4 md:border-b-0 md:border-r md:!px-6 md:!pb-2 md:!pt-1"
           >
-            <Box className="mb-3 flex items-center justify-between">
-              <Typography variant="h6" className="font-bold">
-                메뉴얼(SOP)
-              </Typography>
-              <Button size="small" variant="text" className="text-primary">
-                <Box className="flex items-center">
-                  <AddIcon fontSize="small" />
-                  <span className="text-base">More</span>
-                </Box>
-              </Button>
-            </Box>
-            <ul className="space-y-2">
-              <li className="flex cursor-pointer justify-between hover:text-primary">
-                <span className="w-9/12 truncate">
-                  [매뉴얼] 5G NMS 2024년9월 정기배포 사용자 매뉴얼
-                </span>
-                <span className="min-w-min whitespace-nowrap text-sm text-gray-500">
-                  2024-09-01
-                </span>
-              </li>
-              <li className="flex cursor-pointer justify-between hover:text-primary">
-                <span className="w-9/12 truncate">
-                  [매뉴얼] 5G NMS 2024년8월 정기배포 사용자 매뉴얼
-                </span>
-                <span className="min-w-min whitespace-nowrap text-sm text-gray-500">
-                  2024-08-01
-                </span>
-              </li>
-              <li className="flex cursor-pointer justify-between hover:text-primary">
-                <span className="w-9/12 truncate">
-                  [매뉴얼] 5G NMS 2024년7월 정기배포 사용자 매뉴얼
-                </span>
-                <span className="min-w-min whitespace-nowrap text-sm text-gray-500">
-                  2024-07-01
-                </span>
-              </li>
-            </ul>
+            <MiniBoard section="MANUAL" label="매뉴얼(SOP)" />
           </Grid>
 
           {/* 작업계획 */}
@@ -125,41 +56,11 @@ function DashboardLayout() {
             md={4}
             className="border-gray-300 !px-1 !pb-6 !pt-4 md:!pb-2 md:!pl-6 md:!pt-1"
           >
-            <Box className="mb-3 flex items-center justify-between">
-              <Typography variant="h6" className="font-bold">
-                작업계획
-              </Typography>
-              <Button size="small" variant="text" className="text-primary">
-                <Box className="flex items-center">
-                  <AddIcon fontSize="small" />
-                  <span className="text-base">More</span>
-                </Box>
-              </Button>
-            </Box>
-            <ul className="space-y-2">
-              <li className="flex cursor-pointer justify-between hover:text-primary">
-                <span className="w-9/12 truncate">5G VOC 개선을 위한 커버리지 확보용 형상입력</span>
-                <span className="min-w-min whitespace-nowrap text-sm text-gray-500">
-                  2024-11-01
-                </span>
-              </li>
-              <li className="flex cursor-pointer justify-between hover:text-primary">
-                <span className="w-9/12 truncate">5G VOC 개선을 위한 커버리지 확보용 형상입력</span>
-                <span className="min-w-min whitespace-nowrap text-sm text-gray-500">
-                  2024-11-01
-                </span>
-              </li>
-              <li className="flex cursor-pointer justify-between hover:text-primary">
-                <span className="w-9/12 truncate">5G VOC 개선을 위한 커버리지 확보용 형상입력</span>
-                <span className="min-w-min whitespace-nowrap text-sm text-gray-500">
-                  2024-11-01
-                </span>
-              </li>
-            </ul>
+            <MiniBoard section="TASK" label="작업계획" />
           </Grid>
         </Grid>
 
-        <Box className="flex flex-col bg-gray-100 px-6 py-8 md:flex-row">
+        {/* <Box className="flex flex-col bg-gray-100 px-6 py-8 md:flex-row">
           <Typography variant="h6" className="w-full font-bold md:w-24">
             자료실
           </Typography>
@@ -177,7 +78,7 @@ function DashboardLayout() {
               <FileDownloadIcon className="text-gray-500 hover:text-primary" />
             </li>
           </ul>
-        </Box>
+        </Box> */}
 
         <Box className="flex flex-col px-6 py-8 md:flex-row">
           <Typography variant="h6" className="w-full font-bold md:w-24">
