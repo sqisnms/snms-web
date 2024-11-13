@@ -12,11 +12,11 @@ export function ResourceOption() {
   const [codeSysResSvr, setCodeSysResSvr] = useState<Partial<CommonCode>[]>([])
 
   useEffect(() => {
-    getCode({ CATEGORY: "SYS_RES_SVR" })
+    getCode({ category: "SYS_RES_SVR" })
       .then((data) => {
         setCodeSysResSvr(data)
         if (data.length > 0) {
-          setSelectedServers([data[0].CODE ?? "All"])
+          setSelectedServers([data[0].code ?? "All"])
         }
       })
       .catch((error) => {

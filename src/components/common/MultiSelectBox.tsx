@@ -82,11 +82,11 @@ function MultiSelectBox({
           renderValue={(selected) => (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
               {selected.map((code, index) => {
-                const option = options.find((item) => item.CODE === code)
+                const option = options.find((item) => item.code === code)
                 return (
                   <Chip
                     key={code}
-                    label={option?.CODE_NAME || code}
+                    label={option?.code_name || code}
                     color={chipColors[index % chipColors.length]}
                     size="small"
                     variant="outlined"
@@ -98,8 +98,8 @@ function MultiSelectBox({
           MenuProps={MenuProps}
         >
           {options.map((item) => (
-            <MenuItem key={item.CODE} value={item.CODE}>
-              {item.CODE_NAME}
+            <MenuItem key={item.code} value={item.code}>
+              {item.code_name}
             </MenuItem>
           ))}
         </Select>

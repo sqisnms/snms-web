@@ -14,21 +14,21 @@ export function ProcessOption() {
   const [codeSysPrcPrc, setCodeSysPrcPrc] = useState<Partial<CommonCode>[]>([])
 
   useEffect(() => {
-    getCode({ CATEGORY: "SYS_PRC_SVR" })
+    getCode({ category: "SYS_PRC_SVR" })
       .then((data) => {
         setCodeSysPrcSvr(data)
         if (data.length > 0) {
-          setSelectedServers([data[0].CODE ?? "All"])
+          setSelectedServers([data[0].code ?? "All"])
         }
       })
       .catch((error) => {
         console.error("서버 옵션을 불러오는 데 실패했습니다:", error)
       })
-    getCode({ CATEGORY: "SYS_PRC_PRC" })
+    getCode({ category: "SYS_PRC_PRC" })
       .then((data) => {
         setCodeSysPrcPrc(data)
         if (data.length > 0) {
-          setSelectedProcesses([data[0].CODE ?? "All"])
+          setSelectedProcesses([data[0].code ?? "All"])
         }
       })
       .catch((error) => {

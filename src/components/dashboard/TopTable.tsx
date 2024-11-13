@@ -11,11 +11,11 @@ export function TopTable() {
   const [dashboardOptions, setDashboardOptions] = useState<Partial<CommonCode>[]>([])
 
   useEffect(() => {
-    getCode({ CATEGORY: "dashboardParam1" })
+    getCode({ category: "dashboardParam1" })
       .then((data) => {
         setDashboardOptions(data)
         if (data.length > 0) {
-          setSelectedServer(data[0].CODE_NAME ?? "All")
+          setSelectedServer(data[0].code_name ?? "All")
         }
       })
       .catch((error) => {
@@ -39,8 +39,8 @@ export function TopTable() {
           onChange={(e) => setSelectedServer(e.target.value)}
         >
           {dashboardOptions.map((option) => (
-            <MenuItem key={option.CODE} value={option.CODE}>
-              {option.CODE_NAME}
+            <MenuItem key={option.code} value={option.code}>
+              {option.code_name}
             </MenuItem>
           ))}
         </Select>

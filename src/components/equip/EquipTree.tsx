@@ -25,7 +25,7 @@ export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
       })
   }, [])
 
-  const groupBy = (array: Partial<EquipType>[], key: "NET_TYPE_CODE" | "EQUIP_TYPE_CODE") => {
+  const groupBy = (array: Partial<EquipType>[], key: "net_type_code" | "equip_type_code") => {
     return array.reduce(
       (acc, currentValue) => {
         const groupKey = currentValue[key]
@@ -43,13 +43,13 @@ export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
   // 트리 항목을 렌더링하는 함수
   const renderTreeItems = () => {
     // 먼저 NET_TYPE_CODE로 그룹화
-    const netTypeGroups = groupBy(equips, "NET_TYPE_CODE")
+    const netTypeGroups = groupBy(equips, "net_type_code")
 
     return Object.keys(netTypeGroups).map((netType, index) => (
       <TreeItem key={netType} itemId={netType} label={netType}>
         {/* 각 NET_TYPE_CODE 아래에서 다시 EQUIP_TYPE_CODE로 그룹화 */}
-        {groupBy(netTypeGroups[netType], "EQUIP_TYPE_CODE") &&
-          Object.keys(groupBy(netTypeGroups[netType], "EQUIP_TYPE_CODE")).map((equipType) => (
+        {groupBy(netTypeGroups[netType], "equip_type_code") &&
+          Object.keys(groupBy(netTypeGroups[netType], "equip_type_code")).map((equipType) => (
             <TreeItem
               key={equipType}
               itemId={equipType + index}

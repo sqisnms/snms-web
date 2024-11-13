@@ -5,9 +5,9 @@ import { CommonCode, CommonCodeEdit } from "@/types/commonCode"
 
 export async function getCodeList() {
   const { rows } = await postgres.query<CommonCode>(`
-    select "CATEGORY", "CODE", "CODE_NAME", "USE_YN", "SORT_ORDER", "REMARKS" from "COMDB"."TBD_COM_CODE_MAST"
-    where "USE_YN" = 'Y'
-    order by "CATEGORY", "SORT_ORDER"
+    select CATEGORY, CODE, CODE_NAME, USE_YN, SORT_ORDER, REMARKS from COMDB.TBD_COM_CODE_MAST
+    where USE_YN = 'Y'
+    order by CATEGORY, SORT_ORDER
   `)
   return rows
 }
@@ -16,32 +16,32 @@ export async function getCodeList() {
 export async function updateCode(changes: CommonCodeEdit[]) {
   const { queries, params } = changes.reduce(
     (acc, change) => {
-      const { CATEGORY, CODE, CODE_NAME, USE_YN, SORT_ORDER, REMARKS, flag } = change
+      const { category, code, code_name, use_yn, sort_order, remarks, flag } = change
 
       switch (flag) {
         case "add":
           acc.queries.push(`
-            INSERT INTO "COMDB"."TBD_COM_CODE_MAST" ("CATEGORY", "CODE", "CODE_NAME", "USE_YN", "SORT_ORDER", "REMARKS")
+            INSERT INTO COMDB.TBD_COM_CODE_MAST (CATEGORY, CODE, CODE_NAME, USE_YN, SORT_ORDER, REMARKS)
             VALUES ($1, $2, $3, $4, $5, $6)
           `)
-          acc.params.push([CATEGORY, CODE, CODE_NAME, USE_YN, SORT_ORDER, REMARKS])
+          acc.params.push([category, code, code_name, use_yn, sort_order, remarks])
           break
 
         case "update":
           acc.queries.push(`
-            UPDATE "COMDB"."TBD_COM_CODE_MAST"
-            SET "CODE_NAME" = $3, "USE_YN" = $4, "SORT_ORDER" = $5, "REMARKS" = $6
-            WHERE "CATEGORY" = $1 AND "CODE" = $2
+            UPDATE COMDB.TBD_COM_CODE_MAST
+            SET CODE_NAME = $3, USE_YN = $4, SORT_ORDER = $5, REMARKS = $6
+            WHERE CATEGORY = $1 AND CODE = $2
           `)
-          acc.params.push([CATEGORY, CODE, CODE_NAME, USE_YN, SORT_ORDER, REMARKS])
+          acc.params.push([category, code, code_name, use_yn, sort_order, remarks])
           break
 
         case "del":
           acc.queries.push(`
-            DELETE FROM "COMDB"."TBD_COM_CODE_MAST"
-            WHERE "CATEGORY" = $1 AND "CODE" = $2
+            DELETE FROM COMDB.TBD_COM_CODE_MAST
+            WHERE CATEGORY = $1 AND CODE = $2
           `)
-          acc.params.push([CATEGORY, CODE])
+          acc.params.push([category, code])
           break
 
         default:
