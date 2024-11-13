@@ -6,3 +6,9 @@ export type MenuType = {
   menu_order: number | null
   leaf_node_yn_code: string | null
 }
+
+export type BreadcrumbType = {
+  menu_id: string
+  url: string | null
+  path_names: string[]
+}

@@ -12,7 +12,7 @@ export default async function Login({
 }) {
   const session = await auth()
   if (session) {
-    redirect(searchParams?.callbackUrl ?? "/system/resource")
+    redirect(searchParams?.callbackUrl ?? "/main")
   }
 
   return (

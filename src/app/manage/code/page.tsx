@@ -154,146 +154,143 @@ export default function CodeManager() {
   }
 
   return (
-    <div>
-      <h1>공통 코드 관리</h1>
-      <Box display="flex" gap={4}>
-        {/* 좌측: 카테고리 목록 */}
-        <Box width="30%">
-          <Box mt={2} display="flex" alignItems="center" gap={1}>
-            <TextField
-              variant="outlined"
-              placeholder="검색어 입력"
-              fullWidth
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <IconButton
-              size="small"
-              onClick={() => {
-                setEditCodes([])
-                refetch()
-              }}
-            >
-              <CachedIcon fontSize="small" />
-            </IconButton>
-          </Box>
-          <Divider sx={{ mt: 1, mb: 1 }} />
-          <ul>
-            {categories
-              .filter(
-                (item) => !searchQuery || item.toLowerCase().includes(searchQuery.toLowerCase()),
-              )
-              .map((category) => (
-                <li key={category}>
-                  <Button
-                    fullWidth
-                    variant={selectedCategory === category ? "contained" : "outlined"}
-                    color="primary"
-                    onClick={() => setSelectedCategory(category)}
-                  >
-                    {category}
-                  </Button>
-                </li>
-              ))}
-          </ul>
+    <Box display="flex" gap={4}>
+      {/* 좌측: 카테고리 목록 */}
+      <Box width="30%">
+        <Box mt={2} display="flex" alignItems="center" gap={1}>
+          <TextField
+            variant="outlined"
+            placeholder="검색어 입력"
+            fullWidth
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <IconButton
+            size="small"
+            onClick={() => {
+              setEditCodes([])
+              refetch()
+            }}
+          >
+            <CachedIcon fontSize="small" />
+          </IconButton>
         </Box>
-
-        {/* 우측: 코드 목록 및 검색 */}
-        <Box width="70%">
-          <Box display="flex" alignItems="center" gap={2} mb={2}>
-            <TextField
-              variant="outlined"
-              size="small"
-              placeholder="새 카테고리"
-              value={newCategory}
-              onChange={(e) => setNewCategory(e.target.value)}
-            />
-            <Button variant="contained" color="primary" onClick={handleAddCategory}>
-              +
-            </Button>
-
-            <Box display="flex" gap={2} ml="auto">
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() =>
-                  handleAdd({
-                    category: selectedCategory ?? "",
-                    code: "",
-                    code_name: "",
-                    use_yn: "Y",
-                    sort_order: 0,
-                    remarks: "",
-                    key: v4(),
-                  })
-                }
-              >
-                추가
-              </Button>
-              <Button variant="contained" color="secondary" onClick={() => handleSave()}>
-                저장
-              </Button>
-            </Box>
-          </Box>
-
-          {/* 코드 테이블 */}
-          <Table sx={{ "& .MuiTableCell-root": { padding: "4px 4px" } }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>CATEGORY</TableCell>
-                <TableCell>CODE</TableCell>
-                <TableCell>CODE_NAME</TableCell>
-                <TableCell>REMARKS</TableCell>
-                <TableCell />
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {editCodes
-                .filter((code) => (selectedCategory ? code.category === selectedCategory : false))
-                .map((code) => (
-                  <TableRow key={code.key}>
-                    <TableCell>{code.category}</TableCell>
-                    <TableCell>
-                      <TextField
-                        variant="outlined"
-                        value={code.code}
-                        onChange={(e) =>
-                          handleUpdate({ ...code, CODE: e.target.value } as CommonCodeEdit)
-                        }
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <TextField
-                        variant="outlined"
-                        value={code.code_name}
-                        onChange={(e) =>
-                          handleUpdate({ ...code, CODE_NAME: e.target.value } as CommonCodeEdit)
-                        }
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <TextField
-                        variant="outlined"
-                        value={code.remarks}
-                        onChange={(e) =>
-                          handleUpdate({ ...code, REMARKS: e.target.value } as CommonCodeEdit)
-                        }
-                        slotProps={{
-                          htmlInput: { maxLength: 25 },
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <IconButton size="small" onClick={() => handleDelete(code.key ?? "")}>
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </Box>
+        <Divider sx={{ mt: 1, mb: 1 }} />
+        <ul>
+          {categories
+            .filter(
+              (item) => !searchQuery || item.toLowerCase().includes(searchQuery.toLowerCase()),
+            )
+            .map((category) => (
+              <li key={category}>
+                <Button
+                  fullWidth
+                  variant={selectedCategory === category ? "contained" : "outlined"}
+                  color="primary"
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </Button>
+              </li>
+            ))}
+        </ul>
       </Box>
-    </div>
+
+      {/* 우측: 코드 목록 및 검색 */}
+      <Box width="70%">
+        <Box display="flex" alignItems="center" gap={2} mb={2}>
+          <TextField
+            variant="outlined"
+            size="small"
+            placeholder="새 카테고리"
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+          />
+          <Button variant="contained" color="primary" onClick={handleAddCategory}>
+            +
+          </Button>
+
+          <Box display="flex" gap={2} ml="auto">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                handleAdd({
+                  category: selectedCategory ?? "",
+                  code: "",
+                  code_name: "",
+                  use_yn: "Y",
+                  sort_order: 0,
+                  remarks: "",
+                  key: v4(),
+                })
+              }
+            >
+              추가
+            </Button>
+            <Button variant="contained" color="secondary" onClick={() => handleSave()}>
+              저장
+            </Button>
+          </Box>
+        </Box>
+
+        {/* 코드 테이블 */}
+        <Table sx={{ "& .MuiTableCell-root": { padding: "4px 4px" } }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>CATEGORY</TableCell>
+              <TableCell>CODE</TableCell>
+              <TableCell>CODE_NAME</TableCell>
+              <TableCell>REMARKS</TableCell>
+              <TableCell />
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {editCodes
+              .filter((code) => (selectedCategory ? code.category === selectedCategory : false))
+              .map((code) => (
+                <TableRow key={code.key}>
+                  <TableCell>{code.category}</TableCell>
+                  <TableCell>
+                    <TextField
+                      variant="outlined"
+                      value={code.code}
+                      onChange={(e) =>
+                        handleUpdate({ ...code, CODE: e.target.value } as CommonCodeEdit)
+                      }
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      variant="outlined"
+                      value={code.code_name}
+                      onChange={(e) =>
+                        handleUpdate({ ...code, CODE_NAME: e.target.value } as CommonCodeEdit)
+                      }
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      variant="outlined"
+                      value={code.remarks}
+                      onChange={(e) =>
+                        handleUpdate({ ...code, REMARKS: e.target.value } as CommonCodeEdit)
+                      }
+                      slotProps={{
+                        htmlInput: { maxLength: 25 },
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <IconButton size="small" onClick={() => handleDelete(code.key ?? "")}>
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </Box>
+    </Box>
   )
 }

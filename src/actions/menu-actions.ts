@@ -1,10 +1,10 @@
 "use server"
 
 import { postgres } from "@/config/db"
-import { MenuType } from "@/types/menu"
+import { BreadcrumbType, MenuType } from "@/types/menu"
 
 export async function getMenu() {
-  const { rows } = await postgres.query<MenuType>(`
+  const { rows: menuData } = await postgres.query<MenuType>(`
     WITH RECURSIVE menu_tree AS (
       SELECT
         MENU_ID,
@@ -39,5 +39,38 @@ export async function getMenu() {
     FROM menu_tree
     ORDER BY UPPER_MENU_ID NULLS FIRST, MENU_ORDER
   `)
-  return rows
+
+  const { rows: breadcrumbs } = await postgres.query<BreadcrumbType>(`
+    WITH RECURSIVE menu_tree AS (
+      -- leaf_node_yn_code가 'Y'인 노드부터 시작
+      SELECT
+          MENU_ID,
+          UPPER_MENU_ID,
+          MENU_NAME,
+          URL,
+          ARRAY[MENU_NAME]::varchar[] AS path_names
+      FROM COMDB.TBD_COM_CONF_MENU
+      WHERE leaf_node_yn_code = 'Y'
+        AND COALESCE(USE_YN_CODE, 'N') = 'Y'
+      UNION ALL
+      -- 상위 메뉴로 재귀적으로 연결하면서 path_names 배열에 메뉴명을 추가
+      SELECT
+          parent.MENU_ID,
+          parent.UPPER_MENU_ID,
+          parent.MENU_NAME,
+          child.URL,
+          parent.MENU_NAME || child.path_names
+      FROM COMDB.TBD_COM_CONF_MENU parent
+      JOIN menu_tree child ON child.UPPER_MENU_ID = parent.MENU_ID
+      --WHERE COALESCE(parent.USE_YN_CODE, 'N') = 'Y'
+  )
+  SELECT
+      MENU_ID,
+      URL,
+      path_names
+  FROM menu_tree
+  WHERE UPPER_MENU_ID IS NULL  -- 최상위 노드까지 추적 완료된 경우만 반환
+  ORDER BY MENU_ID
+  `)
+  return { menuData, breadcrumbs }
 }

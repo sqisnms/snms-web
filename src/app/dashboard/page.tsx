@@ -1,38 +1,21 @@
 "use client"
 
-import { dashboardSelectedAtom } from "@/atom/dashboardAtom"
-import { TopTable } from "@/components/dashboard/TopTable"
-import { ClickHouseQuerySample, PostgresQuerySample } from "@/components/sample/Sample"
-import { useContextPath } from "@/config/Providers"
+import { grafanaServerProcessParamAtom } from "@/atom/dashboardAtom"
+import { GrafanaIframe } from "@/components/dashboard/GrafanaIframe"
 import { useAtom } from "jotai"
 
 export default function Page() {
-  const [selected] = useAtom(dashboardSelectedAtom)
-  const contextPath = useContextPath()
-
+  const [selected] = useAtom(grafanaServerProcessParamAtom)
   return (
-    <div>
-      <h1>대시보드</h1>
-      <TopTable />
-      <iframe
-        width="100%"
-        height="600"
-        title="서버자원 모니터링"
-        src={`${
-          contextPath
-        }/grafana/d/ae0ijnes4j7cwe/snms-server-resource?orgId=1&refresh=auto&kiosk${selected}`}
-        // src={`${
-        //   contextPath
-        // }/grafana/d/ae0yw793f2800a/new-dashboard?orgId=1&from=1729567451243&to=1729589051243&refresh=auto&kiosk${selected}`}
-        // src={`grafana/d/ae0ijnes4j7cwe/server-resource?orgId=1&kiosk${selected}`}
-        // &var-server_id=sqinms_m01&var-server_id=sqinms_m03
+    <>
+      {/* <div style={{ width: 50, height: 20 }} /> */}
+      {/* <ProcessOption /> */}
+      {/* <div style={{ width: 50, height: 20 }} /> */}
+      <GrafanaIframe
+        src="/grafana/playlists/play/ce3l4rhdkh5vke?kiosk" // &autofitpanels=true 이 옵션 주면 화면이 줄어들면서 차트가 안보이는 상황 발생
+        selected={selected}
+        title="대시보드"
       />
-      <div>
-        <h2>데이터베이스 통계</h2>
-        <PostgresQuerySample />
-        <ClickHouseQuerySample />
-        {/* <MariaDBQuerySample /> */}
-      </div>
-    </div>
+    </>
   )
 }
