@@ -53,7 +53,23 @@
         "endOfLine": "auto"
       }
     ],
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    //code_name 과 같은 변수명 사용 가능하도록(DB컬럼과 일치)
+    "@typescript-eslint/naming-convention": [
+      "off",
+      {
+        "selector": "default",
+        "format": null
+      },
+      {
+        "selector": "variable",
+        "format": ["camelCase", "PascalCase", "UPPER_CASE"],
+        "filter": {
+          "regex": "code_name",
+          "match": false
+        }
+      }
+    ]
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {

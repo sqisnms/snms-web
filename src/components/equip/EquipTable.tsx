@@ -21,33 +21,33 @@ export function EquipTable({ selectedEquipTypeCode }: EquipTableProps) {
   const [columns, setColumns] = useState<{ name: string; comment: string }[]>([])
 
   useEffect(() => {
-    getEquipByTypeCode({ EQUIP_TYPE_CODE: selectedEquipTypeCode })
+    getEquipByTypeCode({ equip_type_code: selectedEquipTypeCode })
       .then((data) => {
         console.table(data)
         console.log(JSON.stringify(data))
         if (data.length > 0) {
           setColumns([
-            { name: "EQUIP_ID", comment: "고유Key" },
-            { name: "CURRENT_EQUIP_ID", comment: "장비ID" },
-            { name: "EQUIP_NAME", comment: "장비명" },
-            { name: "PARENT_EQUIP_ID", comment: "상위장비" },
-            { name: "EQUIP_TYPE_CODE", comment: "장비종류" },
-            { name: "NET_TYPE_CODE", comment: "장비구분" },
-            { name: "GENERATION_CODE", comment: "세대구분" },
-            { name: "VENDOR_CODE", comment: "제조사" },
-            { name: "MODEL_CODE", comment: "모델" },
-            { name: "TEAM_CODE", comment: "조직" },
-            { name: "OPEN_DATE", comment: "개통일자" },
-            { name: "EQUIP_STATUS", comment: "장비상태" },
-            { name: "IP_ADDRESS", comment: "IP주소" },
-            { name: "MGR_MAIN_USER", comment: "관리담당자(정)" },
-            { name: "MGR_SUB_USER", comment: "관리담당자(부)" },
-            { name: "CITY", comment: "시도" },
-            { name: "DISTRICT", comment: "시군구" },
-            { name: "DONG", comment: "읍면동" },
-            { name: "STREET", comment: "번지" },
-            { name: "CREATE_DATE", comment: "생성일자" },
-            { name: "MODIFY_DATE", comment: "수정일자" },
+            { name: "equip_id", comment: "고유Key" },
+            { name: "current_equip_id", comment: "장비ID" },
+            { name: "equip_name", comment: "장비명" },
+            { name: "parent_equip_id", comment: "상위장비" },
+            { name: "equip_type_code", comment: "장비종류" },
+            { name: "net_type_code", comment: "장비구분" },
+            { name: "generation_code", comment: "세대구분" },
+            { name: "vendor_code", comment: "제조사" },
+            { name: "model_code", comment: "모델" },
+            { name: "team_code", comment: "조직" },
+            { name: "open_date", comment: "개통일자" },
+            { name: "equip_status", comment: "장비상태" },
+            { name: "ip_address", comment: "IP주소" },
+            { name: "mgr_main_user", comment: "관리담당자(정)" },
+            { name: "mgr_sub_user", comment: "관리담당자(부)" },
+            { name: "city", comment: "시도" },
+            { name: "district", comment: "시군구" },
+            { name: "dong", comment: "읍면동" },
+            { name: "street", comment: "번지" },
+            { name: "create_date", comment: "생성일자" },
+            { name: "modify_date", comment: "수정일자" },
           ])
         }
         setEquips(data)
@@ -102,7 +102,7 @@ export function EquipTable({ selectedEquipTypeCode }: EquipTableProps) {
             </TableRow>
           ) : (
             equips.map((equip) => (
-              <TableRow key={equip.EQUIP_ID}>
+              <TableRow key={equip.equip_id}>
                 {columns.map((column) => {
                   const value = equip[column.name as keyof EquipType]
 

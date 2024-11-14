@@ -20,7 +20,7 @@ export default function Menu({ menuData }: { menuData: MenuType[] }) {
   }
 
   const renderSubMenu = (pid: string, depth: number) => {
-    const subMenus = menuData.filter((item) => item.UPPER_MENU_ID === pid)
+    const subMenus = menuData.filter((item) => item.upper_menu_id === pid)
 
     if (subMenus.length === 0) return null
     if (!activeMenus.includes(pid)) return null
@@ -43,16 +43,16 @@ export default function Menu({ menuData }: { menuData: MenuType[] }) {
         <ul className="py-2">
           {subMenus.map((menu) => (
             <li
-              key={menu.MENU_ID}
+              key={menu.menu_id}
               className={depthLiStyle[depth - 1]}
-              onMouseEnter={() => handleMouseEnter(menu.MENU_ID, depth)}
+              onMouseEnter={() => handleMouseEnter(menu.menu_id, depth)}
             >
-              {menu.LEAF_NODE_YN_CODE === "Y" ? (
-                <Link href={menu.URL ?? ""}>{menu.MENU_NAME}</Link>
+              {menu.leaf_node_yn_code === "Y" ? (
+                <Link href={menu.url ?? ""}>{menu.menu_name}</Link>
               ) : (
-                menu.MENU_NAME
+                menu.menu_name
               )}
-              {renderSubMenu(menu.MENU_ID, depth + 1)}
+              {renderSubMenu(menu.menu_id, depth + 1)}
             </li>
           ))}
         </ul>
@@ -67,29 +67,29 @@ export default function Menu({ menuData }: { menuData: MenuType[] }) {
       </Link>
       <nav className="relative flex space-x-6">
         {menuData
-          .filter((item) => item.UPPER_MENU_ID === null)
+          .filter((item) => item.upper_menu_id === null)
           .map((menu) => (
             <div
-              key={menu.MENU_ID}
-              onMouseEnter={() => handleMouseEnter(menu.MENU_ID, 0)}
+              key={menu.menu_id}
+              onMouseEnter={() => handleMouseEnter(menu.menu_id, 0)}
               onMouseLeave={handleMouseLeave}
               className="relative"
             >
               <button
                 type="button"
                 className={`h-16 px-4 py-2 ${
-                  activeMenus.includes(menu.MENU_ID)
+                  activeMenus.includes(menu.menu_id)
                     ? "border-b-2 border-point text-point"
                     : "border-b-2 border-transparent"
                 }`}
               >
-                {menu.LEAF_NODE_YN_CODE === "Y" ? (
-                  <Link href={menu.URL ?? ""}>{menu.MENU_NAME}</Link>
+                {menu.leaf_node_yn_code === "Y" ? (
+                  <Link href={menu.url ?? ""}>{menu.menu_name}</Link>
                 ) : (
-                  menu.MENU_NAME
+                  menu.menu_name
                 )}
               </button>
-              {renderSubMenu(menu.MENU_ID, 1)}
+              {renderSubMenu(menu.menu_id, 1)}
             </div>
           ))}
       </nav>

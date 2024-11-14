@@ -2,11 +2,10 @@
 
 import { getMenu } from "@/actions/menu-actions"
 import Gnb from "@/components/common/Gnb"
-import { MenuType } from "@/types/menu"
 import { auth as getServerSession } from "auth"
 
 export default async function CommonLayout({ children }: { children: React.ReactNode }) {
-  const menuData: MenuType[] = await getMenu() // 공통 메뉴
+  const { menuData } = await getMenu() // 공통 메뉴
   const session = await getServerSession() // 유저정보
   return (
     <div className="flex h-screen flex-col">

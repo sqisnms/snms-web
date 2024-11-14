@@ -1,23 +1,23 @@
 export type EquipType = {
-  EQUIP_ID: string // 고유Key
-  CURRENT_EQUIP_ID: string // 장비ID
-  EQUIP_NAME: string // 장비명
-  PARENT_EQUIP_ID: string | null // 상위장비 (nullable)
-  EQUIP_TYPE_CODE: string // 장비 유형 코드
-  NET_TYPE_CODE: string | null // 네트워크 유형 코드 (nullable)
-  GENERATION_CODE: string | null // 세대 코드 (nullable)
-  VENDOR_CODE: string | null // 벤더 코드 (nullable)
-  MODEL_CODE: string | null // 모델 코드 (nullable)
-  TEAM_CODE: string | null // 팀 코드 (nullable)
-  OPEN_DATE: Date | null // 개통일 (nullable, timestamp -> Date in TypeScript)
-  EQUIP_STATUS: string // 장비 상태 코드
-  IP_ADDRESS: string | null // IP 주소 (nullable)
-  MGR_MAIN_USER: string | null // 주 관리자 ID (nullable)
-  MGR_SUB_USER: string | null // 부 관리자 ID (nullable)
-  CITY: string | null // 도시 (nullable)
-  DISTRICT: string | null // 구/군 (nullable)
-  DONG: string | null // 동 (nullable)
-  STREET: string | null // 거리 (nullable)
-  CREATE_DATE: Date | null // 생성일 (nullable, timestamp -> Date in TypeScript)
-  MODIFY_DATE: Date | null // 수정일 (nullable, timestamp -> Date in TypeScript)
+  equip_id: string // 고유key
+  current_equip_id: string // 장비id
+  equip_name: string // 장비명
+  parent_equip_id: string | null // 상위장비 (nullable)
+  equip_type_code: string // 장비 유형 코드
+  net_type_code: string | null // 네트워크 유형 코드 (nullable)
+  generation_code: string | null // 세대 코드 (nullable)
+  vendor_code: string | null // 벤더 코드 (nullable)
+  model_code: string | null // 모델 코드 (nullable)
+  team_code: string | null // 팀 코드 (nullable)
+  open_date: Date | null // 개통일 (nullable, timestamp -> date in typescript)
+  equip_status: string // 장비 상태 코드
+  ip_address: string | null // ip 주소 (nullable)
+  mgr_main_user: string | null // 주 관리자 id (nullable)
+  mgr_sub_user: string | null // 부 관리자 id (nullable)
+  city: string | null // 도시 (nullable)
+  district: string | null // 구/군 (nullable)
+  dong: string | null // 동 (nullable)
+  street: string | null // 거리 (nullable)
+  create_date: Date | null // 생성일 (nullable, timestamp -> date in typescript)
+  modify_date: Date | null // 수정일 (nullable, timestamp -> date in typescript)
 }

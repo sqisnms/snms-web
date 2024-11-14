@@ -1,10 +1,10 @@
 export type CommonCode = {
-  CATEGORY: string
-  CODE: string
-  CODE_NAME: string
-  USE_YN: string
-  SORT_ORDER: number
-  REMARKS: string
+  category: string
+  code: string
+  code_name: string
+  use_yn: string
+  sort_order: number
+  remarks: string
 }
 
 export type CommonCodeEdit = CommonCode & {
