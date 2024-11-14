@@ -6,6 +6,10 @@ const nextConfig = {
         source: "/grafana/:path*",
         destination: `${process.env.GRAFANA_URL}/grafana/:path*`,
       },
+      {
+        source: "/qrScan/:path*",
+        destination: `${process.env.AUTH_SERVER_URL}/api/qrScan/:path*`,
+      },
     ]
   },
 }

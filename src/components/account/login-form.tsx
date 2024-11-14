@@ -6,6 +6,7 @@ import { Button } from "@mui/material"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useFormState, useFormStatus } from "react-dom"
+import QRLogin from "./qrLogin"
 
 function LoginButton() {
   const { pending } = useFormStatus()
@@ -82,6 +83,8 @@ export default function LoginForm() {
           </>
         )}
       </div>
+
+      <QRLogin />
     </form>
   )
 }
