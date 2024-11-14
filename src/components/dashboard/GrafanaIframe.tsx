@@ -1,4 +1,6 @@
+import { grafanaThemeAtom } from "@/atom/dashboardAtom"
 import { useContextPath } from "@/config/Providers"
+import { useAtom } from "jotai"
 import { useRef } from "react"
 
 interface GrafanaIframeProps {
@@ -10,6 +12,7 @@ interface GrafanaIframeProps {
 export function GrafanaIframe({ src, selected, title }: GrafanaIframeProps) {
   const contextPath = useContextPath()
   const iframeRef = useRef<HTMLIFrameElement | null>(null)
+  const [theme] = useAtom(grafanaThemeAtom)
 
   // height 자동조정 스크립트. 11버전으로 가면서(autofitheight) 필요없어짐.
 
@@ -59,7 +62,7 @@ export function GrafanaIframe({ src, selected, title }: GrafanaIframeProps) {
       width="100%"
       height="750"
       title={title}
-      src={`${contextPath}${src}${selected}`}
+      src={`${contextPath}${src}${selected}&theme=${theme}`}
       // src={`${contextPath}/grafana/d/ae0ijnes4j7cwe/snms-server-resource?orgId=1&refresh=auto&kiosk${selected}`}
       /// grafana/d/ae0yw793f2800a/new-dashboard?orgId=1&from=1729567451243&to=1729589051243&refresh=auto&kiosk
       // grafana/d/ae0ijnes4j7cwe/server-resource?orgId=1&kiosk${selected}
