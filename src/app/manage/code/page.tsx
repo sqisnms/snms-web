@@ -157,7 +157,7 @@ export default function CodeManager() {
     <Box display="flex" gap={4}>
       {/* 좌측: 카테고리 목록 */}
       <Box width="30%">
-        <Box mt={2} display="flex" alignItems="center" gap={1}>
+        <Box mt={2} display="flex" alignItems="center" gap={1} className="dark:bg-black">
           <TextField
             variant="outlined"
             placeholder="검색어 입력"
@@ -171,22 +171,28 @@ export default function CodeManager() {
               setEditCodes([])
               refetch()
             }}
+            className="dark:text-white"
           >
             <CachedIcon fontSize="small" />
           </IconButton>
         </Box>
-        <Divider sx={{ mt: 1, mb: 1 }} />
+        <Divider className="dark:border-gray-400" sx={{ mt: 1, mb: 1 }} />
         <ul>
           {categories
             .filter(
               (item) => !searchQuery || item.toLowerCase().includes(searchQuery.toLowerCase()),
             )
             .map((category) => (
-              <li key={category}>
+              <li className="mt-2" key={category}>
                 <Button
                   fullWidth
                   variant={selectedCategory === category ? "contained" : "outlined"}
                   color="primary"
+                  className={`${
+                    selectedCategory === category
+                      ? "bg-primary text-white"
+                      : "border-primary bg-white text-primary dark:border-white dark:bg-black dark:text-white"
+                  }`}
                   onClick={() => setSelectedCategory(category)}
                 >
                   {category}
@@ -238,11 +244,11 @@ export default function CodeManager() {
         <Table sx={{ "& .MuiTableCell-root": { padding: "4px 4px" } }}>
           <TableHead>
             <TableRow>
-              <TableCell>CATEGORY</TableCell>
-              <TableCell>CODE</TableCell>
-              <TableCell>CODE_NAME</TableCell>
-              <TableCell>REMARKS</TableCell>
-              <TableCell />
+              <TableCell className="dark:text-white">CATEGORY</TableCell>
+              <TableCell className="dark:text-white">CODE</TableCell>
+              <TableCell className="dark:text-white">CODE_NAME</TableCell>
+              <TableCell className="dark:text-white">REMARKS</TableCell>
+              <TableCell className="dark:text-white" />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -250,8 +256,8 @@ export default function CodeManager() {
               .filter((code) => (selectedCategory ? code.category === selectedCategory : false))
               .map((code) => (
                 <TableRow key={code.key}>
-                  <TableCell>{code.category}</TableCell>
-                  <TableCell>
+                  <TableCell className="dark:text-white">{code.category}</TableCell>
+                  <TableCell className="dark:text-white">
                     <TextField
                       variant="outlined"
                       value={code.code}
@@ -283,7 +289,7 @@ export default function CodeManager() {
                   </TableCell>
                   <TableCell>
                     <IconButton size="small" onClick={() => handleDelete(code.key ?? "")}>
-                      <DeleteIcon fontSize="small" />
+                      <DeleteIcon className="dark:text-white" fontSize="small" />
                     </IconButton>
                   </TableCell>
                 </TableRow>
