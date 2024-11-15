@@ -16,11 +16,11 @@ export default async function CommonLayout({ children }: { children: React.React
         <Gnb menuData={menuData} userName={session?.user?.name ?? ""} />
       </div>
       <div className="w-full">
-        <div className="flex h-screen flex-col">
+        <div className="flex h-screen flex-col dark:bg-black">
           {/* Header Section */}
-          <Paper className="mb-6 p-4 shadow-md">
+          <Paper className="mb-6 rounded-none p-4 shadow-md dark:bg-black">
             <Top breadcrumbs={breadcrumbs} />
-            <div style={{ width: 50, height: 20 }} />
+            {/* <div style={{ width: 50, height: 20 }} /> */}
             {children}
           </Paper>
         </div>
