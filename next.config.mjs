@@ -10,6 +10,10 @@ const nextConfig = {
         source: "/qrScan/:path*",
         destination: `${process.env.AUTH_SERVER_URL}/api/qrScan/:path*`,
       },
+      {
+        source: "/token/:path*",
+        destination: `${process.env.AUTH_SERVER_URL}/api/token/:path*`,
+      },
     ]
   },
 }
