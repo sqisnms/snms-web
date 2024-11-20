@@ -1,6 +1,8 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 // eslint-disable-next-line import/no-cycle
+import { AES } from "crypto-js"
+import Utf8 from "crypto-js/enc-utf8"
 import { authConfig } from "./auth.config"
 
 export const {
@@ -34,17 +36,13 @@ export const {
     // }),
     Credentials({
       async authorize(credentials, request) {
-        if (credentials.refreshToken) {
-          return {
-            ...credentials,
-            user: {
-              id: credentials.id,
-              name: credentials.name,
-              email: credentials.email,
-              password: credentials.password,
-              auth_key: credentials.auth_key,
-            },
-          }
+        if (credentials.qrInfo) {
+          const bytes = AES.decrypt(
+            credentials.qrInfo as string,
+            process.env.AUTH_SERVER_API_KEY ?? "",
+          )
+          const decrypted = JSON.parse(bytes.toString(Utf8))
+          return decrypted
         }
         if (credentials.email && credentials.password) {
           const response = await fetch(new URL("/token/genToken", request.url), {

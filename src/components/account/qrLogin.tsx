@@ -1,3 +1,4 @@
+import { checkQrLogin } from "@/actions/account-actions"
 import { Box, Button, CircularProgress } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
 import { signIn } from "next-auth/react"
@@ -12,25 +13,15 @@ export default function QRLogin() {
   const [isLoginSuccessful, setIsLoginSuccessful] = useState(false)
 
   const pollingQrLogin = async () => {
-    const res = await fetch("/qrScan/loginCheck", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        sessionID: qrSessionID,
-      }),
+    const res = await checkQrLogin({
+      qrSessionID: qrSessionID ?? "",
+      baseUrl: window.location.href,
     })
-
-    if (!res.ok) throw new Error("QR 코드를 가져오는데 실패했습니다.")
-
-    const resData = await res.json()
-
-    if (resData.code === "0000") {
+    if (res.code === "0000") {
       setIsLoginSuccessful(true)
-      signIn("credentials", { ...resData.data, ...resData.data.user })
-      // 로그인 성공 처리 로직 추가
+      signIn("credentials", { qrInfo: res.data })
     }
+    return []
   }
 
   useQuery({
