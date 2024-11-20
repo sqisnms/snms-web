@@ -5,15 +5,20 @@ import Gnb from "@/components/common/Gnb"
 import Top from "@/components/common/Top"
 import { Paper } from "@mui/material"
 import { auth as getServerSession } from "auth"
+import { cookies } from "next/headers"
 
 export default async function CommonLayout({ children }: { children: React.ReactNode }) {
   const { menuData, breadcrumbs } = await getMenu() // 공통 메뉴
   const session = await getServerSession() // 유저정보
 
+  // 다크모드 토글 초기 세팅
+  const cookie = cookies()
+  const theme = cookie.get("theme")?.value ?? "light"
+
   return (
     <div className="flex h-screen flex-col">
       <div className="w-full">
-        <Gnb menuData={menuData} userName={session?.user?.name ?? ""} />
+        <Gnb menuData={menuData} userName={session?.user?.name ?? ""} theme={theme} />
       </div>
       <div className="w-full">
         <div className="flex h-screen flex-col dark:bg-black">

@@ -4,4 +4,4 @@ export const dashboardSelectedAtom = atom<string>("")
 export const grafanaServerResourceParamAtom = atom<string>("")
 export const grafanaServerProcessParamAtom = atom<string>("")
 
-export const grafanaThemeAtom = atom<"dark" | "light">("dark")
+export const grafanaThemeAtom = atom<"dark" | "light">("light")

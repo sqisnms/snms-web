@@ -23,8 +23,8 @@ export function EquipTable({ selectedEquipTypeCode }: EquipTableProps) {
   useEffect(() => {
     getEquipByTypeCode({ equip_type_code: selectedEquipTypeCode })
       .then((data) => {
-        console.table(data)
-        console.log(JSON.stringify(data))
+        // console.table(data)
+        // console.log(JSON.stringify(data))
         if (data.length > 0) {
           setColumns([
             { name: "equip_id", comment: "고유Key" },
