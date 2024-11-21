@@ -2,7 +2,7 @@
 
 import { grafanaThemeAtom } from "@/atom/dashboardAtom"
 import { MenuType } from "@/types/menu"
-import { FormControlLabel } from "@mui/material"
+import { Box, FormControlLabel } from "@mui/material"
 import { styled } from "@mui/material/styles"
 import Switch from "@mui/material/Switch"
 import { useAtom } from "jotai"
@@ -113,9 +113,27 @@ export default function Menu({
     setActiveMenus([])
   }
 
+  const openInNewWindow = (menu: MenuType) => {
+    const url = menu.url ?? ""
+    const width = menu.screen_width ?? 800
+    const height = menu.screen_width ?? 600
+    window.open(url, "_blank", `noopener,noreferrer,width=${width},height=${height},top=50,left=50`)
+  }
+
   function renderMenuLink(menu: MenuType) {
     if (menu.leaf_node_yn_code === "Y") {
+      // 새창 팝업
       if (menu.pop_up_yn_code === "Y") {
+        return (
+          <Box>
+            <button type="button" onClick={() => openInNewWindow(menu)}>
+              {menu.menu_name}
+            </button>
+          </Box>
+        )
+      }
+      // 새탭
+      if (menu.pop_up_yn_code === "T") {
         return (
           <Link href={menu.url ?? ""} target="_blank" rel="noopener noreferrer">
             {menu.menu_name}
