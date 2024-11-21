@@ -2,12 +2,13 @@
 
 import { grafanaThemeAtom } from "@/atom/dashboardAtom"
 import { MenuType } from "@/types/menu"
+import { FormControlLabel } from "@mui/material"
 import { styled } from "@mui/material/styles"
 import Switch from "@mui/material/Switch"
 import { useAtom } from "jotai"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -65,9 +66,41 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }))
 
-export default function Menu({ menuData }: { menuData: MenuType[] }) {
+function setCookie(name: string, value: string, days: number) {
+  let expires = ""
+  if (days) {
+    const date = new Date()
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000)
+    expires = `; expires=${date.toUTCString()}`
+  }
+  document.cookie = `${name}=${value || ""}${expires}; path=/`
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getCookie(name: string) {
+  const nameEQ = `${name}=`
+  const ca = document.cookie.split(";")
+  for (let i = 0; i < ca.length; i + 1) {
+    let c = ca[i]
+    while (c.charAt(0) === " ") c = c.substring(1, c.length)
+    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length)
+  }
+  return null
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function eraseCookie(name: string) {
+  document.cookie = `${name}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`
+}
+
+export default function Menu({
+  menuData,
+  theme: initialTheme,
+}: {
+  menuData: MenuType[]
+  theme: string
+}) {
   const [activeMenus, setActiveMenus] = useState<string[]>([])
-  const [theme, setTheme] = useAtom(grafanaThemeAtom)
+  const [theme, setTheme] = useState<string>(initialTheme)
+  const [, setGrafanaTheme] = useAtom(grafanaThemeAtom)
 
   const handleMouseEnter = (menu: string, depth: number) => {
     const newActiveMenus = activeMenus.slice(0, depth)
@@ -122,9 +155,22 @@ export default function Menu({ menuData }: { menuData: MenuType[] }) {
   }
 
   // 스위치가 눌렸을 때 모드 전환 함수
-  const toggleMode = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTheme(event.target.checked ? "dark" : "light")
+  const toggleTheme = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newTheme = event.target.checked ? "dark" : "light"
+    setTheme(newTheme)
+    setGrafanaTheme(newTheme as "dark" | "light")
+
+    document.documentElement.className = newTheme
+
+    setCookie("theme", newTheme, 30)
   }
+
+  useEffect(() => {
+    const savedTheme = initialTheme ?? "light"
+    setTheme(savedTheme)
+    setGrafanaTheme(savedTheme as "dark" | "light")
+    document.documentElement.className = savedTheme
+  }, [])
 
   return (
     <div className="flex items-center">
@@ -159,11 +205,11 @@ export default function Menu({ menuData }: { menuData: MenuType[] }) {
             </div>
           ))}
       </nav>
-      <MaterialUISwitch
-        sx={{ m: 1 }}
-        defaultChecked
-        onChange={toggleMode}
-        value={theme === "dark"}
+      <FormControlLabel
+        control={
+          <MaterialUISwitch sx={{ m: 1 }} onChange={toggleTheme} checked={theme !== "light"} />
+        }
+        label=""
       />
     </div>
   )

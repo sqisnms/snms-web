@@ -2,11 +2,19 @@ import { LogoutButton } from "@/components/account/logout-form"
 import { MenuType } from "@/types/menu"
 import Menu from "./Menu"
 
-function Gnb({ menuData, userName }: { menuData: MenuType[]; userName: string }) {
+function Gnb({
+  menuData,
+  userName,
+  theme,
+}: {
+  menuData: MenuType[]
+  userName: string
+  theme: string
+}) {
   return (
     <header className="bg-primary text-white dark:bg-gray-800">
       <div className="container flex h-16 w-full max-w-full items-center justify-between px-4">
-        <Menu menuData={menuData} />
+        <Menu menuData={menuData} theme={theme} />
 
         {/* Right Icons */}
         <div className="flex items-center space-x-4">

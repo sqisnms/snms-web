@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from "uuid"
 
 import { postgres } from "@/config/db"
 import type { User } from "@/types/user"
+import AES from "crypto-js/aes"
 
 export async function getUser(email: string): Promise<User | undefined> {
   try {
@@ -136,4 +137,35 @@ export async function performLogout() {
     // eslint-disable-next-line no-console
     console.error("Logout failed:", error)
   }
+}
+
+export async function checkQrLogin({
+  qrSessionID,
+  baseUrl,
+}: {
+  qrSessionID: string
+  baseUrl: string
+}) {
+  const res = await fetch(new URL("/qrScan/loginCheck", baseUrl), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      sessionID: qrSessionID,
+    }),
+  })
+
+  if (!res.ok) return { code: "1001" }
+
+  const resData = await res.json()
+
+  if (resData.code === "0000") {
+    const encryped = AES.encrypt(
+      JSON.stringify(resData.data),
+      process.env.AUTH_SERVER_API_KEY ?? "",
+    ).toString()
+    return { code: resData.code, data: encryped }
+  }
+  return { code: "1002" }
 }

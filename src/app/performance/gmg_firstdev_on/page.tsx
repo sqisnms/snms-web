@@ -11,11 +11,7 @@ export default function Page() {
       {/* <div style={{ width: 50, height: 20 }} /> */}
       {/* <ProcessOption /> */}
       {/* <div style={{ width: 50, height: 20 }} /> */}
-      <GrafanaIframe
-        src="/grafana/d/ce37784xa7h1cc/gmg-type1?kiosk"
-        selected={selected}
-        title="gmg1"
-      />
+      <GrafanaIframe src="/grafana/d/be3wexhknqdxce?kiosk" selected={selected} title="gmg1" />
     </>
   )
 }

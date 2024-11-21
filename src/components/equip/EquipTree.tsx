@@ -16,8 +16,8 @@ export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
   useEffect(() => {
     getEquipList()
       .then((data) => {
-        console.table(data)
-        console.log(JSON.stringify(data))
+        // console.table(data)
+        // console.log(JSON.stringify(data))
         setEquips(data)
       })
       .catch((error) => {
