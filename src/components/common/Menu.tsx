@@ -163,6 +163,8 @@ export default function Menu({
     document.documentElement.className = newTheme
 
     setCookie("theme", newTheme, 30)
+
+    window.location.reload()
   }
 
   useEffect(() => {
