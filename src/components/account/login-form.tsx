@@ -17,9 +17,21 @@ function LoginButton() {
       type="submit"
       variant="contained"
       fullWidth
-      className="mt-6 h-12 rounded-lg bg-primary text-base font-normal shadow-none hover:bg-primary-dark"
+      className="btn btn_login !mt-6 !h-12 !rounded-lg !bg-primary !text-base !font-normal !shadow-none hover:!bg-primary-dark"
     >
       로그인
+    </Button>
+  )
+}
+
+function JoinButton() {
+  return (
+    <Button
+      variant="contained"
+      fullWidth
+      className="btn btn_join mt-4 h-12 !rounded-lg bg-white !text-base !font-normal text-primary !shadow-none hover:text-primary-dark"
+    >
+      회원가입
     </Button>
   )
 }
@@ -72,6 +84,7 @@ function FormLogin() {
         />
       </div>
       <LoginButton />
+      <JoinButton />
       <div className="flex h-8 items-end space-x-1" aria-live="polite" aria-atomic="true">
         {errorMessage && (
           <>

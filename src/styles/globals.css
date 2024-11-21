@@ -14,3 +14,9 @@
 .css-1qltlow-MuiTabs-indicator {
   background-color: #143896 !important;
 }
+
+*,
+.MuiButtonBase-root,
+.btn {
+  font-family: "__Noto_Sans_KR_23d4f0", "__Noto_Sans_KR_Fallback_23d4f0";
+}
