@@ -1,7 +1,8 @@
 import { grafanaThemeAtom } from "@/atom/dashboardAtom"
 import { useContextPath } from "@/config/Providers"
+import { Box } from "@mui/material"
 import { useAtom } from "jotai"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 interface GrafanaIframeProps {
   src: string
@@ -13,6 +14,7 @@ export function GrafanaIframe({ src, selected, title }: GrafanaIframeProps) {
   const contextPath = useContextPath()
   const iframeRef = useRef<HTMLIFrameElement | null>(null)
   const [theme] = useAtom(grafanaThemeAtom)
+  const [loaded, setLoaded] = useState(false)
 
   // height 자동조정 스크립트. 11버전으로 가면서(autofitheight) 필요없어짐.
 
@@ -55,6 +57,22 @@ export function GrafanaIframe({ src, selected, title }: GrafanaIframeProps) {
   //     if (intervalRef.current) clearInterval(intervalRef.current)
   //   }
   // }, [adjustHeight, selected])
+
+  useEffect(() => {
+    setLoaded(true)
+  }, [])
+
+  if (!loaded) {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          height: "750px", // iframe과 동일한 높이
+          backgroundColor: "transparent", // 배경 투명
+        }}
+      />
+    )
+  }
 
   return (
     <iframe

@@ -117,7 +117,8 @@ export default function Menu({
     const url = menu.url ?? ""
     const width = menu.screen_width ?? 800
     const height = menu.screen_width ?? 600
-    window.open(url, "_blank", `noopener,noreferrer,width=${width},height=${height},top=50,left=50`)
+    // 아이디로 추적할거면 noopener,noreferrer 못씀
+    window.open(url, url, `width=${width},height=${height},top=50,left=50`)
   }
 
   function renderMenuLink(menu: MenuType) {
@@ -134,8 +135,9 @@ export default function Menu({
       }
       // 새탭
       if (menu.pop_up_yn_code === "T") {
+        // 아이디로 추적할거면 rel="noopener noreferrer" 못씀
         return (
-          <Link href={menu.url ?? ""} target="_blank" rel="noopener noreferrer">
+          <Link href={menu.url ?? ""} target={menu.url ?? ""}>
             {menu.menu_name}
           </Link>
         )
