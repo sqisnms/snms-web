@@ -12,7 +12,8 @@ export async function getMenu() {
         MENU_NAME,
         URL,
         MENU_ORDER,
-        LEAF_NODE_YN_CODE
+        LEAF_NODE_YN_CODE,
+        POP_UP_YN_CODE
       FROM COMDB.TBD_COM_CONF_MENU
       WHERE UPPER_MENU_ID IS NULL
       AND COALESCE(USE_YN_CODE, 'N') = 'Y'
@@ -24,7 +25,8 @@ export async function getMenu() {
         child.MENU_NAME,
         child.URL,
         child.MENU_ORDER,
-        child.LEAF_NODE_YN_CODE
+        child.LEAF_NODE_YN_CODE,
+        child.POP_UP_YN_CODE
       FROM COMDB.TBD_COM_CONF_MENU child
       JOIN menu_tree parent ON parent.MENU_ID = child.UPPER_MENU_ID
       WHERE COALESCE(child.USE_YN_CODE, 'N') = 'Y'
@@ -35,7 +37,8 @@ export async function getMenu() {
       MENU_NAME,
       URL,
       MENU_ORDER,
-      LEAF_NODE_YN_CODE
+      LEAF_NODE_YN_CODE,
+      POP_UP_YN_CODE
     FROM menu_tree
     ORDER BY UPPER_MENU_ID NULLS FIRST, MENU_ORDER
   `)

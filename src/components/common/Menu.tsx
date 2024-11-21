@@ -113,6 +113,20 @@ export default function Menu({
     setActiveMenus([])
   }
 
+  function renderMenuLink(menu: MenuType) {
+    if (menu.leaf_node_yn_code === "Y") {
+      if (menu.pop_up_yn_code === "Y") {
+        return (
+          <Link href={menu.url ?? ""} target="_blank" rel="noopener noreferrer">
+            {menu.menu_name}
+          </Link>
+        )
+      }
+      return <Link href={menu.url ?? ""}>{menu.menu_name}</Link>
+    }
+    return menu.menu_name
+  }
+
   const renderSubMenu = (pid: string, depth: number) => {
     const subMenus = menuData.filter((item) => item.upper_menu_id === pid)
 
@@ -141,11 +155,7 @@ export default function Menu({
               className={depthLiStyle[depth - 1]}
               onMouseEnter={() => handleMouseEnter(menu.menu_id, depth)}
             >
-              {menu.leaf_node_yn_code === "Y" ? (
-                <Link href={menu.url ?? ""}>{menu.menu_name}</Link>
-              ) : (
-                menu.menu_name
-              )}
+              {renderMenuLink(menu)}
               {renderSubMenu(menu.menu_id, depth + 1)}
             </li>
           ))}
@@ -197,11 +207,7 @@ export default function Menu({
                     : "border-b-2 border-transparent"
                 }`}
               >
-                {menu.leaf_node_yn_code === "Y" ? (
-                  <Link href={menu.url ?? ""}>{menu.menu_name}</Link>
-                ) : (
-                  menu.menu_name
-                )}
+                {renderMenuLink(menu)}
               </button>
               {renderSubMenu(menu.menu_id, 1)}
             </div>
