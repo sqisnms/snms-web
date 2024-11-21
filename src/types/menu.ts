@@ -5,6 +5,7 @@ export type MenuType = {
   url: string | null
   menu_order: number | null
   leaf_node_yn_code: string | null
+  pop_up_yn_code: string | null
 }
 
 export type BreadcrumbType = {
