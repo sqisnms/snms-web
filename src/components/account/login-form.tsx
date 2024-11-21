@@ -2,7 +2,7 @@
 
 import { authenticate } from "@/actions/account-actions"
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
-import { Button } from "@mui/material"
+import { Box, Button, Tab, Tabs } from "@mui/material"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useFormState, useFormStatus } from "react-dom"
@@ -12,22 +12,19 @@ function LoginButton() {
   const { pending } = useFormStatus()
 
   return (
-    // <Button className="mt-4 w-full" aria-disabled={pending}>
-    //   로그인 <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
-    // </Button>
     <Button
       aria-disabled={pending}
       type="submit"
       variant="contained"
       fullWidth
-      className="mt-6·h-12·rounded-lg·bg-primary·text-base·font-normal·shadow-none·hover:bg-primary-dark"
+      className="mt-6 h-12 rounded-lg bg-primary text-base font-normal shadow-none hover:bg-primary-dark"
     >
       로그인
     </Button>
   )
 }
 
-export default function LoginForm() {
+function FormLogin() {
   const [email, setEmail] = useState("")
   const [errorMessage, dispatch] = useFormState(authenticate, undefined)
 
@@ -83,8 +80,46 @@ export default function LoginForm() {
           </>
         )}
       </div>
-
-      <QRLogin />
     </form>
+  )
+}
+
+export default function LoginForm() {
+  const [activeTab, setActiveTab] = useState(0)
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue)
+  }
+
+  return (
+    <Box className="mx-auto w-full max-w-md">
+      {/* Tabs */}
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="mb-6">
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          aria-label="login tabs"
+          indicatorColor="primary"
+          textColor="primary"
+        >
+          <Tab className="flex-1 text-base" label="이메일 로그인" />
+          <Tab className="flex-1 text-base" label="QR 로그인" />
+        </Tabs>
+      </Box>
+
+      {/* Tab Panels */}
+      <Box>
+        {activeTab === 0 && (
+          <Box>
+            <FormLogin />
+          </Box>
+        )}
+        {activeTab === 1 && (
+          <Box>
+            <QRLogin />
+          </Box>
+        )}
+      </Box>
+    </Box>
   )
 }

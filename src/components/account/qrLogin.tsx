@@ -68,7 +68,7 @@ export default function QRLogin() {
       {qrUrl && !loading && <Image src={qrUrl} alt="QR 코드" width={200} height={200} />}
 
       {/* QR 코드 갱신 버튼 (선택 사항) */}
-      <Button variant="outlined" onClick={fetchQrCode} className="mt-4">
+      <Button variant="outlined" onClick={fetchQrCode} className="mt-6">
         새로고침
       </Button>
     </Box>
