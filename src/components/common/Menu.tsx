@@ -187,7 +187,7 @@ export default function Menu({
   // 스위치가 눌렸을 때 모드 전환 함수
   const toggleTheme = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newTheme = event.target.checked ? "dark" : "light"
-    // setTheme(newTheme)
+    setTheme(newTheme)
     // setGrafanaTheme(newTheme as "dark" | "light")
 
     // document.documentElement.className = newTheme
