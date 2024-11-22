@@ -145,7 +145,7 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
     >
       {articleId === null && (
         <>
-          <DialogTitle>{label}</DialogTitle>
+          <DialogTitle className="dark:text-white">{label}</DialogTitle>
           <DialogContent
             sx={{
               display: "flex",
@@ -159,18 +159,21 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
                 flexGrow: 1, // 테이블 컨텐츠가 가변적으로 크기를 차지하도록 설정
                 overflowY: "auto", // 테이블 내용이 많을 경우 스크롤 가능하게 설정
               }}
+              className="border dark:border-gray-700 dark:bg-black"
             >
               <Table size="small">
                 <TableHead>
                   <TableRow sx={{ height: "40px" }}>
-                    <TableCell sx={{ paddingY: "0px" }}>제목</TableCell>
-                    <TableCell align="right" sx={{ paddingY: "0px" }}>
+                    <TableCell sx={{ paddingY: "0px" }} className="dark:text-white">
+                      제목
+                    </TableCell>
+                    <TableCell align="right" sx={{ paddingY: "0px" }} className="dark:text-white">
                       날짜
                     </TableCell>
-                    {/* <TableCell align="right" sx={{ paddingY: "0px" }}>
+                    {/* <TableCell align="right" sx={{ paddingY: "0px" }} className="dark:text-white">
                       수정
                     </TableCell>
-                    <TableCell align="right" sx={{ paddingY: "0px" }}>
+                    <TableCell align="right" sx={{ paddingY: "0px" }} className="dark:text-white">
                       삭제
                     </TableCell> */}
                   </TableRow>
@@ -179,19 +182,15 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
                   {boards.map((board) => (
                     <TableRow
                       key={board.id}
-                      sx={{
-                        height: "40px",
-                        cursor: "pointer",
-                        "&:hover": {
-                          backgroundColor: "#F6FAFD", // hover 시 로우 색상 변경
-                        },
-                      }}
                       onClick={() => handleView(board.id ?? "")}
+                      className="h-10 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
                       <TableCell sx={{ paddingY: "0px" }}>
-                        <Typography className="w-128 truncate">{board.title}</Typography>
+                        <Typography className="w-128 truncate dark:text-white">
+                          {board.title}
+                        </Typography>
                       </TableCell>
-                      <TableCell align="right" sx={{ paddingY: "0px" }}>
+                      <TableCell align="right" sx={{ paddingY: "0px" }} className="dark:text-white">
                         {formatDate(board.create_date ?? "")}
                       </TableCell>
                       {/* <TableCell align="right" sx={{ paddingY: "0px" }}>
@@ -221,18 +220,19 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
                 page={page} // 현재 페이지
                 onChange={(_, value) => handlePageChange(value)} // 페이지 변경 시 호출되는 함수
                 color="primary"
+                className="dark:text-white"
                 shape="rounded"
               />
             </Box>
           </DialogContent>
 
           {/* Dialog Actions */}
-          <DialogActions>
+          <DialogActions className="p-4 pt-0 dark:bg-black">
             {/* 일단 readOnly 로 조회만 할 수 있게 */}
             {/* <Button onClick={handleAdd} startIcon={<Add />}>
               추가
             </Button> */}
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleClose} color="primary" className="dark:text-white">
               닫기
             </Button>
           </DialogActions>
@@ -240,7 +240,7 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
       )}
       {articleId !== null && (
         <>
-          <DialogTitle>{label}</DialogTitle>
+          <DialogTitle className="dark:bg-black dark:text-white">{label}</DialogTitle>
           <DialogContent
             sx={{
               display: "flex",
@@ -248,6 +248,7 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
               gap: 2, // 요소 간 간격 추가
               padding: "36px", // 내부 패딩 추가
             }}
+            className="dark:bg-black dark:text-white"
           >
             {/* 제목 */}
             {articleId === "" ? (
@@ -318,11 +319,11 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
           </DialogContent>
 
           {/* Dialog Actions */}
-          <DialogActions sx={{ padding: "16px" }}>
+          <DialogActions className="p-4 pt-0 dark:bg-black">
             {/* <Button onClick={handleAdd} startIcon={<Add />}>
               저장
             </Button> */}
-            <Button onClick={handleArticleBack} color="primary">
+            <Button onClick={handleArticleBack} color="primary" className="dark:text-white">
               뒤로
             </Button>
           </DialogActions>

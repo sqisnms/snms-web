@@ -37,7 +37,7 @@ function DashboardLayout() {
             item
             xs={12}
             md={4}
-            className="border-b border-gray-300 !px-1 !pt-1 pb-6 md:border-b-0 md:border-r md:!pb-2 md:!pr-6 dark:border-gray-500"
+            className="border-b border-gray-300 !px-1 !pt-1 pb-6 dark:border-gray-500 md:border-b-0 md:border-r md:!pb-2 md:!pr-6"
           >
             <MiniBoard section="NOTICE" label="공지사항" />
           </Grid>
@@ -47,7 +47,7 @@ function DashboardLayout() {
             item
             xs={12}
             md={4}
-            className="border-b border-gray-300 !px-1 !pb-6 !pt-4 md:border-b-0 md:border-r md:!px-6 md:!pb-2 md:!pt-1 dark:border-gray-500"
+            className="border-b border-gray-300 !px-1 !pb-6 !pt-4 dark:border-gray-500 md:border-b-0 md:border-r md:!px-6 md:!pb-2 md:!pt-1"
           >
             <MiniBoard section="MANUAL" label="매뉴얼(SOP)" />
           </Grid>
@@ -78,7 +78,7 @@ function DashboardLayout() {
           </ul>
         </Box> */}
 
-        <Box className="flex flex-col bg-gray-100 px-6 py-8 md:flex-row dark:bg-gray-900">
+        <Box className="flex flex-col bg-gray-100 px-6 py-8 dark:bg-gray-900 md:flex-row">
           <Typography variant="h6" className="w-full font-bold md:w-1/12">
             FAQ
           </Typography>
@@ -141,7 +141,7 @@ function DashboardLayout() {
         </Box>
 
         {/* Q&A */}
-        <Box className="flex flex-col px-6 py-8 md:flex-row dark:bg-black dark:text-white">
+        <Box className="flex flex-col px-6 py-8 dark:bg-black dark:text-white md:flex-row">
           <Typography variant="h6" className="w-full font-bold md:w-1/12">
             Q&A
           </Typography>

@@ -43,3 +43,19 @@
   display: block;
   padding: 0.5rem 1rem;
 }
+
+.dark .css-183dk5e-MuiFormLabel-root-MuiInputLabel-root.MuiInputLabel-shrink {
+  color: #fff !important;
+}
+.dark .MuiDialog-paper {
+  background: #000;
+}
+.dark .MuiOutlinedInput-root {
+  background: #2c2c2c;
+}
+.dark .MuiTableCell-root {
+  border-bottom-color: #374151;
+}
+.dark .MuiPaginationItem-root {
+  color: white;
+}
