@@ -29,6 +29,12 @@ const config: Config = {
         "128": "32rem", // 512px
         "192": "48rem", // 768px
       },
+      screens: {
+        sm: "600px", // MUI의 sm
+        md: "900px", // MUI의 md
+        lg: "1200px", // MUI의 lg
+        xl: "1536px", // MUI의 xl
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],
