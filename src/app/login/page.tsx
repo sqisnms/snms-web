@@ -23,7 +23,7 @@ export default async function Login({
         </Box>
 
         <Box className="flex w-full items-center justify-center p-0 md:p-8 lg:w-1/2">
-          <Box className="w-full max-w-md rounded-lg bg-white bg-opacity-90 px-10 py-12 shadow-lg">
+          <Box className="login_box_wrap w-full max-w-md rounded-lg bg-white bg-opacity-90 px-10 py-12 shadow-lg">
             <Box className="mb-6 flex justify-center">
               <Image src="/logo.png" alt="로고" width={130} height={40} className="h-10" />
             </Box>
