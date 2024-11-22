@@ -27,4 +27,19 @@
   max-height: 84vh;
   overflow-y: auto;
 }
+
+.gnb_menu .depth2 > ul > li:not(:has(> a)) {
+  padding: 0.5rem 1rem;
+}
+.gnb_menu .depth2 > ul > li:has(> a) {
+  padding: 0;
+}
+.gnb_menu .depth2 > ul > li > a {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+}
+.gnb_menu .depth3 a {
+  display: block;
+  padding: 0.5rem 1rem;
 }
