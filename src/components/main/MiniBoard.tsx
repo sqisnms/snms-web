@@ -89,7 +89,7 @@ export function MiniBoard({ section, label }: { section: string; label: string }
         <Typography variant="h6" className="font-bold">
           {label}
         </Typography>
-        <Button size="small" variant="text" className="text-primary">
+        <Button size="small" variant="text" className="text-primary dark:text-primary-light">
           <Box className="flex items-center" onClick={handleOpenDialog}>
             <AddIcon fontSize="small" />
             <span className="text-base">More</span>
@@ -100,11 +100,11 @@ export function MiniBoard({ section, label }: { section: string; label: string }
         {boards.map((notice) => (
           <li key={notice.id}>
             <Box
-              className="flex cursor-pointer justify-between hover:text-primary"
+              className="flex cursor-pointer justify-between hover:text-primary dark:hover:text-primary-light"
               onClick={() => handleClick(notice.id ?? "")}
             >
               <span className="w-9/12 truncate">{notice.title}</span>
-              <span className="min-w-min whitespace-nowrap text-sm text-gray-500">
+              <span className="min-w-min whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
                 {formatDate(notice.create_date ?? "")}
               </span>
             </Box>

@@ -10,6 +10,7 @@ const config: Config = {
       },
       colors: {
         primary: "#143896",
+        "primary-light": "#7da0ff",
         "primary-dark": "#0f2b6d",
         point: "#49CBFF",
         blue: { 400: "#2589FE", 500: "#0070F3", 600: "#2F6FEB" },
