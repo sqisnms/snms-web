@@ -156,8 +156,8 @@ export default function CodeManager() {
   return (
     <Box display="flex" gap={4}>
       {/* 좌측: 카테고리 목록 */}
-      <Box width="30%">
-        <Box mt={2} display="flex" alignItems="center" gap={1} className="dark:bg-black">
+      <Box width="20%">
+        <Box display="flex" alignItems="center" gap={1} className="dark:bg-black">
           <TextField
             variant="outlined"
             placeholder="검색어 입력"
@@ -203,20 +203,25 @@ export default function CodeManager() {
       </Box>
 
       {/* 우측: 코드 목록 및 검색 */}
-      <Box width="70%">
-        <Box display="flex" alignItems="center" gap={2} mb={2}>
+      <Box width="80%" className="border-l-2 pl-6">
+        <Box display="flex" alignItems="center" gap={1} mb={2}>
           <TextField
             variant="outlined"
             size="small"
             placeholder="새 카테고리"
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
+            className="mt0"
           />
-          <Button variant="contained" color="primary" onClick={handleAddCategory}>
+          <Button
+            variant="contained"
+            onClick={handleAddCategory}
+            className="bg-primary text-xl shadow-none"
+          >
             +
           </Button>
 
-          <Box display="flex" gap={2} ml="auto">
+          <Box display="flex" gap={1} ml="auto">
             <Button
               variant="contained"
               color="primary"
@@ -231,10 +236,15 @@ export default function CodeManager() {
                   key: v4(),
                 })
               }
+              className="bg-primary shadow-none"
             >
               추가
             </Button>
-            <Button variant="contained" color="secondary" onClick={() => handleSave()}>
+            <Button
+              variant="contained"
+              className="bg-secondary shadow-none"
+              onClick={() => handleSave()}
+            >
               저장
             </Button>
           </Box>

@@ -59,3 +59,10 @@
 .dark .MuiPaginationItem-root {
   color: white;
 }
+
+.MuiPaper-root {
+  box-shadow: none;
+}
+.css-5hf2k4-MuiFormControl-root-MuiTextField-root {
+  margin-top: 0;
+}
