@@ -19,4 +19,8 @@
 .MuiButtonBase-root,
 .btn {
   font-family: "__Noto_Sans_KR_23d4f0", "__Noto_Sans_KR_Fallback_23d4f0";
+.login_box_wrap {
+  max-height: 84vh;
+  overflow-y: auto;
+}
 }
