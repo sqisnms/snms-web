@@ -5,6 +5,9 @@ const config: Config = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['"Noto Sans"', "Apple SD Gothic Neo", "Roboto", "sans-serif"],
+      },
       colors: {
         primary: "#143896",
         "primary-dark": "#0f2b6d",
