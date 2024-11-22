@@ -203,7 +203,7 @@ export default function CodeManager() {
       </Box>
 
       {/* 우측: 코드 목록 및 검색 */}
-      <Box width="80%" className="border-l-2 pl-6">
+      <Box width="80%" className="border-l-2 pl-6 dark:border-gray-600">
         <Box display="flex" alignItems="center" gap={1} mb={2}>
           <TextField
             variant="outlined"

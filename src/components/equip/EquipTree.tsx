@@ -51,6 +51,7 @@ export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
         {groupBy(netTypeGroups[netType], "equip_type_code") &&
           Object.keys(groupBy(netTypeGroups[netType], "equip_type_code")).map((equipType) => (
             <TreeItem
+              className="py-2"
               key={equipType}
               itemId={equipType + index}
               label={equipType}

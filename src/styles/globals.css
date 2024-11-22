@@ -66,3 +66,12 @@
 .css-5hf2k4-MuiFormControl-root-MuiTextField-root {
   margin-top: 0;
 }
+
+.MuiSimpleTreeView-root {
+  box-shadow: none;
+  padding: 10px;
+}
+.dark .css-1it4x0c-MuiSimpleTreeView-root {
+  background: #1f2937;
+  color: #fff;
+}

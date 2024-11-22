@@ -23,7 +23,7 @@ export default async function CommonLayout({ children }: { children: React.React
       <div className="w-full">
         <div className="flex h-screen flex-col dark:bg-black">
           {/* Header Section */}
-          <Paper className="mb-6 rounded-none p-4 shadow-md dark:bg-black">
+          <Paper className="rounded-none border-none p-4 dark:bg-black">
             <Top breadcrumbs={breadcrumbs} />
             {/* <div style={{ width: 50, height: 20 }} /> */}
             {children}
