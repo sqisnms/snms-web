@@ -83,7 +83,14 @@ export default function QRLogin() {
       <Button
         variant="outlined"
         onClick={fetchQrCode}
-        className="mt-6 h-12 w-full rounded-lg text-base !font-normal"
+        sx={{
+          marginTop: "1.5rem",
+          height: "3rem",
+          width: "100%",
+          borderRadius: "0.5rem",
+          fontSize: "1rem",
+          fontWeight: "normal",
+        }}
       >
         새로고침
       </Button>
