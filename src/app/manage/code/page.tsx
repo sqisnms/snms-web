@@ -7,6 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
   IconButton,
   Table,
@@ -28,7 +29,12 @@ export default function CodeManager() {
   const [editCodes, setEditCodes] = useState<CommonCodeEdit[]>([])
   const [newCategory, setNewCategory] = useState<string>("")
 
-  const { data: codes = [], refetch } = useQuery({
+  const {
+    data: codes = [],
+    refetch,
+    isLoading,
+    isFetching,
+  } = useQuery({
     queryKey: ["codes"],
     queryFn: () => getCodeList(),
   })
@@ -177,29 +183,42 @@ export default function CodeManager() {
           </IconButton>
         </Box>
         <Divider className="dark:border-gray-400" sx={{ mt: 1, mb: 1 }} />
-        <ul>
-          {categories
-            .filter(
-              (item) => !searchQuery || item.toLowerCase().includes(searchQuery.toLowerCase()),
-            )
-            .map((category) => (
-              <li className="mt-2" key={category}>
-                <Button
-                  fullWidth
-                  variant={selectedCategory === category ? "contained" : "outlined"}
-                  color="primary"
-                  className={`${
-                    selectedCategory === category
-                      ? "bg-primary text-white"
-                      : "border-primary bg-white text-primary dark:border-white dark:bg-black dark:text-white"
-                  }`}
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  {category}
-                </Button>
-              </li>
-            ))}
-        </ul>
+        {isLoading || isFetching ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "10rem",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <ul>
+            {categories
+              .filter(
+                (item) => !searchQuery || item.toLowerCase().includes(searchQuery.toLowerCase()),
+              )
+              .map((category) => (
+                <li className="mt-2" key={category}>
+                  <Button
+                    fullWidth
+                    variant={selectedCategory === category ? "contained" : "outlined"}
+                    color="primary"
+                    className={`${
+                      selectedCategory === category
+                        ? "bg-primary text-white"
+                        : "border-primary bg-white text-primary dark:border-white dark:bg-black dark:text-white"
+                    }`}
+                    onClick={() => setSelectedCategory(category)}
+                  >
+                    {category}
+                  </Button>
+                </li>
+              ))}
+          </ul>
+        )}
       </Box>
 
       {/* 우측: 코드 목록 및 검색 */}

@@ -17,12 +17,14 @@ export default function RootLayout({
 }>) {
   // 다크모드 초기 flickering 방지
   const cookie = cookies()
-  const theme = cookie.get("theme")?.value ?? "light"
+  const theme = (cookie.get("theme")?.value as "dark" | "light") ?? "light"
 
+  // html 에 넣는 theme 은 tailwindcss 용
+  // Providers 에 넣는 theme 은 mui 용
   return (
     <html lang="ko" className={theme}>
       <body className={`${notoSansKR.className} antialiased`}>
-        <Providers>{children}</Providers>
+        <Providers darkLightTheme={theme}>{children}</Providers>
       </body>
     </html>
   )

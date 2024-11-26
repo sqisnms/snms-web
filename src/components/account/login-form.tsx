@@ -27,9 +27,24 @@ function LoginButton() {
 function JoinButton() {
   return (
     <Button
+      href="/signup"
       variant="contained"
       fullWidth
-      className="btn btn_join mt-4 h-12 !rounded-lg bg-white !text-base !font-normal text-primary !shadow-none hover:text-primary-dark"
+      // className="btn btn_join mt-4 h-12 !rounded-lg bg-white !text-base !font-normal text-primary !shadow-none hover:text-primary-dark"
+      sx={{
+        mt: "1rem",
+        height: "3rem",
+        borderRadius: "0.5rem",
+        backgroundColor: "white",
+        fontSize: "1rem",
+        fontWeight: "normal",
+        color: "rgb(20, 56, 150)",
+        boxShadow: "none",
+        "&:hover": {
+          color: "rgb(15, 43, 109)",
+          boxShadow: "none",
+        },
+      }}
     >
       회원가입
     </Button>
@@ -115,8 +130,22 @@ export default function LoginForm() {
           indicatorColor="primary"
           textColor="primary"
         >
-          <Tab className="flex-1 text-base" label="이메일 로그인" />
-          <Tab className="flex-1 text-base" label="QR 로그인" />
+          {/* <Tab className="flex-1 text-base" label="이메일 로그인" /> */}
+          <Tab
+            label="이메일 로그인"
+            sx={{
+              flex: 1, // TailwindCSS의 flex-1
+              fontSize: "1rem", // TailwindCSS의 text-base (16px)
+            }}
+          />
+          {/* <Tab className="flex-1 text-base" label="QR 로그인" /> */}
+          <Tab
+            label="QR 로그인"
+            sx={{
+              flex: 1, // TailwindCSS의 flex-1
+              fontSize: "1rem", // TailwindCSS의 text-base (16px)
+            }}
+          />
         </Tabs>
       </Box>
 

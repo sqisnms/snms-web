@@ -59,7 +59,19 @@ export default function QRLogin() {
   return (
     <Box className="mt-4 flex flex-col items-center">
       {/* 로딩 중일 때 */}
-      {loading && <CircularProgress />}
+      {loading && (
+        <Box
+          sx={{
+            width: "200px",
+            height: "200px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
 
       {/* 에러 발생 시 */}
       {error && <p className="text-red-500">{error}</p>}

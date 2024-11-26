@@ -1,7 +1,6 @@
 "use client"
 
 import { MiniBoard } from "@/components/main/MiniBoard"
-import { notoSansKR } from "@/styles/fonts"
 import { Box, Grid, Typography } from "@mui/material"
 import Image from "next/image"
 
@@ -20,40 +19,83 @@ function DashboardLayout() {
             <hr className="mx-auto my-4 w-14 border-t-2 border-gray-300 opacity-60" />
             <Typography
               variant="h4"
-              className={`${notoSansKR.className} mb-2 break-keep font-semibold`}
+              // className={`${notoSansKR.className} mb-2 break-keep font-semibold`}
+              sx={{
+                marginBottom: "0.5rem",
+                wordBreak: "keep-all",
+                fontWeight: 600,
+                fontFamily: "Noto Sans KR",
+              }}
             >
               미래의 연결, 혁신의 시작
             </Typography>
-            <Typography variant="body1" className={`${notoSansKR.className} break-keep`}>
+            <Typography
+              variant="body1"
+              // className={`${notoSansKR.className} break-keep`}
+              sx={{
+                wordBreak: "keep-all",
+                fontFamily: "Noto Sans KR",
+              }}
+            >
               첨단 기술로 변화하는 도시와 산업의 동반자, S·NMS가 함께합니다.
             </Typography>
           </Box>
         </Box>
 
         {/* Main Content */}
-        <Grid container spacing={2} className="!m-0 w-full px-6 py-8">
-          {/* 공지사항 */}
+        <Grid
+          container
+          spacing={2}
+          // className="!m-0 w-full px-6 py-8"
+          sx={{
+            margin: 0,
+            width: "100%",
+            paddingX: { xs: "0.5rem", md: "0.5rem" }, // 좌우 패딩 균등
+            paddingY: { xs: "0.5rem", md: "0.5rem" }, // 상하 패딩 균등
+          }}
+        >
           <Grid
             item
             xs={12}
             md={4}
-            className="border-b border-gray-300 !px-1 !pt-1 pb-6 dark:border-gray-500 md:border-b-0 md:border-r md:!pb-2 md:!pr-6"
+            // className="border-b border-gray-300 !px-1 !pt-1 pb-6 dark:border-gray-500 md:border-b-0 md:border-r md:!pb-2 md:!pr-6"
+            sx={{
+              borderBottom: { xs: "1px solid rgb(209, 213, 219)", md: "none" }, // 좁은 화면에서는 하단 경계선, 넓은 화면에서는 없음
+              borderRight: { md: "1px solid rgb(209, 213, 219)" }, // 넓은 화면에서만 오른쪽 경계선
+              paddingX: { xs: "0.5rem", md: "1rem" }, // 좌우 패딩 균등
+              paddingTop: { xs: "0.5rem", md: "1rem" }, // 상하 패딩 균등
+              paddingBottom: { xs: "1rem", md: "1rem" }, // 상하 패딩 균등
+            }}
           >
             <MiniBoard section="NOTICE" label="공지사항" />
           </Grid>
 
-          {/* 메뉴얼(SOP) */}
           <Grid
             item
             xs={12}
             md={4}
-            className="border-b border-gray-300 !px-1 !pb-6 !pt-4 dark:border-gray-500 md:border-b-0 md:border-r md:!px-6 md:!pb-2 md:!pt-1"
+            // className="border-b border-gray-300 !px-1 !pb-6 !pt-4 dark:border-gray-500 md:border-b-0 md:border-r md:!px-6 md:!pb-2 md:!pt-1"
+            sx={{
+              borderBottom: { xs: "1px solid rgb(209, 213, 219)", md: "none" },
+              borderRight: { md: "1px solid rgb(209, 213, 219)" },
+              paddingX: { xs: "0.5rem", md: "1rem" },
+              paddingTop: { xs: "0.5rem", md: "1rem" }, // 상하 패딩 균등
+              paddingBottom: { xs: "1rem", md: "1rem" }, // 상하 패딩 균등
+            }}
           >
             <MiniBoard section="MANUAL" label="매뉴얼(SOP)" />
           </Grid>
 
-          {/* 작업계획 */}
-          <Grid item xs={12} md={4} className="!px-1 !pb-6 !pt-4 md:!pb-2 md:!pl-6 md:!pt-1">
+          <Grid
+            item
+            xs={12}
+            md={4}
+            // className="!px-1 !pb-6 !pt-4 md:!pb-2 md:!pl-6 md:!pt-1"
+            sx={{
+              paddingX: { xs: "0.5rem", md: "1rem" },
+              paddingY: { xs: "0.5rem", md: "1rem" },
+            }}
+          >
             <MiniBoard section="TASK" label="작업계획" />
           </Grid>
         </Grid>
@@ -79,7 +121,17 @@ function DashboardLayout() {
         </Box> */}
 
         <Box className="flex flex-col bg-gray-100 px-6 py-8 dark:bg-gray-900 md:flex-row">
-          <Typography variant="h6" className="w-full font-bold md:w-1/12">
+          <Typography
+            variant="h6"
+            // className="w-full font-bold md:w-1/12"
+            sx={{
+              width: "100%",
+              fontWeight: 700,
+              "@media (min-width:900px)": {
+                width: "8.333333%",
+              },
+            }}
+          >
             FAQ
           </Typography>
           <ul className="mt-6 flex w-full flex-col space-y-6 md:mt-0 md:w-11/12 md:flex-row md:space-x-4 md:space-y-0">
@@ -142,7 +194,17 @@ function DashboardLayout() {
 
         {/* Q&A */}
         <Box className="flex flex-col px-6 py-8 dark:bg-black dark:text-white md:flex-row">
-          <Typography variant="h6" className="w-full font-bold md:w-1/12">
+          <Typography
+            variant="h6"
+            // className="w-full font-bold md:w-1/12"
+            sx={{
+              width: "100%",
+              fontWeight: 700,
+              "@media (min-width:900px)": {
+                width: "8.333333%",
+              },
+            }}
+          >
             Q&A
           </Typography>
           <ul className="mt-6 flex w-full flex-col space-y-6 md:mt-0 md:w-11/12 md:flex-row md:space-x-4 md:space-y-0">
