@@ -13,7 +13,7 @@ export default async function CommonLayout({ children }: { children: React.React
   const cookie = cookies()
   const theme = cookie.get("theme")?.value ?? "light"
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex min-h-screen flex-col dark:bg-black">
       <div className="w-full">
         <Gnb menuData={menuData} userName={session?.user?.name ?? ""} theme={theme} />
       </div>

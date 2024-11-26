@@ -7,9 +7,9 @@ import Image from "next/image"
 // 함수 선언 방식으로 컴포넌트 정의
 function DashboardLayout() {
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex flex-1 flex-col">
       {/* Banner */}
-      <Box className="min-h-screen dark:bg-black dark:text-white">
+      <Box className="dark:bg-black dark:text-white">
         <Box
           className="relative h-80 bg-cover bg-center"
           style={{ backgroundImage: "url('/login_bg.png')" }}
