@@ -2,7 +2,7 @@
 
 import { authenticate } from "@/actions/account-actions"
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
-import { Box, Button, Tab, Tabs } from "@mui/material"
+import { Box, Button, Tab, Tabs, ThemeProvider, createTheme } from "@mui/material"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useFormState, useFormStatus } from "react-dom"
@@ -17,7 +17,20 @@ function LoginButton() {
       type="submit"
       variant="contained"
       fullWidth
-      className="btn btn_login !mt-6 !h-12 !rounded-lg !bg-primary !text-base !font-normal !shadow-none hover:!bg-primary-dark"
+      className="btn btn_login"
+      sx={{
+        marginTop: "1.5rem",
+        height: "3rem",
+        borderRadius: "0.5rem",
+        backgroundColor: "primary.main",
+        fontSize: "1rem",
+        fontWeight: "normal",
+        boxShadow: "none",
+        "&:hover": {
+          backgroundColor: "primary.dark",
+          boxShadow: "none",
+        },
+      }}
     >
       로그인
     </Button>
@@ -30,7 +43,7 @@ function JoinButton() {
       href="/signup"
       variant="contained"
       fullWidth
-      // className="btn btn_join mt-4 h-12 !rounded-lg bg-white !text-base !font-normal text-primary !shadow-none hover:text-primary-dark"
+      className="btn btn_join"
       sx={{
         mt: "1rem",
         height: "3rem",
@@ -38,10 +51,11 @@ function JoinButton() {
         backgroundColor: "white",
         fontSize: "1rem",
         fontWeight: "normal",
-        color: "rgb(20, 56, 150)",
+        color: "primary.main",
         boxShadow: "none",
         "&:hover": {
-          color: "rgb(15, 43, 109)",
+          color: "primary.dark",
+          backgroundColor: "grey.100",
           boxShadow: "none",
         },
       }}
@@ -112,6 +126,14 @@ function FormLogin() {
   )
 }
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#143896",
+    },
+  },
+})
+
 export default function LoginForm() {
   const [activeTab, setActiveTab] = useState(0)
 
@@ -120,48 +142,51 @@ export default function LoginForm() {
   }
 
   return (
-    <Box className="mx-auto w-full max-w-md">
-      {/* Tabs */}
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="mb-6">
-        <Tabs
-          value={activeTab}
-          onChange={handleTabChange}
-          aria-label="login tabs"
-          indicatorColor="primary"
-          textColor="primary"
-        >
-          {/* <Tab className="flex-1 text-base" label="이메일 로그인" /> */}
-          <Tab
-            label="이메일 로그인"
+    <ThemeProvider theme={theme}>
+      <Box className="mx-auto w-full max-w-md">
+        {/* Tabs */}
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="mb-6">
+          <Tabs
+            value={activeTab}
+            onChange={handleTabChange}
+            aria-label="login tabs"
             sx={{
-              flex: 1, // TailwindCSS의 flex-1
-              fontSize: "1rem", // TailwindCSS의 text-base (16px)
+              "& .MuiTabs-indicator": { backgroundColor: "primary" },
+              "& .MuiTab-root": { color: "#696f6f", borderBottom: "1px solid #e5e7eb" },
+              "& .MuiTab-root.Mui-selected": { color: "primary" },
             }}
-          />
-          {/* <Tab className="flex-1 text-base" label="QR 로그인" /> */}
-          <Tab
-            label="QR 로그인"
-            sx={{
-              flex: 1, // TailwindCSS의 flex-1
-              fontSize: "1rem", // TailwindCSS의 text-base (16px)
-            }}
-          />
-        </Tabs>
-      </Box>
+          >
+            <Tab
+              label="이메일 로그인"
+              sx={{
+                flex: 1,
+                fontSize: "1rem",
+              }}
+            />
+            <Tab
+              label="QR 로그인"
+              sx={{
+                flex: 1,
+                fontSize: "1rem",
+              }}
+            />
+          </Tabs>
+        </Box>
 
-      {/* Tab Panels */}
-      <Box>
-        {activeTab === 0 && (
-          <Box>
-            <FormLogin />
-          </Box>
-        )}
-        {activeTab === 1 && (
-          <Box>
-            <QRLogin />
-          </Box>
-        )}
+        {/* Tab Panels */}
+        <Box>
+          {activeTab === 0 && (
+            <Box>
+              <FormLogin />
+            </Box>
+          )}
+          {activeTab === 1 && (
+            <Box>
+              <QRLogin />
+            </Box>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </ThemeProvider>
   )
 }
