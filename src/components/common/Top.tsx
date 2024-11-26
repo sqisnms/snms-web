@@ -15,7 +15,26 @@ export default function Top({ breadcrumbs }: { breadcrumbs: BreadcrumbType[] }) 
   return (
     <Box display="flex" alignItems="center" justifyContent="space-between" className="mb-3">
       {/* 페이지 제목 */}
-      <Typography variant="h5" className="font-semibold text-gray-800 dark:text-white">
+      <Typography
+        variant="h5"
+        // className="font-semibold text-gray-800 dark:text-white"
+        // sx={{
+        //   fontWeight: 600,
+        //   color: "rgb(31, 41, 55)",
+        //   "&.Mui-dark": {
+        //     color: "rgb(255, 255, 255)",
+        //   },
+        // }}
+        sx={[
+          (theme) => ({
+            fontWeight: 600,
+            color: "rgb(31, 41, 55)",
+            ...theme.applyStyles("dark", {
+              color: "rgb(255, 255, 255)",
+            }),
+          }),
+        ]}
+      >
         {currentBreadcrumb?.path_names?.[currentBreadcrumb.path_names.length - 1] ||
           "메뉴 미등록 화면"}
       </Typography>

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,4 +8,70 @@
   background: #2c2c2c;
   color: #fff;
   border-radius: 4px;
+}
+
+.css-1usuzwp-MuiButtonBase-root-MuiTab-root.Mui-selected {
+  color: #143896 !important;
+}
+.css-1qltlow-MuiTabs-indicator {
+  background-color: #143896 !important;
+}
+
+*,
+.MuiButtonBase-root,
+.btn {
+  font-family: "NotoSans" !important;
+}
+
+.login_box_wrap {
+  max-height: 84vh;
+  overflow-y: auto;
+}
+
+.gnb_menu .depth2 > ul > li:not(:has(> a)) {
+  padding: 0.5rem 1rem;
+}
+.gnb_menu .depth2 > ul > li:has(> a) {
+  padding: 0;
+}
+.gnb_menu .depth2 > ul > li > a {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+}
+.gnb_menu .depth3 a {
+  display: block;
+  padding: 0.5rem 1rem;
+}
+
+.dark .css-183dk5e-MuiFormLabel-root-MuiInputLabel-root.MuiInputLabel-shrink {
+  color: #fff !important;
+}
+.dark .MuiDialog-paper {
+  background: #000;
+}
+.dark .MuiOutlinedInput-root {
+  background: #2c2c2c;
+}
+.dark .MuiTableCell-root {
+  border-bottom-color: #374151;
+}
+.dark .MuiPaginationItem-root {
+  color: white;
+}
+
+.MuiPaper-root {
+  box-shadow: none;
+}
+.css-5hf2k4-MuiFormControl-root-MuiTextField-root {
+  margin-top: 0;
+}
+
+.MuiSimpleTreeView-root {
+  box-shadow: none;
+  padding: 10px;
+}
+.dark .css-1it4x0c-MuiSimpleTreeView-root {
+  background: #1f2937;
+  color: #fff;
 }

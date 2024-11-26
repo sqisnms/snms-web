@@ -1,7 +1,7 @@
 import { getBoardList } from "@/actions/board-action"
 import { BoardType } from "@/types/board"
 import AddIcon from "@mui/icons-material/Add"
-import { Box, Button, Typography } from "@mui/material"
+import { Box, Button, CircularProgress, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { BoardDialog } from "./BoardDialog"
@@ -37,7 +37,7 @@ export function MiniBoard({ section, label }: { section: string; label: string }
   //       }),
   // })
 
-  const { data: boardsResult } = useQuery({
+  const { data: boardsResult, isLoading } = useQuery({
     queryKey: ["board", section, "MiniBoard"], // 캐시 키
     queryFn: () => getBoardList({ section, page: 1, rowsPerPage: 10, count: 3 }),
   })
@@ -86,10 +86,26 @@ export function MiniBoard({ section, label }: { section: string; label: string }
   return (
     <>
       <Box className="mb-3 flex items-center justify-between">
-        <Typography variant="h6" className="font-bold">
+        <Typography
+          variant="h6"
+          // className="font-bold"
+          sx={{ fontWeight: 700 }}
+        >
           {label}
         </Typography>
-        <Button size="small" variant="text" className="text-primary">
+        <Button
+          size="small"
+          variant="text"
+          // className="text-primary dark:text-primary-light"
+          sx={[
+            (theme) => ({
+              color: "rgb(20, 56, 150)",
+              ...theme.applyStyles("dark", {
+                color: "rgb(125, 160, 255)",
+              }),
+            }),
+          ]}
+        >
           <Box className="flex items-center" onClick={handleOpenDialog}>
             <AddIcon fontSize="small" />
             <span className="text-base">More</span>
@@ -97,19 +113,32 @@ export function MiniBoard({ section, label }: { section: string; label: string }
         </Button>
       </Box>
       <ul className="space-y-2">
-        {boards.map((notice) => (
-          <li key={notice.id}>
-            <Box
-              className="flex cursor-pointer justify-between hover:text-primary"
-              onClick={() => handleClick(notice.id ?? "")}
-            >
-              <span className="w-9/12 truncate">{notice.title}</span>
-              <span className="min-w-min whitespace-nowrap text-sm text-gray-500">
-                {formatDate(notice.create_date ?? "")}
-              </span>
-            </Box>
-          </li>
-        ))}
+        {isLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "88px",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          boards.map((notice) => (
+            <li key={notice.id}>
+              <Box
+                className="flex cursor-pointer justify-between hover:text-primary dark:hover:text-primary-light"
+                onClick={() => handleClick(notice.id ?? "")}
+              >
+                <span className="w-9/12 truncate">{notice.title}</span>
+                <span className="min-w-min whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                  {formatDate(notice.create_date ?? "")}
+                </span>
+              </Box>
+            </li>
+          ))
+        )}
       </ul>
       <BoardDialog
         open={openDialog}

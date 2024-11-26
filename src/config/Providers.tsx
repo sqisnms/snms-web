@@ -22,7 +22,13 @@ export function ToastProvider() {
 }
 //
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({
+  children,
+  darkLightTheme,
+}: {
+  children: React.ReactNode
+  darkLightTheme: "light" | "dark"
+}) {
   // react query 설정
   const [queryClient] = useState(
     () =>
@@ -43,6 +49,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   // MUI
   const theme = createTheme({
+    palette: { mode: darkLightTheme },
     components: {
       // 버튼 자동대문자 변환 방지
       MuiButton: {

@@ -117,6 +117,7 @@ export default function Menu({
     const url = menu.url ?? ""
     const width = menu.screen_width ?? 800
     const height = menu.screen_width ?? 600
+
     // 아이디로 추적할거면 noopener,noreferrer 못씀
     window.open(url, url, `width=${width},height=${height},top=50,left=50`)
   }
@@ -155,15 +156,15 @@ export default function Menu({
 
     // 순서대로 2,3,4뎁스 용 스타일
     const depthDivStyle = [
-      "absolute left-1/2 top-full z-50 w-48 -translate-x-1/2 transform bg-white text-gray-800 shadow-lg dark:bg-gray-900 dark:text-white",
-      "absolute left-full top-0 z-50 w-48 bg-white text-gray-800 shadow-lg dark:bg-gray-900 dark:text-white",
-      "absolute left-full top-0 z-50 w-48 bg-white text-gray-800 shadow-lg dark:bg-gray-900 dark:text-white",
+      "depth2 absolute left-1/2 top-full z-50 w-48 -translate-x-1/2 transform bg-white text-gray-800 shadow-lg dark:bg-gray-900 dark:text-white",
+      "depth3 absolute left-full top-0 z-50 w-48 bg-white text-gray-800 shadow-lg dark:bg-gray-900 dark:text-white",
+      "depth4 absolute left-full top-0 z-50 w-48 bg-white text-gray-800 shadow-lg dark:bg-gray-900 dark:text-white",
     ]
 
     const depthLiStyle = [
-      "hover:text-primary relative cursor-pointer px-4 py-2 dark:hover:text-point",
-      "px-4 py-2 relative hover:bg-gray-100 dark:hover:text-point dark:bg-gray-900 dark:hover:bg-gray-800",
-      "px-4 py-2 relative hover:bg-gray-100 dark:hover:text-point dark:bg-gray-900 dark:hover:bg-gray-800",
+      "hover:text-primary relative cursor-pointer dark:hover:text-point",
+      "relative hover:bg-gray-100 hover:text-primary dark:hover:text-point dark:bg-gray-900 dark:hover:bg-gray-800",
+      "relative hover:bg-gray-100 dark:hover:text-point dark:bg-gray-900 dark:hover:bg-gray-800",
     ]
 
     return (
@@ -217,7 +218,7 @@ export default function Menu({
               key={menu.menu_id}
               onMouseEnter={() => handleMouseEnter(menu.menu_id, 0)}
               onMouseLeave={handleMouseLeave}
-              className="relative"
+              className="gnb_menu relative"
             >
               <button
                 type="button"

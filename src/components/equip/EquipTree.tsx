@@ -2,28 +2,20 @@ import { getEquipList } from "@/actions/equip-actions"
 import { EquipType } from "@/types/equip"
 import ChevronRightIcon from "@mui/icons-material/ChevronRight"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import { Box, CircularProgress } from "@mui/material"
 import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView"
 import { TreeItem } from "@mui/x-tree-view/TreeItem"
-import { useEffect, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 
 type EquipTreeProps = {
   onSelectEquipTypeCode: (equipId: string) => void
 }
 
 export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
-  const [equips, setEquips] = useState<Partial<EquipType>[]>([])
-
-  useEffect(() => {
-    getEquipList()
-      .then((data) => {
-        // console.table(data)
-        // console.log(JSON.stringify(data))
-        setEquips(data)
-      })
-      .catch((error) => {
-        console.error("데이터를 불러오는 데 실패했습니다:", error)
-      })
-  }, [])
+  const { data: equipList = [], isLoading } = useQuery({
+    queryKey: ["equipList"],
+    queryFn: () => getEquipList(),
+  })
 
   const groupBy = (array: Partial<EquipType>[], key: "net_type_code" | "equip_type_code") => {
     return array.reduce(
@@ -43,7 +35,7 @@ export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
   // 트리 항목을 렌더링하는 함수
   const renderTreeItems = () => {
     // 먼저 NET_TYPE_CODE로 그룹화
-    const netTypeGroups = groupBy(equips, "net_type_code")
+    const netTypeGroups = groupBy(equipList, "net_type_code")
 
     return Object.keys(netTypeGroups).map((netType, index) => (
       <TreeItem key={netType} itemId={netType} label={netType}>
@@ -51,6 +43,7 @@ export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
         {groupBy(netTypeGroups[netType], "equip_type_code") &&
           Object.keys(groupBy(netTypeGroups[netType], "equip_type_code")).map((equipType) => (
             <TreeItem
+              className="py-2"
               key={equipType}
               itemId={equipType + index}
               label={equipType}
@@ -71,6 +64,21 @@ export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
           ))}
       </TreeItem>
     ))
+  }
+
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "10rem",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    )
   }
 
   return (

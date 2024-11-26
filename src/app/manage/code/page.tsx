@@ -7,6 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
   IconButton,
   Table,
@@ -28,7 +29,12 @@ export default function CodeManager() {
   const [editCodes, setEditCodes] = useState<CommonCodeEdit[]>([])
   const [newCategory, setNewCategory] = useState<string>("")
 
-  const { data: codes = [], refetch } = useQuery({
+  const {
+    data: codes = [],
+    refetch,
+    isLoading,
+    isFetching,
+  } = useQuery({
     queryKey: ["codes"],
     queryFn: () => getCodeList(),
   })
@@ -156,8 +162,8 @@ export default function CodeManager() {
   return (
     <Box display="flex" gap={4}>
       {/* 좌측: 카테고리 목록 */}
-      <Box width="30%">
-        <Box mt={2} display="flex" alignItems="center" gap={1} className="dark:bg-black">
+      <Box width="20%">
+        <Box display="flex" alignItems="center" gap={1} className="dark:bg-black">
           <TextField
             variant="outlined"
             placeholder="검색어 입력"
@@ -177,46 +183,64 @@ export default function CodeManager() {
           </IconButton>
         </Box>
         <Divider className="dark:border-gray-400" sx={{ mt: 1, mb: 1 }} />
-        <ul>
-          {categories
-            .filter(
-              (item) => !searchQuery || item.toLowerCase().includes(searchQuery.toLowerCase()),
-            )
-            .map((category) => (
-              <li className="mt-2" key={category}>
-                <Button
-                  fullWidth
-                  variant={selectedCategory === category ? "contained" : "outlined"}
-                  color="primary"
-                  className={`${
-                    selectedCategory === category
-                      ? "bg-primary text-white"
-                      : "border-primary bg-white text-primary dark:border-white dark:bg-black dark:text-white"
-                  }`}
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  {category}
-                </Button>
-              </li>
-            ))}
-        </ul>
+        {isLoading || isFetching ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "10rem",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <ul>
+            {categories
+              .filter(
+                (item) => !searchQuery || item.toLowerCase().includes(searchQuery.toLowerCase()),
+              )
+              .map((category) => (
+                <li className="mt-2" key={category}>
+                  <Button
+                    fullWidth
+                    variant={selectedCategory === category ? "contained" : "outlined"}
+                    color="primary"
+                    className={`${
+                      selectedCategory === category
+                        ? "bg-primary text-white"
+                        : "border-primary bg-white text-primary dark:border-white dark:bg-black dark:text-white"
+                    }`}
+                    onClick={() => setSelectedCategory(category)}
+                  >
+                    {category}
+                  </Button>
+                </li>
+              ))}
+          </ul>
+        )}
       </Box>
 
       {/* 우측: 코드 목록 및 검색 */}
-      <Box width="70%">
-        <Box display="flex" alignItems="center" gap={2} mb={2}>
+      <Box width="80%" className="border-l-2 pl-6 dark:border-gray-600">
+        <Box display="flex" alignItems="center" gap={1} mb={2}>
           <TextField
             variant="outlined"
             size="small"
             placeholder="새 카테고리"
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
+            className="mt0"
           />
-          <Button variant="contained" color="primary" onClick={handleAddCategory}>
+          <Button
+            variant="contained"
+            onClick={handleAddCategory}
+            className="bg-primary text-xl shadow-none"
+          >
             +
           </Button>
 
-          <Box display="flex" gap={2} ml="auto">
+          <Box display="flex" gap={1} ml="auto">
             <Button
               variant="contained"
               color="primary"
@@ -231,10 +255,15 @@ export default function CodeManager() {
                   key: v4(),
                 })
               }
+              className="bg-primary shadow-none"
             >
               추가
             </Button>
-            <Button variant="contained" color="secondary" onClick={() => handleSave()}>
+            <Button
+              variant="contained"
+              className="bg-secondary shadow-none"
+              onClick={() => handleSave()}
+            >
               저장
             </Button>
           </Box>

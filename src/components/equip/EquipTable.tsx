@@ -76,14 +76,14 @@ export function EquipTable({ selectedEquipTypeCode }: EquipTableProps) {
   }
 
   return (
-    <TableContainer component={Paper} className="p-4">
+    <TableContainer component={Paper}>
       <Table aria-label="simple table">
-        <TableHead>
+        <TableHead className="bg-gray-200 dark:bg-gray-800">
           <TableRow>
             {columns.map((column) => (
               <TableCell
                 key={column.name}
-                className="whitespace-nowrap font-semibold text-gray-600"
+                className="whitespace-nowrap font-semibold text-gray-600 dark:text-white"
               >
                 {column.comment}
               </TableCell>
@@ -96,7 +96,11 @@ export function EquipTable({ selectedEquipTypeCode }: EquipTableProps) {
         <TableBody>
           {equips.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={columns.length} align="center">
+              <TableCell
+                className="dark:bg-black dark:text-white"
+                colSpan={columns.length}
+                align="center"
+              >
                 <Typography variant="body1">좌측 분류에서 선택해주세요</Typography>
               </TableCell>
             </TableRow>
@@ -109,7 +113,10 @@ export function EquipTable({ selectedEquipTypeCode }: EquipTableProps) {
                   // 날짜 컬럼 처리
                   if (column.name.toLowerCase().includes("date")) {
                     return (
-                      <TableCell key={column.name} className="whitespace-nowrap">
+                      <TableCell
+                        key={column.name}
+                        className="whitespace-nowrap dark:bg-black dark:text-white"
+                      >
                         {formatDate(String(value))}
                       </TableCell>
                     )
@@ -117,11 +124,19 @@ export function EquipTable({ selectedEquipTypeCode }: EquipTableProps) {
 
                   // 일반 값 처리
                   if (value !== null && value !== undefined) {
-                    return <TableCell key={column.name}>{String(value)}</TableCell>
+                    return (
+                      <TableCell className="dark:bg-black dark:text-white" key={column.name}>
+                        {String(value)}
+                      </TableCell>
+                    )
                   }
 
                   // 값이 null 또는 undefined인 경우
-                  return <TableCell key={column.name}>N/A</TableCell>
+                  return (
+                    <TableCell className="dark:bg-black dark:text-white" key={column.name}>
+                      N/A
+                    </TableCell>
+                  )
                 })}
               </TableRow>
             ))

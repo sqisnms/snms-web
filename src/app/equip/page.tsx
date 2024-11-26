@@ -12,12 +12,12 @@ export default function Page() {
   return (
     <Box display="flex">
       {/* Left: TreeView */}
-      <Box width="30%" mr={2}>
+      <Box width="20%" mr={2}>
         <EquipTree onSelectEquipTypeCode={setSelectedEquipTypeCode} />
       </Box>
 
       {/* Right: Table */}
-      <Box width="70%">
+      <Box width="80%" className="border-l-2 pl-6 dark:border-gray-600">
         <EquipTable selectedEquipTypeCode={selectedEquipTypeCode} />
       </Box>
     </Box>

@@ -59,7 +59,19 @@ export default function QRLogin() {
   return (
     <Box className="mt-4 flex flex-col items-center">
       {/* 로딩 중일 때 */}
-      {loading && <CircularProgress />}
+      {loading && (
+        <Box
+          sx={{
+            width: "200px",
+            height: "200px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
 
       {/* 에러 발생 시 */}
       {error && <p className="text-red-500">{error}</p>}
@@ -68,7 +80,11 @@ export default function QRLogin() {
       {qrUrl && !loading && <Image src={qrUrl} alt="QR 코드" width={200} height={200} />}
 
       {/* QR 코드 갱신 버튼 (선택 사항) */}
-      <Button variant="outlined" onClick={fetchQrCode} className="mt-4">
+      <Button
+        variant="outlined"
+        onClick={fetchQrCode}
+        className="mt-6 h-12 w-full rounded-lg text-base !font-normal"
+      >
         새로고침
       </Button>
     </Box>
