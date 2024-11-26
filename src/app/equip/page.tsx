@@ -17,7 +17,19 @@ export default function Page() {
       </Box>
 
       {/* Right: Table */}
-      <Box width="80%" className="border-l-2 pl-6 dark:border-gray-600">
+      <Box
+        width="80%"
+        // className="border-l-2 pl-6 dark:border-gray-600"
+        sx={[
+          (theme) => ({
+            borderLeftWidth: "2px",
+            paddingLeft: "1.5rem",
+            ...theme.applyStyles("dark", {
+              borderColor: "rgb(75, 85, 99)",
+            }),
+          }),
+        ]}
+      >
         <EquipTable selectedEquipTypeCode={selectedEquipTypeCode} />
       </Box>
     </Box>
