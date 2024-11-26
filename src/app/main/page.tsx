@@ -120,7 +120,7 @@ function DashboardLayout() {
           </ul>
         </Box> */}
 
-        <Box className="flex flex-col bg-gray-100 px-6 py-8 dark:bg-gray-900 md:flex-row">
+        <Box className="flex flex-col bg-gray-100 p-6 pb-8 dark:bg-gray-900 md:flex-row">
           <Typography
             variant="h6"
             // className="w-full font-bold md:w-1/12"
@@ -134,13 +134,13 @@ function DashboardLayout() {
           >
             FAQ
           </Typography>
-          <ul className="mt-6 flex w-full flex-col space-y-6 md:mt-0 md:w-11/12 md:flex-row md:space-x-4 md:space-y-0">
-            <li className="w-full cursor-pointer hover:text-primary md:w-1/3">
+          <ul className="mt-6 grid w-full grid-cols-3 gap-6 md:mt-0 md:w-11/12 md:flex-row">
+            <li className="w-full cursor-pointer hover:text-primary">
               <Box className="flex items-center space-x-2">
                 <Typography className="h-6 min-w-8 max-w-8 rounded-md bg-gray-600 text-center font-medium text-white">
                   Q
                 </Typography>
-                <span className="truncate text-gray-800 hover:text-primary dark:text-white">
+                <span className="truncate text-gray-800 hover:text-primary dark:text-white dark:hover:text-primary-light">
                   5G NMS 활용, 무선망 코어 & 엑세스 스위치 감시 체계 관련 문의 드립니다.
                 </span>
               </Box>
@@ -148,17 +148,17 @@ function DashboardLayout() {
                 <Typography className="h-6 min-w-8 max-w-8 rounded-md bg-red-500 text-center font-medium text-white">
                   A
                 </Typography>
-                <span className="truncate text-gray-800 hover:text-primary dark:text-white">
+                <span className="truncate text-gray-800 hover:text-primary dark:text-white dark:hover:text-primary-light">
                   5G NMS 활용, 무선망 코어 & 엑세스 스위치 감시 체계 관련 안내입니다.
                 </span>
               </Box>
             </li>
-            <li className="w-full cursor-pointer hover:text-primary md:w-1/3">
+            <li className="w-full cursor-pointer hover:text-primary">
               <Box className="flex items-center space-x-2">
                 <Typography className="h-6 min-w-8 max-w-8 rounded-md bg-gray-600 text-center font-medium text-white">
                   Q
                 </Typography>
-                <span className="truncate text-gray-800 hover:text-primary dark:text-white">
+                <span className="truncate text-gray-800 hover:text-primary dark:text-white dark:hover:text-primary-light">
                   무선 VOC 응대시스템 권한신청 매뉴얼 장애 해결을 위한 질문입니다.
                 </span>
               </Box>
@@ -166,17 +166,17 @@ function DashboardLayout() {
                 <Typography className="h-6 min-w-8 max-w-8 rounded-md bg-red-500 text-center font-medium text-white">
                   A
                 </Typography>
-                <span className="truncate text-gray-800 hover:text-primary dark:text-white">
+                <span className="truncate text-gray-800 hover:text-primary dark:text-white dark:hover:text-primary-light">
                   무선 VOC 응대시스템 권한신청 매뉴얼 장애 해결을 위한 조치 방법입니다.
                 </span>
               </Box>
             </li>
-            <li className="w-full cursor-pointer hover:text-primary md:w-1/3">
+            <li className="w-full cursor-pointer hover:text-primary">
               <Box className="flex items-center space-x-2">
                 <Typography className="h-6 min-w-8 max-w-8 rounded-md bg-gray-600 text-center font-medium text-white">
                   Q
                 </Typography>
-                <span className="truncate text-gray-800 hover:text-primary dark:text-white">
+                <span className="truncate text-gray-800 hover:text-primary dark:text-white dark:hover:text-primary-light">
                   무선 VOC 응대시스템 권한신청 매뉴얼 장애 해결을 위한 질문입니다.
                 </span>
               </Box>
@@ -184,7 +184,7 @@ function DashboardLayout() {
                 <Typography className="h-6 min-w-8 max-w-8 rounded-md bg-red-500 text-center font-medium text-white">
                   A
                 </Typography>
-                <span className="truncate text-gray-800 hover:text-primary dark:text-white">
+                <span className="truncate text-gray-800 hover:text-primary dark:text-white dark:hover:text-primary-light">
                   무선 VOC 응대시스템 권한신청 매뉴얼 장애 해결을 위한 조치 방법입니다.
                 </span>
               </Box>
@@ -193,7 +193,7 @@ function DashboardLayout() {
         </Box>
 
         {/* Q&A */}
-        <Box className="flex flex-col px-6 py-8 dark:bg-black dark:text-white md:flex-row">
+        <Box className="flex flex-col p-6 pb-14 dark:bg-black dark:text-white md:flex-row">
           <Typography
             variant="h6"
             // className="w-full font-bold md:w-1/12"
@@ -207,13 +207,13 @@ function DashboardLayout() {
           >
             Q&A
           </Typography>
-          <ul className="mt-6 flex w-full flex-col space-y-6 md:mt-0 md:w-11/12 md:flex-row md:space-x-4 md:space-y-0">
-            <li className="w-full cursor-pointer hover:text-primary md:w-1/3">
+          <ul className="mt-6 grid w-full grid-cols-3 gap-6 md:mt-0 md:w-11/12 md:flex-row">
+            <li className="w-full cursor-pointer hover:text-primary">
               <Box className="flex items-center space-x-2">
                 <Typography className="h-6 min-w-8 max-w-8 rounded-md bg-gray-600 text-center font-medium text-white">
                   Q
                 </Typography>
-                <span className="truncate text-gray-800 hover:text-primary dark:text-white">
+                <span className="truncate text-gray-800 hover:text-primary dark:text-white dark:hover:text-primary-light">
                   안녕하세요? 2024년 9월 4일 특정국소의 전기정보관리 입력 관련 문의입니다.
                 </span>
               </Box>
@@ -221,17 +221,17 @@ function DashboardLayout() {
                 <Typography className="h-6 min-w-8 max-w-8 rounded-md bg-red-500 text-center font-medium text-white">
                   A
                 </Typography>
-                <span className="truncate text-gray-800 hover:text-primary dark:text-white">
+                <span className="truncate text-gray-800 hover:text-primary dark:text-white dark:hover:text-primary-light">
                   답변 준비 중 입니다.
                 </span>
               </Box>
             </li>
-            <li className="w-full cursor-pointer hover:text-primary md:w-1/3">
+            <li className="w-full cursor-pointer hover:text-primary">
               <Box className="flex items-center space-x-2">
                 <Typography className="h-6 min-w-8 max-w-8 rounded-md bg-gray-600 text-center font-medium text-white">
                   Q
                 </Typography>
-                <span className="truncate text-gray-800 hover:text-primary dark:text-white">
+                <span className="truncate text-gray-800 hover:text-primary dark:text-white dark:hover:text-primary-light">
                   안녕하세요? 2024년 9월 4일 특정국소의 전기정보관리 입력 관련 문의입니다.
                 </span>
               </Box>
@@ -239,17 +239,17 @@ function DashboardLayout() {
                 <Typography className="h-6 min-w-8 max-w-8 rounded-md bg-red-500 text-center font-medium text-white">
                   A
                 </Typography>
-                <span className="truncate text-gray-800 hover:text-primary dark:text-white">
+                <span className="truncate text-gray-800 hover:text-primary dark:text-white dark:hover:text-primary-light">
                   실제로 WCDMA 품질 보고가 누락되어 발생한 정상 장애입니다.
                 </span>
               </Box>
             </li>
-            <li className="w-full cursor-pointer hover:text-primary md:w-1/3">
+            <li className="w-full cursor-pointer hover:text-primary">
               <Box className="flex items-center space-x-2">
                 <Typography className="h-6 min-w-8 max-w-8 rounded-md bg-gray-600 text-center font-medium text-white">
                   Q
                 </Typography>
-                <span className="truncate text-gray-800 hover:text-primary dark:text-white">
+                <span className="truncate text-gray-800 hover:text-primary dark:text-white dark:hover:text-primary-light">
                   안녕하세요? 2024년 9월 4일 특정국소의 전기정보관리 입력 관련 문의입니다.
                 </span>
               </Box>
@@ -257,7 +257,7 @@ function DashboardLayout() {
                 <Typography className="h-6 min-w-8 max-w-8 rounded-md bg-red-500 text-center font-medium text-white">
                   A
                 </Typography>
-                <span className="truncate text-gray-800 hover:text-primary dark:text-white">
+                <span className="truncate text-gray-800 hover:text-primary dark:text-white dark:hover:text-primary-light">
                   실제로 WCDMA 품질 보고가 누락되어 발생한 정상 장애입니다.
                 </span>
               </Box>
