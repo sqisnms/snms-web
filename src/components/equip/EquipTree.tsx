@@ -43,7 +43,7 @@ export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
         {groupBy(netTypeGroups[netType], "equip_type_code") &&
           Object.keys(groupBy(netTypeGroups[netType], "equip_type_code")).map((equipType) => (
             <TreeItem
-              className="py-2"
+              // className="py-2"
               key={equipType}
               itemId={equipType + index}
               label={equipType}
@@ -87,7 +87,7 @@ export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
         collapseIcon: ExpandMoreIcon,
         expandIcon: ChevronRightIcon,
       }}
-      sx={{ bgcolor: "white", p: 2, borderRadius: 1, boxShadow: 1 }}
+      sx={{ p: 2, borderRadius: 1, boxShadow: 1 }}
     >
       {renderTreeItems()}
     </SimpleTreeView>
