@@ -9,14 +9,6 @@
   color: #fff;
   border-radius: 4px;
 }
-
-.css-1usuzwp-MuiButtonBase-root-MuiTab-root.Mui-selected {
-  color: #143896 !important;
-}
-.css-1qltlow-MuiTabs-indicator {
-  background-color: #143896 !important;
-}
-
 *,
 .MuiButtonBase-root,
 .btn {
@@ -43,10 +35,6 @@
   display: block;
   padding: 0.5rem 1rem;
 }
-
-.dark .css-183dk5e-MuiFormLabel-root-MuiInputLabel-root.MuiInputLabel-shrink {
-  color: #fff !important;
-}
 .dark .MuiDialog-paper {
   background: #000;
 }
@@ -63,15 +51,8 @@
 .MuiPaper-root {
   box-shadow: none;
 }
-.css-5hf2k4-MuiFormControl-root-MuiTextField-root {
-  margin-top: 0;
-}
 
 .MuiSimpleTreeView-root {
   box-shadow: none;
-  padding: 10px;
-}
-.dark .css-1it4x0c-MuiSimpleTreeView-root {
-  background: #1f2937;
-  color: #fff;
+  padding: 0;
 }
