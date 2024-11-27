@@ -8,6 +8,7 @@ import {
   Box,
   Button,
   CircularProgress,
+  createTheme,
   Divider,
   IconButton,
   Table,
@@ -16,6 +17,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  ThemeProvider,
 } from "@mui/material"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
@@ -37,6 +39,14 @@ export default function CodeManager() {
   } = useQuery({
     queryKey: ["codes"],
     queryFn: () => getCodeList(),
+  })
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#143896",
+      },
+    },
   })
 
   useEffect(() => {
@@ -160,172 +170,216 @@ export default function CodeManager() {
   }
 
   return (
-    <Box display="flex" gap={4}>
-      {/* 좌측: 카테고리 목록 */}
-      <Box width="20%">
-        <Box display="flex" alignItems="center" gap={1} className="dark:bg-black">
-          <TextField
-            variant="outlined"
-            placeholder="검색어 입력"
-            fullWidth
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <IconButton
-            size="small"
-            onClick={() => {
-              setEditCodes([])
-              refetch()
-            }}
-            className="dark:text-white"
-          >
-            <CachedIcon fontSize="small" />
-          </IconButton>
-        </Box>
-        <Divider className="dark:border-gray-400" sx={{ mt: 1, mb: 1 }} />
-        {isLoading || isFetching ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "10rem",
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : (
-          <ul>
-            {categories
-              .filter(
-                (item) => !searchQuery || item.toLowerCase().includes(searchQuery.toLowerCase()),
-              )
-              .map((category) => (
-                <li className="mt-2" key={category}>
-                  <Button
-                    fullWidth
-                    variant={selectedCategory === category ? "contained" : "outlined"}
-                    color="primary"
-                    className={`${
-                      selectedCategory === category
-                        ? "bg-primary text-white"
-                        : "border-primary bg-white text-primary dark:border-white dark:bg-black dark:text-white"
-                    }`}
-                    onClick={() => setSelectedCategory(category)}
-                  >
-                    {category}
-                  </Button>
-                </li>
-              ))}
-          </ul>
-        )}
-      </Box>
-
-      {/* 우측: 코드 목록 및 검색 */}
-      <Box width="80%" className="border-l-2 pl-6 dark:border-gray-600">
-        <Box display="flex" alignItems="center" gap={1} mb={2}>
-          <TextField
-            variant="outlined"
-            size="small"
-            placeholder="새 카테고리"
-            value={newCategory}
-            onChange={(e) => setNewCategory(e.target.value)}
-            className="mt0"
-          />
-          <Button
-            variant="contained"
-            onClick={handleAddCategory}
-            className="bg-primary text-xl shadow-none"
-          >
-            +
-          </Button>
-
-          <Box display="flex" gap={1} ml="auto">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() =>
-                handleAdd({
-                  category: selectedCategory ?? "",
-                  code: "",
-                  code_name: "",
-                  use_yn: "Y",
-                  sort_order: 0,
-                  remarks: "",
-                  key: v4(),
-                })
-              }
-              className="bg-primary shadow-none"
+    <ThemeProvider theme={theme}>
+      <Box display="flex" gap={2}>
+        {/* 좌측: 카테고리 목록 */}
+        <Box width="20%">
+          <Box display="flex" alignItems="center" gap={1} className="dark:bg-black">
+            <TextField
+              variant="outlined"
+              placeholder="검색어 입력"
+              fullWidth
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              sx={{
+                height: "40px",
+              }}
+            />
+            <IconButton
+              size="small"
+              onClick={() => {
+                setEditCodes([])
+                refetch()
+              }}
+              className="dark:text-white"
             >
-              추가
-            </Button>
-            <Button
-              variant="contained"
-              className="bg-secondary shadow-none"
-              onClick={() => handleSave()}
-            >
-              저장
-            </Button>
+              <CachedIcon fontSize="small" />
+            </IconButton>
           </Box>
+          <Divider className="dark:border-gray-400" sx={{ mt: 1, mb: 1 }} />
+          {isLoading || isFetching ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "10rem",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
+            <ul>
+              {categories
+                .filter(
+                  (item) => !searchQuery || item.toLowerCase().includes(searchQuery.toLowerCase()),
+                )
+                .map((category) => (
+                  <li className="mt-2" key={category}>
+                    <Button
+                      fullWidth
+                      variant={selectedCategory === category ? "contained" : "outlined"}
+                      color="primary"
+                      sx={[
+                        (theme) => ({
+                          backgroundColor: selectedCategory === category ? "primary.main" : "white",
+                          color: selectedCategory === category ? "white" : "primary.main",
+                          borderColor:
+                            selectedCategory === category ? "transparent" : "primary.main",
+                          borderWidth: "1px",
+                          borderStyle: "solid",
+                          "&:hover": {
+                            backgroundColor:
+                              selectedCategory === category
+                                ? "primary.dark"
+                                : "rgba(0, 0, 0, 0.04)",
+                          },
+                          ...(theme.palette.mode === "dark" && {
+                            backgroundColor:
+                              selectedCategory === category ? "primary.dark" : "black",
+                            color: selectedCategory === category ? "white" : "white",
+                            borderColor: selectedCategory === category ? "transparent" : "white",
+                          }),
+                        }),
+                      ]}
+                      onClick={() => setSelectedCategory(category)}
+                    >
+                      {category}
+                    </Button>
+                  </li>
+                ))}
+            </ul>
+          )}
         </Box>
 
-        {/* 코드 테이블 */}
-        <Table sx={{ "& .MuiTableCell-root": { padding: "4px 4px" } }}>
-          <TableHead>
-            <TableRow>
-              <TableCell className="dark:text-white">CATEGORY</TableCell>
-              <TableCell className="dark:text-white">CODE</TableCell>
-              <TableCell className="dark:text-white">CODE_NAME</TableCell>
-              <TableCell className="dark:text-white">REMARKS</TableCell>
-              <TableCell className="dark:text-white" />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {editCodes
-              .filter((code) => (selectedCategory ? code.category === selectedCategory : false))
-              .map((code) => (
-                <TableRow key={code.key}>
-                  <TableCell className="dark:text-white">{code.category}</TableCell>
-                  <TableCell className="dark:text-white">
-                    <TextField
-                      variant="outlined"
-                      value={code.code}
-                      onChange={(e) =>
-                        handleUpdate({ ...code, CODE: e.target.value } as CommonCodeEdit)
-                      }
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      variant="outlined"
-                      value={code.code_name}
-                      onChange={(e) =>
-                        handleUpdate({ ...code, CODE_NAME: e.target.value } as CommonCodeEdit)
-                      }
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      variant="outlined"
-                      value={code.remarks}
-                      onChange={(e) =>
-                        handleUpdate({ ...code, REMARKS: e.target.value } as CommonCodeEdit)
-                      }
-                      slotProps={{
-                        htmlInput: { maxLength: 25 },
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <IconButton size="small" onClick={() => handleDelete(code.key ?? "")}>
-                      <DeleteIcon className="dark:text-white" fontSize="small" />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
+        {/* 우측: 코드 목록 및 검색 */}
+        <Box
+          width="80%"
+          sx={[
+            (theme) => ({
+              borderLeftWidth: "2px",
+              paddingLeft: "1rem",
+              minHeight: "30vh",
+              ...theme.applyStyles("dark", {
+                borderColor: "rgb(75, 85, 99)",
+              }),
+            }),
+          ]}
+          className="code_wrap"
+        >
+          <Box display="flex" alignItems="center" gap={1} mb={2}>
+            <TextField
+              variant="outlined"
+              size="small"
+              placeholder="새 카테고리"
+              value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+              className="mt0"
+            />
+            <Button
+              variant="contained"
+              onClick={handleAddCategory}
+              className="bg-primary text-xl shadow-none"
+            >
+              +
+            </Button>
+
+            <Box display="flex" gap={1} ml="auto">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() =>
+                  handleAdd({
+                    category: selectedCategory ?? "",
+                    code: "",
+                    code_name: "",
+                    use_yn: "Y",
+                    sort_order: 0,
+                    remarks: "",
+                    key: v4(),
+                  })
+                }
+                className="bg-primary shadow-none"
+              >
+                추가
+              </Button>
+              <Button
+                variant="contained"
+                className="bg-secondary shadow-none"
+                onClick={() => handleSave()}
+              >
+                저장
+              </Button>
+            </Box>
+          </Box>
+
+          {/* 코드 테이블 */}
+          <Table sx={{ "& .MuiTableCell-root": { padding: "4px 4px" } }}>
+            <TableHead>
+              <TableRow>
+                <TableCell className="dark:text-white">CATEGORY</TableCell>
+                <TableCell className="dark:text-white">CODE</TableCell>
+                <TableCell className="dark:text-white">CODE_NAME</TableCell>
+                <TableCell className="dark:text-white">REMARKS</TableCell>
+                <TableCell className="dark:text-white" />
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {editCodes
+                .filter((code) => (selectedCategory ? code.category === selectedCategory : false))
+                .map((code) => (
+                  <TableRow key={code.key}>
+                    <TableCell className="dark:text-white">{code.category}</TableCell>
+                    <TableCell className="dark:text-white">
+                      <TextField
+                        variant="outlined"
+                        value={code.code}
+                        onChange={(e) =>
+                          handleUpdate({ ...code, CODE: e.target.value } as CommonCodeEdit)
+                        }
+                        sx={{
+                          height: "40px",
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        variant="outlined"
+                        value={code.code_name}
+                        onChange={(e) =>
+                          handleUpdate({ ...code, CODE_NAME: e.target.value } as CommonCodeEdit)
+                        }
+                        sx={{
+                          height: "40px",
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        variant="outlined"
+                        value={code.remarks}
+                        onChange={(e) =>
+                          handleUpdate({ ...code, REMARKS: e.target.value } as CommonCodeEdit)
+                        }
+                        slotProps={{
+                          htmlInput: { maxLength: 25 },
+                        }}
+                        sx={{
+                          height: "40px",
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <IconButton size="small" onClick={() => handleDelete(code.key ?? "")}>
+                        <DeleteIcon className="dark:text-white" fontSize="small" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </Box>
       </Box>
-    </Box>
+    </ThemeProvider>
   )
 }
