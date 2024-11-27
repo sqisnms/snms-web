@@ -77,7 +77,14 @@ export function EquipTable({ selectedEquipTypeCode }: EquipTableProps) {
 
   return (
     <TableContainer component={Paper}>
-      <Table aria-label="simple table">
+      <Table
+        aria-label="simple table"
+        sx={{
+          minHeight: "30vh",
+          borderBottom: "none",
+          background: "#fafafa",
+        }}
+      >
         <TableHead className="bg-gray-200 dark:bg-gray-800">
           <TableRow>
             {columns.map((column) => (
@@ -100,8 +107,18 @@ export function EquipTable({ selectedEquipTypeCode }: EquipTableProps) {
                 className="dark:bg-black dark:text-white"
                 colSpan={columns.length}
                 align="center"
+                sx={{
+                  borderBottom: "none",
+                }}
               >
-                <Typography variant="body1">좌측 분류에서 선택해주세요</Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#9b9b9b",
+                  }}
+                >
+                  좌측 분류에서 선택해주세요
+                </Typography>
               </TableCell>
             </TableRow>
           ) : (
