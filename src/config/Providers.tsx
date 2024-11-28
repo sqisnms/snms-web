@@ -53,6 +53,13 @@ export default function Providers({
       primary: {
         main: "#143896", // Primary 메인 색상
         dark: "#102c78", // Primary 다크 색상
+        light: "#234ab1", // Primary 다크 색상
+        contrastText: "#ffffff", // Primary 대비 텍스트
+      },
+      secondary: {
+        main: "#4496e5", // Secondary 메인 색상
+        dark: "#367bbd", // Secondary 다크 색상
+        light: "#5eb6ff", // Secondary 라이트 색상
         contrastText: "#ffffff", // Primary 대비 텍스트
       },
       mode: darkLightTheme,
