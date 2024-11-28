@@ -9,18 +9,31 @@
   color: #fff;
   border-radius: 4px;
 }
-
-.css-1usuzwp-MuiButtonBase-root-MuiTab-root.Mui-selected {
-  color: #143896 !important;
-}
-.css-1qltlow-MuiTabs-indicator {
-  background-color: #143896 !important;
-}
-
 *,
 .MuiButtonBase-root,
 .btn {
   font-family: "NotoSans" !important;
+}
+
+*::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #7b7b7b;
+  border-radius: 4px;
+}
+*::-webkit-scrollbar-track {
+  background: #d8d8d8;
+  border-radius: 4px;
+}
+.dark *::-webkit-scrollbar-thumb {
+  background: #c9c9c9;
+  border-radius: 4px;
+}
+.dark *::-webkit-scrollbar-track {
+  background: #5d5d5d;
+  border-radius: 4px;
 }
 
 .login_box_wrap {
@@ -43,10 +56,6 @@
   display: block;
   padding: 0.5rem 1rem;
 }
-
-.dark .css-183dk5e-MuiFormLabel-root-MuiInputLabel-root.MuiInputLabel-shrink {
-  color: #fff !important;
-}
 .dark .MuiDialog-paper {
   background: #000;
 }
@@ -61,17 +70,34 @@
 }
 
 .MuiPaper-root {
-  box-shadow: none;
-}
-.css-5hf2k4-MuiFormControl-root-MuiTextField-root {
-  margin-top: 0;
+  box-shadow: none !important;
 }
 
 .MuiSimpleTreeView-root {
   box-shadow: none;
-  padding: 10px;
+  padding: 0;
 }
-.dark .css-1it4x0c-MuiSimpleTreeView-root {
-  background: #1f2937;
+.MuiTreeItem-content {
+  padding: 6px 4px;
+  border-radius: 0;
+}
+.tree-depth2 .MuiTreeItem-label {
+  font-size: 15px;
+}
+.MuiTreeItem-content.Mui-selected {
+  color: #4b5563;
+  background: #e5e7eb;
+}
+
+.dark .MuiTreeItem-content:hover {
   color: #fff;
+  background: #1f2937;
+}
+.dark .MuiTreeItem-content.Mui-selected {
+  color: #fff;
+  background: #253447;
+}
+
+.code_wrap .MuiFormControl-root {
+  margin-top: 0;
 }

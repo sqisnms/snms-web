@@ -160,7 +160,7 @@ export default function CodeManager() {
   }
 
   return (
-    <Box display="flex" gap={4}>
+    <Box display="flex" gap={2}>
       {/* 좌측: 카테고리 목록 */}
       <Box width="20%">
         <Box display="flex" alignItems="center" gap={1} className="dark:bg-black">
@@ -170,6 +170,9 @@ export default function CodeManager() {
             fullWidth
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            sx={{
+              height: "40px",
+            }}
           />
           <IconButton
             size="small"
@@ -206,11 +209,24 @@ export default function CodeManager() {
                     fullWidth
                     variant={selectedCategory === category ? "contained" : "outlined"}
                     color="primary"
-                    className={`${
-                      selectedCategory === category
-                        ? "bg-primary text-white"
-                        : "border-primary bg-white text-primary dark:border-white dark:bg-black dark:text-white"
-                    }`}
+                    sx={[
+                      (theme) => ({
+                        backgroundColor: selectedCategory === category ? "primary.main" : "white",
+                        color: selectedCategory === category ? "white" : "primary.main",
+                        borderColor: selectedCategory === category ? "transparent" : "primary.main",
+                        borderWidth: "1px",
+                        borderStyle: "solid",
+                        "&:hover": {
+                          backgroundColor:
+                            selectedCategory === category ? "primary.dark" : "rgba(0, 0, 0, 0.04)",
+                        },
+                        ...(theme.palette.mode === "dark" && {
+                          backgroundColor: selectedCategory === category ? "primary.dark" : "black",
+                          color: selectedCategory === category ? "white" : "white",
+                          borderColor: selectedCategory === category ? "transparent" : "white",
+                        }),
+                      }),
+                    ]}
                     onClick={() => setSelectedCategory(category)}
                   >
                     {category}
@@ -222,7 +238,20 @@ export default function CodeManager() {
       </Box>
 
       {/* 우측: 코드 목록 및 검색 */}
-      <Box width="80%" className="border-l-2 pl-6 dark:border-gray-600">
+      <Box
+        width="80%"
+        sx={[
+          (theme) => ({
+            borderLeftWidth: "2px",
+            paddingLeft: "1rem",
+            minHeight: "30vh",
+            ...theme.applyStyles("dark", {
+              borderColor: "rgb(75, 85, 99)",
+            }),
+          }),
+        ]}
+        className="code_wrap"
+      >
         <Box display="flex" alignItems="center" gap={1} mb={2}>
           <TextField
             variant="outlined"
@@ -293,6 +322,9 @@ export default function CodeManager() {
                       onChange={(e) =>
                         handleUpdate({ ...code, CODE: e.target.value } as CommonCodeEdit)
                       }
+                      sx={{
+                        height: "40px",
+                      }}
                     />
                   </TableCell>
                   <TableCell>
@@ -302,6 +334,9 @@ export default function CodeManager() {
                       onChange={(e) =>
                         handleUpdate({ ...code, CODE_NAME: e.target.value } as CommonCodeEdit)
                       }
+                      sx={{
+                        height: "40px",
+                      }}
                     />
                   </TableCell>
                   <TableCell>
@@ -313,6 +348,9 @@ export default function CodeManager() {
                       }
                       slotProps={{
                         htmlInput: { maxLength: 25 },
+                      }}
+                      sx={{
+                        height: "40px",
                       }}
                     />
                   </TableCell>

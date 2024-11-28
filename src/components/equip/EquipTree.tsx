@@ -43,11 +43,14 @@ export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
         {groupBy(netTypeGroups[netType], "equip_type_code") &&
           Object.keys(groupBy(netTypeGroups[netType], "equip_type_code")).map((equipType) => (
             <TreeItem
-              // className="py-2"
               key={equipType}
               itemId={equipType + index}
               label={equipType}
               onClick={() => onSelectEquipTypeCode(equipType ?? "")}
+              className="tree-depth2"
+              sx={{
+                padding: "0",
+              }}
             >
               {/* 3뎁스라면 - 각 EQUIP_TYPE_CODE 아래에서 실제 장비 목록을 렌더링 */}
               {/* {netTypeGroups[netType]

@@ -49,7 +49,14 @@ export default function Providers({
 
   // MUI
   const theme = createTheme({
-    palette: { mode: darkLightTheme },
+    palette: {
+      primary: {
+        main: "#143896", // Primary 메인 색상
+        dark: "#102c78", // Primary 다크 색상
+        contrastText: "#ffffff", // Primary 대비 텍스트
+      },
+      mode: darkLightTheme,
+    },
     components: {
       // 버튼 자동대문자 변환 방지
       MuiButton: {

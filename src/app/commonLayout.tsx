@@ -16,12 +16,12 @@ export default async function CommonLayout({ children }: { children: React.React
   const theme = cookie.get("theme")?.value ?? "light"
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-screen flex-col dark:bg-black">
       <div className="w-full">
         <Gnb menuData={menuData} userName={session?.user?.name ?? ""} theme={theme} />
       </div>
       <div className="w-full">
-        <div className="flex h-screen flex-col dark:bg-black">
+        <div className="flex flex-col dark:bg-black">
           {/* Header Section */}
           <Paper className="rounded-none border-none p-4 dark:bg-black">
             <Top breadcrumbs={breadcrumbs} />

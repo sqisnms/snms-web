@@ -12,10 +12,22 @@ export default function Page() {
   return (
     <Box display="flex">
       {/* Left: TreeView */}
-      <Box width="20%" mr={2}>
+      <Box
+        width="20%"
+        mr={2}
+        sx={[
+          (theme) => ({
+            background: "#fafafa",
+            padding: "10px",
+            minHeight: "30vh",
+            ...theme.applyStyles("dark", {
+              background: "#000",
+            }),
+          }),
+        ]}
+      >
         <EquipTree onSelectEquipTypeCode={setSelectedEquipTypeCode} />
       </Box>
-
       {/* Right: Table */}
       <Box
         width="80%"
@@ -23,7 +35,8 @@ export default function Page() {
         sx={[
           (theme) => ({
             borderLeftWidth: "2px",
-            paddingLeft: "1.5rem",
+            paddingLeft: "1rem",
+            minHeight: "30vh",
             ...theme.applyStyles("dark", {
               borderColor: "rgb(75, 85, 99)",
             }),
