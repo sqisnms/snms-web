@@ -264,7 +264,20 @@ export default function CodeManager() {
           <Button
             variant="contained"
             onClick={handleAddCategory}
-            className="bg-primary text-xl shadow-none"
+            className="bg-primary"
+            sx={[
+              (theme) => ({
+                background: theme.palette.primary.main,
+                fontSize: "1.25rem",
+                lineHeight: "1.75rem",
+                boxShadow: "none",
+                color: theme.palette.primary.contrastText,
+                "&:hover": {
+                  background: theme.palette.primary.dark,
+                  boxShadow: "none",
+                },
+              }),
+            ]}
           >
             +
           </Button>
@@ -284,14 +297,38 @@ export default function CodeManager() {
                   key: v4(),
                 })
               }
-              className="bg-primary shadow-none"
+              sx={[
+                (theme) => ({
+                  background: theme.palette.primary.main,
+                  fontSize: "14px",
+                  lineHeight: "1.75rem",
+                  boxShadow: "none",
+                  color: theme.palette.primary.contrastText,
+                  "&:hover": {
+                    background: theme.palette.primary.dark,
+                    boxShadow: "none",
+                  },
+                }),
+              ]}
             >
               추가
             </Button>
             <Button
               variant="contained"
-              className="bg-secondary shadow-none"
               onClick={() => handleSave()}
+              sx={[
+                (theme) => ({
+                  background: theme.palette.secondary.main,
+                  fontSize: "14px",
+                  lineHeight: "1.75rem",
+                  boxShadow: "none",
+                  color: theme.palette.secondary.contrastText,
+                  "&:hover": {
+                    background: theme.palette.secondary.dark,
+                    boxShadow: "none",
+                  },
+                }),
+              ]}
             >
               저장
             </Button>
