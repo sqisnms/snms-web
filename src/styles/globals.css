@@ -3,8 +3,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.MuiInputBase-input {
+.MuiFormControl-root .MuiInputBase-input {
   height: 40px;
   box-sizing: border-box;
 }

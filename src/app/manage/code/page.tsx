@@ -216,14 +216,20 @@ export default function CodeManager() {
                         borderColor: selectedCategory === category ? "transparent" : "primary.main",
                         borderWidth: "1px",
                         borderStyle: "solid",
+                        boxShadow: "none",
                         "&:hover": {
                           backgroundColor:
-                            selectedCategory === category ? "primary.dark" : "rgba(0, 0, 0, 0.04)",
+                            selectedCategory === category ? "primary.dark" : "grey.100",
                         },
                         ...(theme.palette.mode === "dark" && {
-                          backgroundColor: selectedCategory === category ? "primary.dark" : "black",
+                          backgroundColor:
+                            selectedCategory === category ? "secondary.main" : "black",
                           color: selectedCategory === category ? "white" : "white",
                           borderColor: selectedCategory === category ? "transparent" : "white",
+                          "&:hover": {
+                            backgroundColor:
+                              selectedCategory === category ? "secondary.dark" : "grey.900",
+                          },
                         }),
                       }),
                     ]}
