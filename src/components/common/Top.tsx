@@ -42,8 +42,11 @@ export default function Top({ breadcrumbs }: { breadcrumbs: BreadcrumbType[] }) 
       {/* Breadcrumb 표시 */}
       <Breadcrumbs
         aria-label="breadcrumb"
-        className="text-sm dark:text-white"
+        className="dark:text-white"
         separator={<span className="text-gray-400 dark:text-gray-500">/</span>}
+        sx={{
+          fontSize: "0.875rem",
+        }}
       >
         <Link href="/main" underline="hover" color="inherit">
           Home
