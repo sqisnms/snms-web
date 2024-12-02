@@ -1,6 +1,7 @@
 "use client"
 
 import { grafanaThemeAtom } from "@/atom/dashboardAtom"
+import { LOGIN_DEFAULT_PAGE } from "@/config/const"
 import { MenuType } from "@/types/menu"
 import { Box, FormControlLabel } from "@mui/material"
 import { styled } from "@mui/material/styles"
@@ -207,7 +208,7 @@ export default function Menu({
 
   return (
     <div className="flex items-center">
-      <Link href="/main">
+      <Link href={LOGIN_DEFAULT_PAGE}>
         <Image src="/logo_w.svg" width={130} height={40} alt="Logo" className="mr-10 h-8" />
       </Link>
       <nav className="relative flex space-x-6">

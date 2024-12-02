@@ -1,5 +1,6 @@
 "use client"
 
+import { LOGIN_DEFAULT_PAGE } from "@/config/const"
 import { BreadcrumbType } from "@/types/menu"
 import { Box, Breadcrumbs, Link, Typography } from "@mui/material"
 import { usePathname } from "next/navigation"
@@ -48,7 +49,7 @@ export default function Top({ breadcrumbs }: { breadcrumbs: BreadcrumbType[] }) 
           fontSize: "0.875rem",
         }}
       >
-        <Link href="/main" underline="hover" color="inherit">
+        <Link href={LOGIN_DEFAULT_PAGE} underline="hover" color="inherit">
           Home
         </Link>
         {currentBreadcrumb?.path_names.map((name, index) => (

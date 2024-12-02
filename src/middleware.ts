@@ -2,6 +2,7 @@ import { auth } from "auth"
 import NextAuth from "next-auth"
 import { NextRequest, NextResponse } from "next/server"
 import { authConfig } from "../auth.config"
+import { NO_LOGIN_DEFAULT_PAGE, NO_LOGIN_PAGES } from "./config/const"
 
 export default NextAuth(authConfig).auth
 
@@ -13,11 +14,11 @@ export async function middleware(request: NextRequest) {
   // console.log(session)
   // console.log("session")
   const { pathname } = request.nextUrl
-  const noLoginPage =
-    pathname === "/" || pathname.startsWith("/login") || pathname.startsWith("/signup")
+  const noLoginPage = NO_LOGIN_PAGES.includes(pathname)
+  // pathname === "/" || pathname.startsWith("/login") || pathname.startsWith("/signup")
 
   if (!session && !noLoginPage) {
-    return NextResponse.redirect(new URL(`/login`, request.url))
+    return NextResponse.redirect(new URL(NO_LOGIN_DEFAULT_PAGE, request.url))
   }
 
   const headers = new Headers(request.headers)
