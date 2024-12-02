@@ -1,4 +1,5 @@
 import LoginForm from "@/components/account/login-form"
+import { LOGIN_DEFAULT_PAGE } from "@/config/const"
 import { Box } from "@mui/material"
 import { auth } from "auth"
 import Image from "next/image"
@@ -12,7 +13,7 @@ export default async function Login({
 }) {
   const session = await auth()
   if (session) {
-    redirect(searchParams?.callbackUrl ?? "/main")
+    redirect(searchParams?.callbackUrl ?? LOGIN_DEFAULT_PAGE)
   }
 
   return (
