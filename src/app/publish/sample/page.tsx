@@ -286,8 +286,8 @@ const DashboardLayout: React.FC = () => {
                   (theme) => ({
                     background: theme.palette.secondary.main,
                     width: "6rem",
-                    fontSize: "14px",
-                    lineHeight: "1.75rem",
+                    fontSize: "16px",
+                    lineHeight: "2rem",
                     boxShadow: "none",
                     color: theme.palette.secondary.contrastText,
                     "&:hover": {
@@ -306,8 +306,8 @@ const DashboardLayout: React.FC = () => {
                   (theme) => ({
                     background: theme.palette.primary.main,
                     width: "6rem",
-                    fontSize: "14px",
-                    lineHeight: "1.75rem",
+                    fontSize: "16px",
+                    lineHeight: "2rem",
                     boxShadow: "none",
                     color: theme.palette.primary.contrastText,
                     "&:hover": {
