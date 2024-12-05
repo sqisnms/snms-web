@@ -1,27 +1,25 @@
 "use server"
 
-import { unstable_noStore as noStore } from "next/cache"
 import { z } from "zod"
 // eslint-disable-next-line import/no-cycle
 import { signIn, signOut } from "auth"
 import bcrypt from "bcrypt"
 import { AuthError } from "next-auth"
-import { v4 as uuidv4 } from "uuid"
+import { v4 as uuidv4, v4 } from "uuid"
 
 import { postgres } from "@/config/db"
-import type { User } from "@/types/user"
 import AES from "crypto-js/aes"
 
-export async function getUser(email: string): Promise<User | undefined> {
-  try {
-    const user = await postgres.query<User>("SELECT * FROM users WHERE email=$1", [email])
-    return user.rows[0]
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Failed to fetch user:", error)
-    throw new Error("Failed to fetch user.")
-  }
-}
+// export async function getUser(email: string): Promise<AuthUser | undefined> {
+//   try {
+//     const user = await postgres.query<AuthUser>("SELECT * FROM users WHERE email=$1", [email])
+//     return user.rows[0]
+//   } catch (error) {
+//     // eslint-disable-next-line no-console
+//     console.error("Failed to fetch user:", error)
+//     throw new Error("Failed to fetch user.")
+//   }
+// }
 
 const EmailSchema = z.string().email({ message: "Invalid email address." })
 const PasswordSchema = z
@@ -53,7 +51,10 @@ export async function signUp(prevState: string | undefined, formData: FormData) 
 
   try {
     // 이메일 중복 검사
-    const existingUser = await postgres.query("SELECT * FROM users WHERE email = $1", [email])
+    const existingUser = await postgres.query(
+      "SELECT * FROM comdb.tbd_com_org_user WHERE login_id = $1",
+      [email],
+    )
     if (existingUser.rowCount !== null && existingUser.rowCount > 0) {
       return "Email already exists."
     }
@@ -62,11 +63,11 @@ export async function signUp(prevState: string | undefined, formData: FormData) 
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const query = `
-      INSERT INTO users (name, email, password, auth_key)
-      VALUES ($1, $2, $3, $4)
+      INSERT INTO comdb.tbd_com_org_user (user_name, login_id, user_pwd, auth_key, pfx_user_code, user_id)
+      VALUES ($1, $2, $3, $4, $5, $6)
     `
 
-    const values = [name, email, hashedPassword, authKey]
+    const values = [name, email, hashedPassword, authKey, "5", v4()]
 
     await postgres.query(query, values)
     return "User successfully created."
@@ -110,18 +111,18 @@ export async function deleteUser(email: string) {
   }
 }
 
-export async function fetchLoggedInUser(email: string) {
-  noStore()
+// export async function fetchLoggedInUser(email: string) {
+//   noStore()
 
-  try {
-    const user = await postgres.query("SELECT * FROM users WHERE email = $1", [email])
-    return user.rows[0] as User
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error("Failed to fetch user:", error)
-    throw new Error("Failed to fetch user.")
-  }
-}
+//   try {
+//     const user = await postgres.query("SELECT * FROM users WHERE email = $1", [email])
+//     return user.rows[0] as AuthUser
+//   } catch (error) {
+//     // eslint-disable-next-line no-console
+//     console.error("Failed to fetch user:", error)
+//     throw new Error("Failed to fetch user.")
+//   }
+// }
 
 /**
  * 로그아웃을 수행하는 함수
