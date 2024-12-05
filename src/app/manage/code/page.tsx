@@ -130,6 +130,7 @@ export default function CodeManager() {
       updateMutation.mutate(changes, {
         onSuccess: () => {
           toast.success("저장되었습니다.")
+          setEditCodes([])
           queryClient.invalidateQueries({ queryKey: ["codes"] })
         },
         onError: (error) => {
@@ -363,7 +364,7 @@ export default function CodeManager() {
                       variant="outlined"
                       value={code.code}
                       onChange={(e) =>
-                        handleUpdate({ ...code, CODE: e.target.value } as CommonCodeEdit)
+                        handleUpdate({ ...code, code: e.target.value } as CommonCodeEdit)
                       }
                       sx={{
                         height: "40px",
@@ -375,7 +376,7 @@ export default function CodeManager() {
                       variant="outlined"
                       value={code.code_name}
                       onChange={(e) =>
-                        handleUpdate({ ...code, CODE_NAME: e.target.value } as CommonCodeEdit)
+                        handleUpdate({ ...code, code_name: e.target.value } as CommonCodeEdit)
                       }
                       sx={{
                         height: "40px",
@@ -387,7 +388,7 @@ export default function CodeManager() {
                       variant="outlined"
                       value={code.remarks}
                       onChange={(e) =>
-                        handleUpdate({ ...code, REMARKS: e.target.value } as CommonCodeEdit)
+                        handleUpdate({ ...code, remarks: e.target.value } as CommonCodeEdit)
                       }
                       slotProps={{
                         htmlInput: { maxLength: 25 },
