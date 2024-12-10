@@ -8,6 +8,12 @@ export type MenuType = {
   pop_up_yn_code: string | null
   screen_width: number | null
   screen_height: number | null
+  use_yn_code: string | null
+}
+
+export type MenuEdit = MenuType & {
+  key?: string
+  flag?: "add" | "update" | "del"
 }
 
 export type BreadcrumbType = {

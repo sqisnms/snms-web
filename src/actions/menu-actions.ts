@@ -1,7 +1,7 @@
 "use server"
 
 import { postgres } from "@/config/db"
-import { BreadcrumbType, MenuType } from "@/types/menu"
+import { BreadcrumbType, MenuEdit, MenuType } from "@/types/menu"
 
 export async function getMenu() {
   const { rows: menuData } = await postgres.query<MenuType>(`
@@ -15,7 +15,8 @@ export async function getMenu() {
         LEAF_NODE_YN_CODE,
         POP_UP_YN_CODE,
         SCREEN_WIDTH,
-        SCREEN_HEIGHT
+        SCREEN_HEIGHT,
+        USE_YN_CODE
       FROM COMDB.TBD_COM_CONF_MENU
       WHERE UPPER_MENU_ID IS NULL
       AND COALESCE(USE_YN_CODE, 'N') = 'Y'
@@ -30,7 +31,8 @@ export async function getMenu() {
         child.LEAF_NODE_YN_CODE,
         child.POP_UP_YN_CODE,
         child.SCREEN_WIDTH,
-        child.SCREEN_HEIGHT
+        child.SCREEN_HEIGHT,
+        child.USE_YN_CODE
       FROM COMDB.TBD_COM_CONF_MENU child
       JOIN menu_tree parent ON parent.MENU_ID = child.UPPER_MENU_ID
       WHERE COALESCE(child.USE_YN_CODE, 'N') = 'Y'
@@ -44,7 +46,8 @@ export async function getMenu() {
       LEAF_NODE_YN_CODE,
       POP_UP_YN_CODE,
       SCREEN_WIDTH,
-      SCREEN_HEIGHT
+      SCREEN_HEIGHT,
+      USE_YN_CODE
     FROM menu_tree
     ORDER BY UPPER_MENU_ID NULLS FIRST, MENU_ORDER
   `)
@@ -82,4 +85,76 @@ export async function getMenu() {
   ORDER BY MENU_ID
   `)
   return { menuData, breadcrumbs }
+}
+
+export async function getMenuByMenuId({ menu_id }: { menu_id: string }) {
+  const { rows } = await postgres.query<Partial<MenuType>>(
+    `
+    SELECT
+      MENU_ID,
+      UPPER_MENU_ID,
+      MENU_NAME,
+      URL,
+      MENU_ORDER,
+      LEAF_NODE_YN_CODE,
+      POP_UP_YN_CODE,
+      SCREEN_WIDTH,
+      SCREEN_HEIGHT,
+      USE_YN_CODE
+    FROM COMDB.TBD_COM_CONF_MENU
+    WHERE MENU_ID = $1
+  `,
+    [menu_id],
+  )
+  return rows?.[0] ?? {}
+}
+
+export async function updateMenu(changes: MenuEdit) {
+  const {
+    menu_id,
+    upper_menu_id,
+    menu_name,
+    url,
+    menu_order,
+    leaf_node_yn_code,
+    pop_up_yn_code,
+    screen_width,
+    screen_height,
+    use_yn_code,
+  } = changes
+
+  await postgres.query(
+    `INSERT INTO COMDB.TBD_COM_CONF_MENU (
+      MENU_ID, UPPER_MENU_ID, MENU_NAME, URL, MENU_ORDER, LEAF_NODE_YN_CODE,
+      POP_UP_YN_CODE, SCREEN_WIDTH, SCREEN_HEIGHT, USE_YN_CODE
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    ON CONFLICT (MENU_ID)
+    DO UPDATE SET
+          UPPER_MENU_ID = $2, MENU_NAME = $3, URL = $4, MENU_ORDER = $5, LEAF_NODE_YN_CODE = $6,
+          POP_UP_YN_CODE = $7, SCREEN_WIDTH = $8, SCREEN_HEIGHT = $9, USE_YN_CODE = $10
+    `,
+    [
+      menu_id,
+      upper_menu_id,
+      menu_name,
+      url,
+      menu_order,
+      leaf_node_yn_code,
+      pop_up_yn_code,
+      screen_width,
+      screen_height,
+      use_yn_code,
+    ],
+  )
+}
+
+export async function deleteMenu(changes: MenuEdit) {
+  const { menu_id } = changes
+
+  await postgres.query(
+    `DELETE FROM COMDB.TBD_COM_CONF_MENU
+     WHERE MENU_ID = $1
+    `,
+    [menu_id],
+  )
 }
