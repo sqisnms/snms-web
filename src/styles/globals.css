@@ -4,11 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 .MuiFormControl-root .MuiInputBase-input {
-  height: 40px;
+  font-size: 14px;
+  height: 36px;
   box-sizing: border-box;
 }
 .dark .MuiInputBase-input {
-  background: #2c2c2c;
+  background: #000;
   color: #fff;
   border-radius: 4px;
 }
@@ -84,7 +85,7 @@
   padding: 6px 4px;
   border-radius: 0;
 }
-.tree-depth2 .MuiTreeItem-label {
+.tree-depth2 .MuiTreeItem-content .MuiTreeItem-label {
   font-size: 15px;
 }
 .MuiTreeItem-content.Mui-selected {
@@ -103,4 +104,5 @@
 
 .code_wrap .MuiFormControl-root {
   margin-top: 0;
+  justify-content: center;
 }
