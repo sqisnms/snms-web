@@ -343,70 +343,95 @@ export default function CodeManager() {
         </Box>
 
         {/* 코드 테이블 */}
-        <Table sx={{ "& .MuiTableCell-root": { padding: "4px 4px" } }}>
-          <TableHead>
-            <TableRow>
-              <TableCell className="dark:text-white">CATEGORY</TableCell>
-              <TableCell className="dark:text-white">CODE</TableCell>
-              <TableCell className="dark:text-white">CODE_NAME</TableCell>
-              <TableCell className="dark:text-white">REMARKS</TableCell>
-              <TableCell className="dark:text-white" />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {editCodes
-              .filter((code) => (selectedCategory ? code.category === selectedCategory : false))
-              .map((code) => (
-                <TableRow key={code.key}>
-                  <TableCell className="dark:text-white">{code.category}</TableCell>
-                  <TableCell className="dark:text-white">
-                    <TextField
-                      variant="outlined"
-                      value={code.code}
-                      onChange={(e) =>
-                        handleUpdate({ ...code, code: e.target.value } as CommonCodeEdit)
-                      }
-                      sx={{
-                        height: "40px",
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      variant="outlined"
-                      value={code.code_name}
-                      onChange={(e) =>
-                        handleUpdate({ ...code, code_name: e.target.value } as CommonCodeEdit)
-                      }
-                      sx={{
-                        height: "40px",
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <TextField
-                      variant="outlined"
-                      value={code.remarks}
-                      onChange={(e) =>
-                        handleUpdate({ ...code, remarks: e.target.value } as CommonCodeEdit)
-                      }
-                      slotProps={{
-                        htmlInput: { maxLength: 25 },
-                      }}
-                      sx={{
-                        height: "40px",
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <IconButton size="small" onClick={() => handleDelete(code.key ?? "")}>
-                      <DeleteIcon className="dark:text-white" fontSize="small" />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
+        <div className="overflow-hidden rounded-md">
+          <Table
+            sx={[
+              (theme) => ({
+                "& .MuiTableCell-root": { padding: "4px 16px" },
+                backgroundColor: "#fafafa",
+                ...theme.applyStyles("dark", {
+                  backgroundColor: "#000",
+                }),
+              }),
+            ]}
+          >
+            <TableHead
+              sx={[
+                (theme) => ({
+                  height: "40px",
+                  background: "#e5e7eb",
+                  ...theme.applyStyles("dark", {
+                    backgroundColor: "#1f2937",
+                  }),
+                }),
+              ]}
+            >
+              <TableRow>
+                <TableCell className="dark:text-white">CATEGORY</TableCell>
+                <TableCell className="dark:text-white">CODE</TableCell>
+                <TableCell className="dark:text-white">CODE_NAME</TableCell>
+                <TableCell className="dark:text-white">REMARKS</TableCell>
+                <TableCell className="dark:text-white" />
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {editCodes
+                .filter((code) => (selectedCategory ? code.category === selectedCategory : false))
+                .map((code) => (
+                  <TableRow key={code.key}>
+                    <TableCell className="dark:text-white">{code.category}</TableCell>
+                    <TableCell className="dark:text-white">
+                      <TextField
+                        variant="outlined"
+                        value={code.code}
+                        onChange={(e) =>
+                          handleUpdate({ ...code, CODE: e.target.value } as CommonCodeEdit)
+                        }
+                        sx={{
+                          width: "280px",
+                          height: "40px",
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        variant="outlined"
+                        value={code.code_name}
+                        onChange={(e) =>
+                          handleUpdate({ ...code, CODE_NAME: e.target.value } as CommonCodeEdit)
+                        }
+                        sx={{
+                          width: "280px",
+                          height: "40px",
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <TextField
+                        variant="outlined"
+                        value={code.remarks}
+                        onChange={(e) =>
+                          handleUpdate({ ...code, REMARKS: e.target.value } as CommonCodeEdit)
+                        }
+                        slotProps={{
+                          htmlInput: { maxLength: 25 },
+                        }}
+                        sx={{
+                          width: "280px",
+                          height: "40px",
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <IconButton size="small" onClick={() => handleDelete(code.key ?? "")}>
+                        <DeleteIcon className="dark:text-white" fontSize="small" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </div>
       </Box>
     </Box>
   )
