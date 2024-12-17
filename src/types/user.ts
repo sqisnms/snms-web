@@ -21,4 +21,7 @@ export type UserType = {
   auth_key: string
   device_type: string
   fcm_token: string
+
+  role_names?: string[]
+  role_ids?: string[]
 }

@@ -103,15 +103,16 @@ export function MenuTree({ onSelectCode, setTempMenu }: MenuTreeProps) {
         // onClick={() => onSelectCode(node.menu_id ?? "")}
         className="tree-depth2"
         label={
-          <Box display="flex" alignItems="center" justifyContent="space-between">
-            <Box
-              onClick={(e) => {
-                e.stopPropagation()
-                onSelectCode(node.menu_id ?? "")
-              }}
-            >
-              {node.menu_name}
-            </Box>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            onClick={(e) => {
+              e.stopPropagation()
+              onSelectCode(node.menu_id ?? "")
+            }}
+          >
+            <Box>{node.menu_name}</Box>
             <Tooltip title={`${node.menu_name} (${node.menu_id}) 하위 메뉴 추가`} arrow>
               <IconButton
                 size="small"
