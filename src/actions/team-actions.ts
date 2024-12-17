@@ -71,16 +71,22 @@ export async function getUsersByTeamCode({ code }: { code: string }) {
   const { rows } = await postgres.query<Partial<UserType>>(
     `
     SELECT
-      USER_ID,
-      USER_NAME,
-      LOGIN_ID,
-      TITLE,
-      DUTY_NAME,
-      BUSINESS,
-      PCSPHONE
-    FROM COMDB.TBD_COM_ORG_USER
-    WHERE TEAM_CODE = $1
-    ORDER BY USER_NAME
+      u.USER_ID,
+      u.USER_NAME,
+      u.LOGIN_ID,
+      u.TITLE,
+      u.DUTY_NAME,
+      u.BUSINESS,
+      u.PCSPHONE,
+      ARRAY_REMOVE(ARRAY_AGG(r.role_name), NULL) AS role_names,
+      ARRAY_REMOVE(ARRAY_AGG(r.role_id), NULL) AS role_ids
+    FROM COMDB.TBD_COM_ORG_USER as u
+    left join COMDB.TBD_COM_CONF_USERROLE as ur on u.user_id = ur.user_id
+    left join COMDB.TBD_COM_CONF_ROLE as r on r.role_id = ur.role_id
+    WHERE u.TEAM_CODE = $1
+    GROUP BY
+    	u.USER_ID, u.USER_NAME, u.LOGIN_ID, u.TITLE, u.DUTY_NAME, u.BUSINESS, u.PCSPHONE
+    ORDER BY u.USER_NAME
   `,
     [code],
   )

@@ -38,18 +38,33 @@ export async function getMenu() {
       WHERE COALESCE(child.USE_YN_CODE, 'N') = 'Y'
     )
     SELECT
-      MENU_ID,
-      UPPER_MENU_ID,
-      MENU_NAME,
-      URL,
-      MENU_ORDER,
-      LEAF_NODE_YN_CODE,
-      POP_UP_YN_CODE,
-      SCREEN_WIDTH,
-      SCREEN_HEIGHT,
-      USE_YN_CODE
-    FROM menu_tree
-    ORDER BY UPPER_MENU_ID NULLS FIRST, MENU_ORDER
+      m.MENU_ID,
+      m.UPPER_MENU_ID,
+      m.MENU_NAME,
+      m.URL,
+      m.MENU_ORDER,
+      m.LEAF_NODE_YN_CODE,
+      m.POP_UP_YN_CODE,
+      m.SCREEN_WIDTH,
+      m.SCREEN_HEIGHT,
+      m.USE_YN_CODE,
+      ARRAY_REMOVE(ARRAY_AGG(r.role_name), NULL) AS role_names,
+      ARRAY_REMOVE(ARRAY_AGG(r.role_id), NULL) AS role_ids
+    FROM menu_tree as m
+    left join COMDB.TBD_COM_CONF_MENUROLE as mr on m.menu_id = mr.menu_id
+    left join COMDB.TBD_COM_CONF_ROLE as r on r.role_id = mr.role_id
+    GROUP BY
+      m.MENU_ID,
+      m.UPPER_MENU_ID,
+      m.MENU_NAME,
+      m.URL,
+      m.MENU_ORDER,
+      m.LEAF_NODE_YN_CODE,
+      m.POP_UP_YN_CODE,
+      m.SCREEN_WIDTH,
+      m.SCREEN_HEIGHT,
+      m.USE_YN_CODE
+    ORDER BY m.UPPER_MENU_ID NULLS FIRST, m.MENU_ORDER
   `)
 
   const { rows: breadcrumbs } = await postgres.query<BreadcrumbType>(`
@@ -91,18 +106,33 @@ export async function getMenuByMenuId({ menu_id }: { menu_id: string }) {
   const { rows } = await postgres.query<Partial<MenuType>>(
     `
     SELECT
-      MENU_ID,
-      UPPER_MENU_ID,
-      MENU_NAME,
-      URL,
-      MENU_ORDER,
-      LEAF_NODE_YN_CODE,
-      POP_UP_YN_CODE,
-      SCREEN_WIDTH,
-      SCREEN_HEIGHT,
-      USE_YN_CODE
-    FROM COMDB.TBD_COM_CONF_MENU
-    WHERE MENU_ID = $1
+      m.MENU_ID,
+      m.UPPER_MENU_ID,
+      m.MENU_NAME,
+      m.URL,
+      m.MENU_ORDER,
+      m.LEAF_NODE_YN_CODE,
+      m.POP_UP_YN_CODE,
+      m.SCREEN_WIDTH,
+      m.SCREEN_HEIGHT,
+      m.USE_YN_CODE,
+      ARRAY_REMOVE(ARRAY_AGG(r.role_name), NULL) AS role_names,
+      ARRAY_REMOVE(ARRAY_AGG(r.role_id), NULL) AS role_ids
+    FROM COMDB.TBD_COM_CONF_MENU as m
+    left join COMDB.TBD_COM_CONF_MENUROLE as mr on m.menu_id = mr.menu_id
+    left join COMDB.TBD_COM_CONF_ROLE as r on r.role_id = mr.role_id
+    WHERE m.MENU_ID = $1
+    GROUP BY
+      m.MENU_ID,
+      m.UPPER_MENU_ID,
+      m.MENU_NAME,
+      m.URL,
+      m.MENU_ORDER,
+      m.LEAF_NODE_YN_CODE,
+      m.POP_UP_YN_CODE,
+      m.SCREEN_WIDTH,
+      m.SCREEN_HEIGHT,
+      m.USE_YN_CODE
   `,
     [menu_id],
   )

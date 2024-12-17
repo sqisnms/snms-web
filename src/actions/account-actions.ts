@@ -2,12 +2,13 @@
 
 import { z } from "zod"
 // eslint-disable-next-line import/no-cycle
-import { signIn, signOut } from "auth"
+import { auth as getServerSession, signIn, signOut } from "auth"
 import bcrypt from "bcrypt"
 import { AuthError } from "next-auth"
 import { v4 as uuidv4, v4 } from "uuid"
 
 import { postgres } from "@/config/db"
+import { UserType } from "@/types/user"
 import AES from "crypto-js/aes"
 
 // export async function getUser(email: string): Promise<AuthUser | undefined> {
@@ -169,4 +170,35 @@ export async function checkQrLogin({
     return { code: resData.code, data: encryped }
   }
   return { code: "1002" }
+}
+
+export async function getCurrentUser() {
+  const session = await getServerSession() // 유저 정보
+  const email = session?.user?.email
+
+  if (!email) return null
+
+  const { rows } = await postgres.query<Partial<UserType>>(
+    `
+        SELECT
+          u.USER_ID,
+          u.USER_NAME,
+          u.LOGIN_ID,
+          u.TITLE,
+          u.DUTY_NAME,
+          u.BUSINESS,
+          u.PCSPHONE,
+          ARRAY_REMOVE(ARRAY_AGG(r.role_name), NULL) AS role_names,
+          ARRAY_REMOVE(ARRAY_AGG(r.role_id), NULL) AS role_ids
+        FROM COMDB.TBD_COM_ORG_USER as u
+        left join COMDB.TBD_COM_CONF_USERROLE as ur on u.user_id = ur.user_id
+        left join COMDB.TBD_COM_CONF_ROLE as r on r.role_id = ur.role_id
+        WHERE u.LOGIN_ID = $1
+        GROUP BY
+          u.USER_ID, u.USER_NAME, u.LOGIN_ID, u.TITLE, u.DUTY_NAME, u.BUSINESS, u.PCSPHONE
+        ORDER BY u.USER_NAME
+      `,
+    [email],
+  )
+  return rows[0]
 }

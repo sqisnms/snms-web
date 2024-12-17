@@ -9,6 +9,9 @@ export type MenuType = {
   screen_width: number | null
   screen_height: number | null
   use_yn_code: string | null
+
+  role_names?: string[]
+  role_ids?: string[]
 }
 
 export type MenuEdit = MenuType & {

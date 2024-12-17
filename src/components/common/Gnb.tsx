@@ -1,15 +1,16 @@
 import { LogoutButton } from "@/components/account/logout-form"
 import { MenuType } from "@/types/menu"
+import { UserType } from "@/types/user"
 import Menu from "./Menu"
 
 function Gnb({
   menuData,
-  userName,
   theme,
+  currentUser,
 }: {
   menuData: MenuType[]
-  userName: string
   theme: string
+  currentUser: Partial<UserType> | null
 }) {
   return (
     <header className="bg-primary text-white dark:bg-gray-800">
@@ -24,7 +25,7 @@ function Gnb({
           <button type="button">
             <Image src="/ic_search.png" width={25} height={25} alt="Search" className="h-6" />
           </button> */}
-          <span>{userName}님</span>
+          <span>{currentUser?.user_name ?? ""}님</span>
           {/* <UserName /> */}
           <LogoutButton />
         </div>
