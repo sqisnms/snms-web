@@ -79,7 +79,7 @@ export async function updateUserRole({
     if (role_ids && role_ids.length > 0) {
       role_ids.map(async (role_id) => {
         await client.query(
-          `INSERT INTO COMDB.TBD_COM_CONF_USERROLE (USER_ID, ROLE_ID) VALUES ($1, $2)`,
+          `INSERT INTO COMDB.TBD_COM_CONF_USERROLE (USER_ID, ROLE_ID, CREATE_DATE) VALUES ($1, $2, NOW())`,
           [user_id, role_id],
         )
       })
@@ -123,7 +123,7 @@ export async function updateMenuRole({
     if (role_ids && role_ids.length > 0) {
       role_ids.map(async (role_id) => {
         await client.query(
-          `INSERT INTO COMDB.TBD_COM_CONF_MENUROLE (MENU_ID, ROLE_ID) VALUES ($1, $2)`,
+          `INSERT INTO COMDB.TBD_COM_CONF_MENUROLE (MENU_ID, ROLE_ID, CREATE_DATE) VALUES ($1, $2, NOW())`,
           [menu_id, role_id],
         )
       })
