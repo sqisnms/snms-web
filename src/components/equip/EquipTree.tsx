@@ -8,10 +8,14 @@ import { TreeItem } from "@mui/x-tree-view/TreeItem"
 import { useQuery } from "@tanstack/react-query"
 
 type EquipTreeProps = {
-  onSelectEquipTypeCode: (equipId: string) => void
+  onSelectedCodeObj: (selectedCodeObj: {
+    equip_type_code: string
+    net_type_code: string
+    allYN: string
+  }) => void
 }
 
-export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
+export function EquipTree({ onSelectedCodeObj }: EquipTreeProps) {
   const { data: equipList = [], isLoading } = useQuery({
     queryKey: ["equipList"],
     queryFn: () => getEquipList(),
@@ -38,7 +42,23 @@ export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
     const netTypeGroups = groupBy(equipList, "net_type_code")
 
     return Object.keys(netTypeGroups).map((netType, index) => (
-      <TreeItem key={netType} itemId={netType} label={netType}>
+      <TreeItem
+        key={netType}
+        itemId={netType}
+        label={
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            onClick={(e) => {
+              e.stopPropagation()
+              onSelectedCodeObj({ allYN: "N", net_type_code: netType, equip_type_code: "" })
+            }}
+          >
+            <Box>{netType}</Box>
+          </Box>
+        }
+      >
         {/* 각 NET_TYPE_CODE 아래에서 다시 EQUIP_TYPE_CODE로 그룹화 */}
         {groupBy(netTypeGroups[netType], "equip_type_code") &&
           Object.keys(groupBy(netTypeGroups[netType], "equip_type_code")).map((equipType) => (
@@ -46,7 +66,9 @@ export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
               key={equipType}
               itemId={equipType + index}
               label={equipType}
-              onClick={() => onSelectEquipTypeCode(equipType ?? "")}
+              onClick={() =>
+                onSelectedCodeObj({ allYN: "N", net_type_code: "", equip_type_code: equipType })
+              }
               className="tree-depth2"
               sx={{
                 padding: "0",
@@ -92,7 +114,25 @@ export function EquipTree({ onSelectEquipTypeCode }: EquipTreeProps) {
       }}
       sx={{ p: 2, borderRadius: 1, boxShadow: 1 }}
     >
-      {renderTreeItems()}
+      <TreeItem
+        key="all"
+        itemId="all"
+        label={
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            onClick={(e) => {
+              e.stopPropagation()
+              onSelectedCodeObj({ allYN: "Y", net_type_code: "", equip_type_code: "" })
+            }}
+          >
+            <Box>전체</Box>
+          </Box>
+        }
+      >
+        {renderTreeItems()}
+      </TreeItem>
     </SimpleTreeView>
   )
 }

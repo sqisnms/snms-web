@@ -1,4 +1,4 @@
-import { getUsersByTeamCode } from "@/actions/team-actions"
+import { getUsersUnderTeamCode } from "@/actions/team-actions"
 import { UserType } from "@/types/user"
 import { Close } from "@mui/icons-material"
 import {
@@ -42,8 +42,8 @@ export function TeamTable({ selectedCode }: TableProps) {
   })
 
   const { data: users = [] } = useQuery({
-    queryKey: ["getUsersByTeamCode", selectedCode],
-    queryFn: () => getUsersByTeamCode({ code: selectedCode }),
+    queryKey: ["getUsersUnderTeamCode", selectedCode],
+    queryFn: () => getUsersUnderTeamCode({ code: selectedCode }),
   })
 
   useEffect(() => {
@@ -52,6 +52,7 @@ export function TeamTable({ selectedCode }: TableProps) {
         { name: "user_id", comment: "ID" },
         { name: "user_name", comment: "이름" },
         { name: "login_id", comment: "로그인ID" },
+        { name: "team_tree", comment: "팀" },
         { name: "title", comment: "직급" },
         { name: "duty_name", comment: "직책" },
         { name: "business", comment: "담당업무" },
@@ -86,7 +87,7 @@ export function TeamTable({ selectedCode }: TableProps) {
       {
         onSuccess: () => {
           toast.success("저장되었습니다.")
-          queryClient.invalidateQueries({ queryKey: ["getUsersByTeamCode"] })
+          queryClient.invalidateQueries({ queryKey: ["getUsersUnderTeamCode"] })
         },
         onError: (error) => {
           console.error("Error saving changes:", error)
@@ -101,7 +102,7 @@ export function TeamTable({ selectedCode }: TableProps) {
       {
         onSuccess: () => {
           toast.success("저장되었습니다.")
-          queryClient.invalidateQueries({ queryKey: ["getUsersByTeamCode"] })
+          queryClient.invalidateQueries({ queryKey: ["getUsersUnderTeamCode"] })
         },
         onError: (error) => {
           console.error("Error saving changes:", error)
@@ -200,6 +201,18 @@ export function TeamTable({ selectedCode }: TableProps) {
                               color="secondary"
                             />
                           </IconButton>
+                        </TableCell>
+                      )
+                    }
+
+                    // 팀 컬럼 처리
+                    if (column.name.toLowerCase() === "team_tree") {
+                      return (
+                        <TableCell
+                          key={column.name}
+                          className="whitespace-nowrap dark:bg-black dark:text-white"
+                        >
+                          {(value as string[]).join(">")}
                         </TableCell>
                       )
                     }
