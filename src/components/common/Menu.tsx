@@ -3,6 +3,10 @@
 import { grafanaThemeAtom } from "@/atom/dashboardAtom"
 import { LOGIN_DEFAULT_PAGE } from "@/config/const"
 import { MenuType } from "@/types/menu"
+import CloseIcon from "@mui/icons-material/Close"
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
+import MenuIcon from "@mui/icons-material/Menu"
 import { Box, FormControlLabel } from "@mui/material"
 import { styled } from "@mui/material/styles"
 import Switch from "@mui/material/Switch"
@@ -99,7 +103,24 @@ export default function Menu({
   menuData: MenuType[]
   theme: string
 }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false) // 햄버거 메뉴 열림/닫힘 상태
   const [activeMenus, setActiveMenus] = useState<string[]>([])
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobileView = window.innerWidth <= 900 // 900px 이하를 모바일로 간주
+      setIsMobile(isMobileView)
+
+      if (!isMobileView) {
+        setActiveMenus([]) // 활성화된 하위 메뉴 초기화
+      }
+    }
+    handleResize() // 초기 설정
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   const [theme, setTheme] = useState<string>(initialTheme)
   const [, setGrafanaTheme] = useAtom(grafanaThemeAtom)
 
@@ -112,6 +133,28 @@ export default function Menu({
 
   const handleMouseLeave = () => {
     setActiveMenus([])
+  }
+
+  const handleMenuClick = (menuId: string) => {
+    // 해당 메뉴 및 모든 하위 메뉴 ID 가져오기
+    const getAllSubMenuIds = (id: string): string[] => {
+      const subMenus = menuData.filter((menu) => menu.upper_menu_id === id)
+      const subMenuIds = subMenus.map((menu) => menu.menu_id)
+      // 하위 메뉴가 더 있다면 재귀적으로 ID 추가
+      return subMenuIds.length > 0
+        ? subMenuIds.concat(subMenuIds.flatMap((subId) => getAllSubMenuIds(subId)))
+        : []
+    }
+
+    const allRelatedIds = [menuId, ...getAllSubMenuIds(menuId)]
+
+    // 상태 업데이트
+    setActiveMenus(
+      (prev) =>
+        prev.includes(menuId)
+          ? prev.filter((id) => !allRelatedIds.includes(id)) // 열려 있으면 닫기
+          : [...prev, ...allRelatedIds], // 닫혀 있으면 열기
+    )
   }
 
   const openInNewWindow = (menu: MenuType) => {
@@ -137,14 +180,25 @@ export default function Menu({
       }
       // 새탭
       if (menu.pop_up_yn_code === "T") {
-        // 아이디로 추적할거면 rel="noopener noreferrer" 못씀
         return (
-          <Link href={menu.url ?? ""} target={menu.url ?? ""}>
+          <Link
+            className="block w-full py-3 pl-4 indent-4 text-[15px] leading-5 text-gray-800 hover:bg-gray-100 hover:text-primary dark:text-white dark:hover:bg-gray-900 md:p-0 md:indent-0 md:text-base md:hover:!bg-transparent"
+            href={menu.url ?? ""}
+            target={menu.url ?? ""}
+          >
             {menu.menu_name}
           </Link>
         )
       }
-      return <Link href={menu.url ?? ""}>{menu.menu_name}</Link>
+      // 현재 탭 링크 이동
+      return (
+        <Link
+          className="menu block w-full py-3 pl-4 indent-4 text-[15px] leading-5 text-gray-800 hover:bg-gray-100 hover:text-primary dark:text-white dark:hover:bg-gray-900 md:p-0 md:indent-0 md:text-base md:hover:!bg-transparent"
+          href={menu.url ?? ""}
+        >
+          {menu.menu_name}
+        </Link>
+      )
     }
     return menu.menu_name
   }
@@ -153,31 +207,37 @@ export default function Menu({
     const subMenus = menuData.filter((item) => item.upper_menu_id === pid)
 
     if (subMenus.length === 0) return null
-    if (!activeMenus.includes(pid)) return null
+    //if (!activeMenus.includes(pid)) return null
+    const isActive = activeMenus.includes(pid)
 
     // 순서대로 2,3,4뎁스 용 스타일
     const depthDivStyle = [
       "depth2 absolute left-1/2 top-full z-50 w-48 -translate-x-1/2 transform bg-white text-gray-800 shadow-lg dark:bg-gray-900 dark:text-white",
-      "depth3 absolute left-full top-0 z-50 w-48 bg-white text-gray-800 shadow-lg dark:bg-gray-900 dark:text-white",
-      "depth4 absolute left-full top-0 z-50 w-48 bg-white text-gray-800 shadow-lg dark:bg-gray-900 dark:text-white",
+      "depth3 z-10 bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-white md:absolute md:left-full md:top-0 md:z-50 md:w-48 md:bg-white md:shadow-lg",
+      "depth4 z-10 bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-white md:absolute md:left-full md:top-0 md:z-50 md:w-48 md:bg-white md:shadow-lg",
     ]
 
     const depthLiStyle = [
-      "hover:text-primary relative cursor-pointer dark:hover:text-point",
-      "relative hover:bg-gray-100 hover:text-primary dark:hover:text-point dark:bg-gray-900 dark:hover:bg-gray-800",
-      "relative hover:bg-gray-100 dark:hover:text-point dark:bg-gray-900 dark:hover:bg-gray-800",
+      "text-gray-800 hover:text-primary relative cursor-pointer dark:hover:text-point",
+      "hover:text-primary dark:bg-gray-900 dark:hover:bg-gray-800 dark:hover:text-point md:relative md:hover:bg-gray-100",
+      "dark:bg-gray-900 dark:hover:bg-gray-800 dark:hover:text-point md:relative md:hover:bg-gray-100",
     ]
 
     return (
-      <div className={depthDivStyle[depth - 1]}>
-        <ul className="py-2">
+      <div className={depthDivStyle[depth - 1]} style={{ display: isActive ? "block" : "none" }}>
+        <ul className="md:py-2">
           {subMenus.map((menu) => (
             <li
               key={menu.menu_id}
-              className={depthLiStyle[depth - 1]}
-              onMouseEnter={() => handleMouseEnter(menu.menu_id, depth)}
+              className={`${depthLiStyle[depth - 1]} md:hover:bg-gray-100 md:hover:text-primary`}
+              {...(!isMobile && {
+                onMouseEnter: () => handleMouseEnter(menu.menu_id, depth),
+                onMouseLeave: handleMouseLeave,
+              })}
             >
-              {renderMenuLink(menu)}
+              <span className="block cursor-pointer indent-5 text-sm leading-9 text-gray-500 dark:bg-gray-800 dark:text-gray-400 md:relative md:indent-0 md:text-base md:leading-6 md:text-gray-800 md:hover:text-primary md:dark:hover:text-point">
+                {renderMenuLink(menu)}
+              </span>
               {renderSubMenu(menu.menu_id, depth + 1)}
             </li>
           ))}
@@ -208,24 +268,44 @@ export default function Menu({
 
   return (
     <div className="flex items-center">
+      {/* 햄버거 버튼 */}
+      <button
+        type="button"
+        className="block h-8 w-8 md:hidden"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+      >
+        {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
+      </button>
+
+      {/* 로고 */}
       <Link href={LOGIN_DEFAULT_PAGE}>
-        <Image src="/logo_w.svg" width={130} height={40} alt="Logo" className="mr-10 h-8" />
+        <Image
+          src="/logo_w.svg"
+          width={130}
+          height={40}
+          alt="Logo"
+          className="mr-2 h-8 md:mr-4 lg:mr-6"
+        />
       </Link>
-      <nav className="relative flex space-x-6">
+
+      {/* 데스크톱 메뉴 */}
+      <nav className="relative hidden space-x-2 md:mr-6 md:flex lg:space-x-6">
         {menuData
           .filter((item) => item.upper_menu_id === null)
           .map((menu) => (
             <div
               key={menu.menu_id}
-              onMouseEnter={() => handleMouseEnter(menu.menu_id, 0)}
-              onMouseLeave={handleMouseLeave}
+              {...(!isMobile && {
+                onMouseEnter: () => handleMouseEnter(menu.menu_id, 0),
+                onMouseLeave: handleMouseLeave,
+              })}
               className="gnb_menu relative"
             >
               <button
                 type="button"
                 className={`h-16 px-4 py-2 ${
                   activeMenus.includes(menu.menu_id)
-                    ? "border-b-2 border-point text-point"
+                    ? "border-b-2 border-point !text-point hover:!text-point"
                     : "border-b-2 border-transparent"
                 }`}
               >
@@ -235,12 +315,55 @@ export default function Menu({
             </div>
           ))}
       </nav>
+
+      {/* 다크모드 토글 */}
       <FormControlLabel
         control={
           <MaterialUISwitch sx={{ m: 1 }} onChange={toggleTheme} checked={theme !== "light"} />
         }
         label=""
       />
+
+      {/* 모바일 메뉴 */}
+      {isMobile && isMenuOpen && (
+        <nav className="fixed left-0 top-16 z-10 h-[calc(100vh-64px)] w-full overflow-y-auto bg-gray-200 pb-10 dark:bg-gray-900 md:hidden">
+          <ul>
+            {menuData
+              .filter((item) => item.upper_menu_id === null)
+              .map((menu) => {
+                const hasSubMenu = menuData.some((item) => item.upper_menu_id === menu.menu_id)
+                const isActive = activeMenus.includes(menu.menu_id)
+
+                return (
+                  <li key={menu.menu_id} className="relative">
+                    {hasSubMenu ? (
+                      <button
+                        onClick={() => handleMenuClick(menu.menu_id)}
+                        className={`flex w-full justify-between bg-white px-5 py-3 pr-4 text-gray-800 dark:bg-gray-700 dark:text-white ${
+                          isActive ? "text-primary" : ""
+                        }`}
+                      >
+                        {menu.menu_name}
+                        <span>
+                          {isActive ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                        </span>
+                      </button>
+                    ) : (
+                      <a
+                        href={menu.url ?? "#"}
+                        className="flex w-full justify-between bg-white px-5 py-3 pr-4 text-gray-800 dark:bg-gray-700 dark:text-white"
+                      >
+                        {menu.menu_name}
+                      </a>
+                    )}
+                    {/* 하위 메뉴 */}
+                    {isActive && renderSubMenu(menu.menu_id, 2)}
+                  </li>
+                )
+              })}
+          </ul>
+        </nav>
+      )}
     </div>
   )
 }
