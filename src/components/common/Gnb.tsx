@@ -25,7 +25,7 @@ function Gnb({
           <button type="button">
             <Image src="/ic_search.png" width={25} height={25} alt="Search" className="h-6" />
           </button> */}
-          <span>{currentUser?.user_name ?? ""}님</span>
+          <span className="hidden md:block">{currentUser?.user_name ?? ""}님</span>
           {/* <UserName /> */}
           <LogoutButton />
         </div>
