@@ -207,7 +207,7 @@ export default function Menu({
     const subMenus = menuData.filter((item) => item.upper_menu_id === pid)
 
     if (subMenus.length === 0) return null
-    //if (!activeMenus.includes(pid)) return null
+    // if (!activeMenus.includes(pid)) return null
     const isActive = activeMenus.includes(pid)
 
     // 순서대로 2,3,4뎁스 용 스타일
@@ -230,10 +230,8 @@ export default function Menu({
             <li
               key={menu.menu_id}
               className={`${depthLiStyle[depth - 1]} md:hover:bg-gray-100 md:hover:text-primary`}
-              {...(!isMobile && {
-                onMouseEnter: () => handleMouseEnter(menu.menu_id, depth),
-                onMouseLeave: handleMouseLeave,
-              })}
+              onMouseEnter={!isMobile ? () => handleMouseEnter(menu.menu_id, depth) : undefined}
+              onMouseLeave={!isMobile ? handleMouseLeave : undefined}
             >
               <span className="block cursor-pointer indent-5 text-sm leading-9 text-gray-500 dark:bg-gray-800 dark:text-gray-400 md:relative md:indent-0 md:text-base md:leading-6 md:text-gray-800 md:hover:text-primary md:dark:hover:text-point">
                 {renderMenuLink(menu)}
@@ -295,10 +293,8 @@ export default function Menu({
           .map((menu) => (
             <div
               key={menu.menu_id}
-              {...(!isMobile && {
-                onMouseEnter: () => handleMouseEnter(menu.menu_id, 0),
-                onMouseLeave: handleMouseLeave,
-              })}
+              onMouseEnter={!isMobile ? () => handleMouseEnter(menu.menu_id, 0) : undefined}
+              onMouseLeave={!isMobile ? handleMouseLeave : undefined}
               className="gnb_menu relative"
             >
               <button
@@ -338,6 +334,7 @@ export default function Menu({
                   <li key={menu.menu_id} className="relative">
                     {hasSubMenu ? (
                       <button
+                        type="button"
                         onClick={() => handleMenuClick(menu.menu_id)}
                         className={`flex w-full justify-between bg-white px-5 py-3 pr-4 text-gray-800 dark:bg-gray-700 dark:text-white ${
                           isActive ? "text-primary" : ""
