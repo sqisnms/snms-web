@@ -44,7 +44,7 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
 
   const { data: articleResult } = useQuery({
     queryKey: ["article", articleId],
-    queryFn: () => getArticleById({ id: articleId ?? "" }),
+    queryFn: () => getArticleById({ board_seq: articleId ?? "" }),
     enabled: !!articleId,
   })
 
@@ -181,8 +181,8 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
                 <TableBody>
                   {boards.map((board) => (
                     <TableRow
-                      key={board.id}
-                      onClick={() => handleView(board.id ?? "")}
+                      key={board.board_seq}
+                      onClick={() => handleView(board.board_seq ?? "")}
                       className="h-10 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
                       <TableCell sx={{ paddingY: "0px" }}>

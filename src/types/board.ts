@@ -1,5 +1,5 @@
 export type BoardType = {
-  id: string // 게시물 고유 ID
+  board_seq: string // 게시물 고유 ID
   section: string // 게시판 섹션 (NOTICE, FAQ, QNA 등)
   title: string // 게시물 제목
   content: string // 게시물 내용
