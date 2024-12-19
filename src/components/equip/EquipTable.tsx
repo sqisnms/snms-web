@@ -13,15 +13,20 @@ import {
 import { useEffect, useState } from "react"
 
 type EquipTableProps = {
-  selectedEquipTypeCode: string
+  selectedCodeObj?: {
+    equip_type_code: string
+    net_type_code: string
+    allYN: string
+  }
 }
 
-export function EquipTable({ selectedEquipTypeCode }: EquipTableProps) {
+export function EquipTable({ selectedCodeObj }: EquipTableProps) {
   const [equips, setEquips] = useState<Partial<EquipType>[]>([])
   const [columns, setColumns] = useState<{ name: string; comment: string }[]>([])
 
   useEffect(() => {
-    getEquipByTypeCode({ equip_type_code: selectedEquipTypeCode })
+    if (!selectedCodeObj) return
+    getEquipByTypeCode(selectedCodeObj)
       .then((data) => {
         // console.table(data)
         // console.log(JSON.stringify(data))
@@ -55,7 +60,7 @@ export function EquipTable({ selectedEquipTypeCode }: EquipTableProps) {
       .catch((error) => {
         console.error("데이터를 불러오는 데 실패했습니다:", error)
       })
-  }, [selectedEquipTypeCode])
+  }, [selectedCodeObj])
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "N/A"

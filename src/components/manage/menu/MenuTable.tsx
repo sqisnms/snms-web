@@ -77,6 +77,10 @@ export function MenuTable({ selectedCode, tempMenu, setTempMenu }: TableProps) {
   }, [menuData, tempMenu])
 
   const handleSave = () => {
+    if (!editDatas?.menu_id) {
+      toast.error("저장할 데이터를 입력해주세요.")
+      return
+    }
     updateMutation.mutate(editDatas as MenuEdit, {
       onSuccess: () => {
         toast.success("저장되었습니다.")
@@ -94,6 +98,10 @@ export function MenuTable({ selectedCode, tempMenu, setTempMenu }: TableProps) {
   }
 
   const handleDelete = () => {
+    if (!editDatas?.menu_id) {
+      toast.error("삭제할 메뉴가 선택되지 않았습니다.")
+      return
+    }
     deleteMutation.mutate(editDatas as MenuEdit, {
       onSuccess: () => {
         toast.success("저장되었습니다.")

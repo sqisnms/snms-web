@@ -24,4 +24,5 @@ export type UserType = {
 
   role_names?: string[]
   role_ids?: string[]
+  team_tree?: string[]
 }

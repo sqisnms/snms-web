@@ -7,7 +7,11 @@ import { useState } from "react"
 
 // eslint-disable-next-line react/function-component-definition
 export default function Page() {
-  const [selectedEquipTypeCode, setSelectedEquipTypeCode] = useState<string>("")
+  const [selectedCodeObj, setSelectedCodeObj] = useState<{
+    equip_type_code: string
+    net_type_code: string
+    allYN: string
+  }>()
 
   return (
     <Box display="flex">
@@ -26,7 +30,7 @@ export default function Page() {
           }),
         ]}
       >
-        <EquipTree onSelectEquipTypeCode={setSelectedEquipTypeCode} />
+        <EquipTree onSelectedCodeObj={setSelectedCodeObj} />
       </Box>
       {/* Right: Table */}
       <Box
@@ -43,7 +47,7 @@ export default function Page() {
           }),
         ]}
       >
-        <EquipTable selectedEquipTypeCode={selectedEquipTypeCode} />
+        <EquipTable selectedCodeObj={selectedCodeObj} />
       </Box>
     </Box>
   )

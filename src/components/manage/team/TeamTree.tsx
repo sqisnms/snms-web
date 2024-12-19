@@ -56,8 +56,20 @@ export function TeamTree({ onSelectCode }: TeamTreeProps) {
       <TreeItem
         key={node.team_code}
         itemId={node.team_code}
-        label={node.team_name}
-        onClick={() => onSelectCode(node.team_code ?? "")}
+        label={
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            onClick={(e) => {
+              e.stopPropagation()
+              onSelectCode(node.team_code ?? "")
+            }}
+          >
+            <Box>{node.team_name}</Box>
+          </Box>
+        }
+        // onClick={() => onSelectCode(node.team_code ?? "")}
         className="tree-depth2"
         sx={{
           padding: "0",
@@ -90,7 +102,25 @@ export function TeamTree({ onSelectCode }: TeamTreeProps) {
       }}
       sx={{ p: 2, borderRadius: 1, boxShadow: 1 }}
     >
-      {renderTreeItems(getTreeData())}
+      <TreeItem
+        key="all"
+        itemId="all"
+        label={
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            onClick={(e) => {
+              e.stopPropagation()
+              onSelectCode("")
+            }}
+          >
+            <Box>전체</Box>
+          </Box>
+        }
+      >
+        {renderTreeItems(getTreeData())}
+      </TreeItem>
     </SimpleTreeView>
   )
 }
