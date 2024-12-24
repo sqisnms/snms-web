@@ -84,18 +84,22 @@ export function EquipTable({ selectedCodeObj }: EquipTableProps) {
     <TableContainer component={Paper}>
       <Table
         aria-label="simple table"
-        sx={{
-          minHeight: "30vh",
-          borderBottom: "none",
-          background: "#fafafa",
-        }}
+        sx={[
+          (theme) => ({
+            borderBottom: "none",
+            background: "#fafafa",
+            ...theme.applyStyles("dark", {
+              background: "#1f2937",
+            }),
+          }),
+        ]}
       >
         <TableHead className="bg-gray-200 dark:bg-gray-800">
           <TableRow>
             {columns.map((column) => (
               <TableCell
                 key={column.name}
-                className="whitespace-nowrap font-semibold text-gray-600 dark:text-white"
+                className="whitespace-nowrap p-3 text-center font-semibold text-gray-600 dark:text-white"
               >
                 {column.comment}
               </TableCell>
@@ -109,7 +113,7 @@ export function EquipTable({ selectedCodeObj }: EquipTableProps) {
           {equips.length === 0 ? (
             <TableRow>
               <TableCell
-                className="dark:bg-black dark:text-white"
+                className="dark:bg-gray-800 dark:text-white"
                 colSpan={columns.length}
                 align="center"
                 sx={{
@@ -137,7 +141,7 @@ export function EquipTable({ selectedCodeObj }: EquipTableProps) {
                     return (
                       <TableCell
                         key={column.name}
-                        className="whitespace-nowrap dark:bg-black dark:text-white"
+                        className="whitespace-nowrap p-3 text-center dark:bg-gray-900 dark:text-white md:px-4 md:py-5"
                       >
                         {formatDate(String(value))}
                       </TableCell>
@@ -147,7 +151,10 @@ export function EquipTable({ selectedCodeObj }: EquipTableProps) {
                   // 일반 값 처리
                   if (value !== null && value !== undefined) {
                     return (
-                      <TableCell className="dark:bg-black dark:text-white" key={column.name}>
+                      <TableCell
+                        className="whitespace-nowrap p-3 text-center dark:bg-gray-900 dark:text-white md:px-4 md:py-5"
+                        key={column.name}
+                      >
                         {String(value)}
                       </TableCell>
                     )
@@ -155,7 +162,10 @@ export function EquipTable({ selectedCodeObj }: EquipTableProps) {
 
                   // 값이 null 또는 undefined인 경우
                   return (
-                    <TableCell className="dark:bg-black dark:text-white" key={column.name}>
+                    <TableCell
+                      className="whitespace-nowrap p-3 text-center dark:bg-gray-900 dark:text-white md:px-4 md:py-5"
+                      key={column.name}
+                    >
                       N/A
                     </TableCell>
                   )
