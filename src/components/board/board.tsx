@@ -1,12 +1,9 @@
-import { getArticleById, getBoardList } from "@/actions/board-action"
+import { deleteBoard, getArticleById, getBoardList, updateBoard } from "@/actions/board-action"
+import { useUser } from "@/config/Providers"
 import { BoardType } from "@/types/board"
 import {
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Pagination,
   Paper,
   Table,
@@ -18,25 +15,32 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import { useQuery } from "@tanstack/react-query"
-import { useEffect, useState } from "react"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import dynamic from "next/dynamic"
+import { useEffect, useMemo, useState } from "react"
+import { toast } from "react-toastify"
+
+const SnmsCKEditor = dynamic(() => import("./CKEditor"), {
+  loading: () => <div>...loading</div>,
+  ssr: false,
+})
 
 type BoardDialogProps = {
   section: string
-  label: string
-  open: boolean
-  handleClose: () => void
   miniId: string | null
 }
 
-export function BoardDialog({ section, label, open, handleClose, miniId }: BoardDialogProps) {
+export function Board({ section, miniId }: BoardDialogProps) {
   const [boards, setBoards] = useState<Partial<BoardType>[]>([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
-  // const queryClient = useQueryClient()
+  const queryClient = useQueryClient()
   const rowsPerPage = 10
   const [articleId, setArticleId] = useState<string | null>(miniId)
   const [article, setArticle] = useState<Partial<BoardType>>({})
+  const [isEditable, setIsEditable] = useState<boolean>(false)
+
+  const currentUser = useUser()
   const { data: boardsResult } = useQuery({
     queryKey: ["board", section, "BoardDialog", page], // 캐시 키
     queryFn: () => getBoardList({ section, page, rowsPerPage }),
@@ -46,6 +50,18 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
     queryKey: ["article", articleId],
     queryFn: () => getArticleById({ board_seq: articleId ?? "" }),
     enabled: !!articleId,
+  })
+  const updateMutation = useMutation({
+    mutationFn: () =>
+      updateBoard({
+        board_seq: articleId ?? "",
+        section,
+        title: article.title ?? "",
+        content: article.content ?? "",
+      }),
+  })
+  const deleteMutation = useMutation({
+    mutationFn: (board_seq: string) => deleteBoard({ board_seq }),
   })
 
   useEffect(() => {
@@ -68,6 +84,10 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
     setArticle(articleResult)
   }, [articleResult])
 
+  const hasAuth = useMemo(() => {
+    return currentUser?.role_ids?.some((r) => r.toLowerCase() === "admin") ?? false
+  }, [currentUser])
+
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "N/A"
 
@@ -86,56 +106,63 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
     return `${year}-${month}-${day}`
   }
 
-  // const handleAdd = () => {
-  //   setArticleId("")
-  // }
+  const handleAdd = () => {
+    setArticleId("")
+    setIsEditable(true)
+  }
 
   const handleView = (id: string) => {
     setArticleId(id)
   }
 
-  // const handleDelete = (id: string) => {
-  //   deleteBoard({ id })
-  //     .then((data) => {
-  //       console.table(data)
-  //       console.log(JSON.stringify(data))
-  //       toast("삭제했습니다.")
-  //     })
-  //     .catch((error) => {
-  //       console.error("삭제에 실패했습니다:", error)
-  //     })
-  // }
-  // const updateMutation = useMutation({
-  //   mutationFn: (id: string) => deleteBoard({ id }),
-  // })
+  const handleArticleBack = () => {
+    if (!isEditable || !articleId) {
+      setArticleId(null)
+      setArticle({})
+    }
+    setIsEditable(false)
+  }
 
-  // const handleDelete = (id: string) => {
-  //   updateMutation.mutate(id, {
-  //     onSuccess: () => {
-  //       toast.success("삭제했습니다.")
-  //       queryClient.invalidateQueries({ queryKey: ["board", section] })
-  //     },
-  //     onError: (error) => {
-  //       console.error("Error saving changes:", error)
-  //     },
-  //   })
-  // }
+  const handleGoEdit = () => {
+    setIsEditable(true)
+  }
+
+  const handleSave = () => {
+    updateMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success("저장했습니다.")
+        queryClient.invalidateQueries({ queryKey: ["board", section] })
+        handleArticleBack()
+      },
+      onError: (error) => {
+        console.error("Error saving changes:", error)
+      },
+    })
+  }
+
+  const handleDelete = () => {
+    if (!articleId) {
+      toast.info("선택된 게시물이 없습니다.")
+      return
+    }
+    deleteMutation.mutate(articleId, {
+      onSuccess: () => {
+        toast.success("삭제했습니다.")
+        queryClient.invalidateQueries({ queryKey: ["board", section] })
+        handleArticleBack()
+      },
+      onError: (error) => {
+        console.error("Error saving changes:", error)
+      },
+    })
+  }
 
   const handlePageChange = (c: number) => {
     setPage(c)
   }
 
-  const handleArticleBack = () => {
-    setArticleId(null)
-    setArticle({})
-  }
-
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      maxWidth="md"
-      fullWidth
+    <Box
       sx={{
         "& .MuiDialog-paper": {
           height: "635px",
@@ -145,8 +172,8 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
     >
       {articleId === null && (
         <>
-          <DialogTitle className="dark:text-white">{label}</DialogTitle>
-          <DialogContent
+          <Box className="dark:text-white">목록</Box>
+          <Box
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -164,10 +191,17 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
               <Table size="small">
                 <TableHead>
                   <TableRow sx={{ height: "40px" }}>
-                    <TableCell sx={{ paddingY: "0px" }} className="dark:text-white">
+                    <TableCell sx={{ paddingY: "0px", width: "70%" }} className="dark:text-white">
                       제목
                     </TableCell>
-                    <TableCell align="right" sx={{ paddingY: "0px" }} className="dark:text-white">
+                    <TableCell sx={{ paddingY: "0px", width: "15%" }} className="dark:text-white">
+                      작성자
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{ paddingY: "0px", width: "15%" }}
+                      className="dark:text-white"
+                    >
                       날짜
                     </TableCell>
                     {/* <TableCell align="right" sx={{ paddingY: "0px" }} className="dark:text-white">
@@ -188,6 +222,11 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
                       <TableCell sx={{ paddingY: "0px" }}>
                         <Typography className="w-128 truncate dark:text-white">
                           {board.title}
+                        </Typography>
+                      </TableCell>
+                      <TableCell sx={{ paddingY: "0px" }}>
+                        <Typography className="truncate dark:text-white">
+                          {board.create_user_name}
                         </Typography>
                       </TableCell>
                       <TableCell align="right" sx={{ paddingY: "0px" }} className="dark:text-white">
@@ -224,34 +263,28 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
                 shape="rounded"
               />
             </Box>
-          </DialogContent>
-
-          {/* Dialog Actions */}
-          <DialogActions className="p-4 pt-0 dark:bg-black">
-            {/* 일단 readOnly 로 조회만 할 수 있게 */}
-            {/* <Button onClick={handleAdd} startIcon={<Add />}>
-              추가
-            </Button> */}
-            <Button onClick={handleClose} color="primary" className="dark:text-white">
-              닫기
-            </Button>
-          </DialogActions>
+            {hasAuth && (
+              <Box className="p-4 pt-0 dark:bg-black">
+                <Button onClick={handleAdd}>추가</Button>
+              </Box>
+            )}
+          </Box>
         </>
       )}
       {articleId !== null && (
         <>
-          <DialogTitle className="dark:bg-black dark:text-white">{label}</DialogTitle>
-          <DialogContent
+          <Box className="dark:bg-black dark:text-white">수정</Box>
+          <Box
             sx={{
               display: "flex",
               flexDirection: "column",
               gap: 2, // 요소 간 간격 추가
-              padding: "36px", // 내부 패딩 추가
+              // padding: "36px", // 내부 패딩 추가
             }}
             className="dark:bg-black dark:text-white"
           >
             {/* 제목 */}
-            {articleId === "" ? (
+            {isEditable ? ( // articleId === ""
               <TextField
                 label="제목"
                 variant="outlined"
@@ -278,57 +311,34 @@ export function BoardDialog({ section, label, open, handleClose, miniId }: Board
             )}
 
             {/* 내용 */}
-            {articleId === "" ? (
-              <TextField
-                label="내용"
-                variant="outlined"
-                fullWidth
-                multiline
-                rows={16}
-                value={article.content || ""}
-                onChange={(e) => setArticle({ ...article, content: e.target.value })}
-              />
-            ) : (
-              // <Box
-              //   sx={{
-              //     flexGrow: 1,
-              //     overflowY: "auto", // 내용이 길어질 경우 스크롤 가능하게 설정
-              //     padding: 2,
-              //     borderRadius: 1,
-              //     backgroundColor: "#f5f5f5", // 배경색 추가
-              //     minHeight: "200px", // 최소 높이 설정
-              //   }}
-              // >
-              //   <Typography variant="body1">{article.content || "내용 없음"}</Typography>
-              // </Box>
-              <TextField
-                label="내용"
-                variant="outlined"
-                fullWidth
-                multiline
-                rows={15}
-                value={article.content || ""}
-                onChange={(e) => setArticle({ ...article, content: e.target.value })}
-                slotProps={{
-                  input: {
-                    readOnly: true,
-                  },
-                }}
-              />
-            )}
-          </DialogContent>
+            <SnmsCKEditor
+              key={String(isEditable)}
+              content={article.content ?? ""}
+              isEditable={isEditable}
+              handleSave={(c) => {
+                setArticle((prevArticle) => {
+                  if (prevArticle.content === c) return prevArticle // 상태가 동일하면 업데이트 방지
+                  return { ...prevArticle, content: c }
+                })
+              }}
+            />
+          </Box>
 
           {/* Dialog Actions */}
-          <DialogActions className="p-4 pt-0 dark:bg-black">
-            {/* <Button onClick={handleAdd} startIcon={<Add />}>
-              저장
-            </Button> */}
+          <Box className="p-4 pt-0 dark:bg-black">
+            {isEditable && <Button onClick={handleSave}>저장</Button>}
+            {articleId !== "" && hasAuth && !isEditable && (
+              <Button onClick={handleGoEdit}>수정</Button>
+            )}
+            {articleId !== "" && hasAuth && !isEditable && (
+              <Button onClick={handleDelete}>삭제</Button>
+            )}
             <Button onClick={handleArticleBack} color="primary" className="dark:text-white">
               뒤로
             </Button>
-          </DialogActions>
+          </Box>
         </>
       )}
-    </Dialog>
+    </Box>
   )
 }

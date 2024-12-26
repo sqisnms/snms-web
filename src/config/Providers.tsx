@@ -1,5 +1,6 @@
 "use client"
 
+import { UserType } from "@/types/user"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
@@ -13,6 +14,33 @@ const ContextPathContext = createContext<string>("")
 
 export const useContextPath = () => {
   return useContext(ContextPathContext)
+}
+//
+
+// 유저 정보 UserProvider 설정. commonLayout 에서 조회 후 데이터 넣어서 provider 감쌈
+// const currentUser = useUser() 이런식으로 사용하면 됨
+interface UserContextType {
+  currentUser: Partial<UserType> | null
+}
+
+const UserContext = createContext<UserContextType | undefined>(undefined)
+
+export function UserProvider({
+  children,
+  value,
+}: {
+  children: React.ReactNode
+  value: UserContextType
+}) {
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>
+}
+
+export const useUser = () => {
+  const context = useContext(UserContext)
+  if (!context) {
+    throw new Error("useUser must be used within a UserProvider")
+  }
+  return context.currentUser
 }
 //
 

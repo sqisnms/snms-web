@@ -3,6 +3,7 @@
 import { getCurrentUser } from "@/actions/account-actions"
 import { getMenu } from "@/actions/menu-actions"
 import Gnb from "@/components/common/Gnb"
+import { UserProvider } from "@/config/Providers"
 import { cookies } from "next/headers"
 
 export default async function CommonLayout({ children }: { children: React.ReactNode }) {
@@ -26,11 +27,13 @@ export default async function CommonLayout({ children }: { children: React.React
   const theme = cookie.get("theme")?.value ?? "light"
 
   return (
-    <div className="flex min-h-screen flex-col dark:bg-black">
-      <div className="w-full">
-        <Gnb menuData={roledMenu} theme={theme} currentUser={currentUser} />
+    <UserProvider value={{ currentUser }}>
+      <div className="flex min-h-screen flex-col dark:bg-black">
+        <div className="w-full">
+          <Gnb menuData={roledMenu} theme={theme} currentUser={currentUser} />
+        </div>
+        <div className="w-full">{children}</div>
       </div>
-      <div className="w-full">{children}</div>
-    </div>
+    </UserProvider>
   )
 }

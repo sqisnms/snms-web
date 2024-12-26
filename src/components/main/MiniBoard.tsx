@@ -78,7 +78,6 @@ export function MiniBoard({ section, label }: { section: string; label: string }
   }
 
   const handleClick = (id: string) => {
-    console.log(id)
     setMiniId(id)
     setOpenDialog(true)
   }
@@ -126,10 +125,10 @@ export function MiniBoard({ section, label }: { section: string; label: string }
           </Box>
         ) : (
           boards.map((notice) => (
-            <li key={notice.id}>
+            <li key={notice.board_seq}>
               <Box
                 className="flex cursor-pointer justify-between hover:text-primary dark:hover:text-primary-light"
-                onClick={() => handleClick(notice.id ?? "")}
+                onClick={() => handleClick(notice.board_seq ?? "")}
               >
                 <span className="w-9/12 truncate">{notice.title}</span>
                 <span className="min-w-min whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">

@@ -23,6 +23,7 @@
     ]
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-react": "^9.4.0",
     "@clickhouse/client": "^1.6.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
@@ -37,6 +38,7 @@
     "@tremor/react": "^3.18.2",
     "@vercel/postgres": "^0.10.0",
     "bcrypt": "^5.1.1",
+    "ckeditor5": "^44.1.0",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
     "env-cmd": "^10.1.0",

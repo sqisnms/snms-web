@@ -2,12 +2,13 @@
 
 import { postgres } from "@/config/db"
 import { BoardType } from "@/types/board"
+import { getCurrentUser } from "./account-actions"
 
 export async function getMiniBoardList({ section }: Partial<BoardType>) {
   const { rows } = await postgres.query<Partial<BoardType>>(
     `
     SELECT *
-    FROM boards
+    FROM comdb.tbd_com_info_board
     WHERE section = $1
     ORDER BY create_date DESC
     LIMIT 3
@@ -31,7 +32,7 @@ export async function getBoardList({
   const totalResult = await postgres.query<{ count: number }>(
     `
     SELECT COUNT(*) as count
-    FROM boards
+    FROM comdb.tbd_com_info_board
     WHERE section = $1
     `,
     [section],
@@ -44,10 +45,13 @@ export async function getBoardList({
 
   const { rows } = await postgres.query<Partial<BoardType>>(
     `
-    SELECT *
-    FROM boards
-    WHERE section = $1
-    ORDER BY create_date DESC
+    SELECT
+      b.board_seq, b.title, b.content, b.create_date
+      , u.user_name as create_user_name, b.create_user_id
+    FROM comdb.tbd_com_info_board b
+    left join comdb.tbd_com_org_user u on b.create_user_id = u.user_id
+    WHERE b.section = $1
+    ORDER BY b.create_date DESC
     LIMIT $2 OFFSET $3
   `,
     [section, rowsPerPage, offset],
@@ -59,58 +63,55 @@ export async function getBoardList({
   }
 }
 
-export async function insertBoard({
+export async function updateBoard({
+  board_seq,
   section,
   title,
   content,
-  create_user_id,
-}: Omit<BoardType, "id" | "delete_flag" | "create_date" | "modify_date">) {
-  const { rowCount } = await postgres.query(
-    `
-    INSERT INTO boards (section, title, content, create_user_id, delete_flag, create_date)
-    VALUES ($1, $2, $3, $4, FALSE, CURRENT_TIMESTAMP)
-    `,
-    [section, title, content, create_user_id],
-  )
-  return !!rowCount // 성공 여부 반환
-}
+}: Pick<BoardType, "board_seq" | "section" | "title" | "content">) {
+  const currentUser = await getCurrentUser() // 유저 정보
+  const user_id = currentUser?.user_id
 
-export async function updateBoard({
-  id,
-  title,
-  content,
-}: Pick<BoardType, "id" | "title" | "content">) {
-  const { rowCount } = await postgres.query(
-    `
-    UPDATE boards
+  if (!user_id) return null
+
+  const params = board_seq
+    ? [title, content, user_id, board_seq]
+    : [section, title, content, user_id]
+  const query = board_seq
+    ? `
+    UPDATE comdb.tbd_com_info_board
     SET title = $1,
         content = $2,
+        create_user_id = $3,
         modify_date = CURRENT_TIMESTAMP
-    WHERE id = $3
-    `,
-    [title, content, id],
-  )
+    WHERE board_seq = $4
+  `
+    : `
+    INSERT INTO comdb.tbd_com_info_board (section, title, content, create_user_id, delete_flag, create_date)
+    VALUES ($1, $2, $3, $4, 0, CURRENT_TIMESTAMP)
+  `
+  const { rowCount } = await postgres.query(query, params)
   return !!rowCount // 성공 여부 반환
 }
 
-export async function deleteBoard({ id }: Pick<BoardType, "id">) {
+export async function deleteBoard({ board_seq }: Pick<BoardType, "board_seq">) {
   const { rowCount } = await postgres.query(
     `
-    DELETE FROM boards WHERE id = $1
+    DELETE FROM comdb.tbd_com_info_board WHERE board_seq = $1
     `,
-    [id],
+    [board_seq],
   )
   return !!rowCount // 성공 여부 반환
 }
 
-export async function getArticleById({ id }: Pick<BoardType, "id">) {
+export async function getArticleById({ board_seq }: Pick<BoardType, "board_seq">) {
   const { rows } = await postgres.query<Partial<BoardType>>(
     `
     SELECT *
-    FROM boards
-    WHERE id = $1
+    FROM comdb.tbd_com_info_board
+    WHERE board_seq = $1
   `,
-    [id],
+    [board_seq],
   )
   return rows[0]
 }
