@@ -54,6 +54,14 @@ export function EquipTree({ onSelectedCodeObj }: EquipTreeProps) {
               e.stopPropagation()
               onSelectedCodeObj({ allYN: "N", net_type_code: netType, equip_type_code: "" })
             }}
+            sx={[
+              (theme) => ({
+                fontSize: "14px",
+                [theme.breakpoints.up("md")]: {
+                  fontSize: "16px",
+                },
+              }),
+            ]}
           >
             <Box>{netType}</Box>
           </Box>
