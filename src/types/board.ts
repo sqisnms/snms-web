@@ -10,3 +10,17 @@ export type BoardType = {
 
   create_user_name?: string // 작성자 이름
 }
+
+export type CommentType = {
+  board_seq: string
+  board_sub_seq: string
+  content: string
+  create_user_id: string
+  delete_flag: boolean
+  create_date: string
+  modify_date?: string
+
+  create_user_name?: string
+
+  isEditable?: boolean // 회면 제어용
+}
