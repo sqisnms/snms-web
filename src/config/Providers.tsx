@@ -25,13 +25,13 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | undefined>(undefined)
 
-export const UserProvider = ({
+export function UserProvider({
   children,
   value,
 }: {
   children: React.ReactNode
   value: UserContextType
-}) => {
+}) {
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }
 
