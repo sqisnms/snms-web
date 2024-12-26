@@ -1,6 +1,6 @@
 "use client"
 
-import { Board } from "@/components/board/Board"
+import { Board } from "@/components/board/BoardMain"
 import { useParams } from "next/navigation"
 
 export default function Page() {
