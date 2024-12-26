@@ -67,7 +67,7 @@ function DashboardLayout() {
               paddingBottom: { xs: "1rem", md: "1rem" }, // 상하 패딩 균등
             }}
           >
-            <MiniBoard section="NOTICE" label="공지사항" />
+            <MiniBoard section="notice" label="공지사항" />
           </Grid>
 
           <Grid
@@ -83,7 +83,7 @@ function DashboardLayout() {
               paddingBottom: { xs: "1rem", md: "1rem" }, // 상하 패딩 균등
             }}
           >
-            <MiniBoard section="MANUAL" label="매뉴얼(SOP)" />
+            <MiniBoard section="manual" label="매뉴얼(SOP)" />
           </Grid>
 
           <Grid
@@ -96,7 +96,7 @@ function DashboardLayout() {
               paddingY: { xs: "0.5rem", md: "1rem" },
             }}
           >
-            <MiniBoard section="TASK" label="작업계획" />
+            <MiniBoard section="task" label="작업계획" />
           </Grid>
         </Grid>
 

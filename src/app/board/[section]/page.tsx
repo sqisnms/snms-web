@@ -1,6 +1,6 @@
 "use client"
 
-import { Board } from "@/components/board/board"
+import { Board } from "@/components/board/BoardMain"
 import { useParams } from "next/navigation"
 
 export default function Page() {
@@ -8,5 +8,5 @@ export default function Page() {
 
   const { section } = params as { section: string }
 
-  return <Board section={section.toUpperCase()} miniId={null} />
+  return <Board section={section} />
 }

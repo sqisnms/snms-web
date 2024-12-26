@@ -1,9 +1,13 @@
+"use client"
+
 import { deleteBoard, getArticleById, getBoardList, updateBoard } from "@/actions/board-action"
 import { useUser } from "@/config/Providers"
 import { BoardType } from "@/types/board"
 import {
   Box,
   Button,
+  CircularProgress,
+  Divider,
   Pagination,
   Paper,
   Table,
@@ -17,8 +21,11 @@ import {
 } from "@mui/material"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import dynamic from "next/dynamic"
+import Link from "next/link"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 import { toast } from "react-toastify"
+import { Comment } from "./Comment"
 
 const SnmsCKEditor = dynamic(() => import("./CKEditor"), {
   loading: () => <div>...loading</div>,
@@ -27,26 +34,31 @@ const SnmsCKEditor = dynamic(() => import("./CKEditor"), {
 
 type BoardDialogProps = {
   section: string
-  miniId: string | null
 }
 
-export function Board({ section, miniId }: BoardDialogProps) {
+export function Board({ section }: BoardDialogProps) {
   const [boards, setBoards] = useState<Partial<BoardType>[]>([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const queryClient = useQueryClient()
   const rowsPerPage = 10
-  const [articleId, setArticleId] = useState<string | null>(miniId)
+  const [articleId, setArticleId] = useState<string | null>(null)
   const [article, setArticle] = useState<Partial<BoardType>>({})
+  const [oriArticle, setOriArticle] = useState<Partial<BoardType>>({})
   const [isEditable, setIsEditable] = useState<boolean>(false)
 
   const currentUser = useUser()
-  const { data: boardsResult } = useQuery({
+  const searchParams = useSearchParams()
+  const queryId = searchParams?.get("id") ?? ""
+
+  const router = useRouter()
+
+  const { data: boardsResult, isFetching: isLoadingBoards } = useQuery({
     queryKey: ["board", section, "BoardDialog", page], // 캐시 키
-    queryFn: () => getBoardList({ section, page, rowsPerPage }),
+    queryFn: () => getBoardList({ section: section.toUpperCase(), page, rowsPerPage }),
   })
 
-  const { data: articleResult } = useQuery({
+  const { data: articleResult, isFetching: isLoadingArticle } = useQuery({
     queryKey: ["article", articleId],
     queryFn: () => getArticleById({ board_seq: articleId ?? "" }),
     enabled: !!articleId,
@@ -55,7 +67,7 @@ export function Board({ section, miniId }: BoardDialogProps) {
     mutationFn: () =>
       updateBoard({
         board_seq: articleId ?? "",
-        section,
+        section: section.toUpperCase(),
         title: article.title ?? "",
         content: article.content ?? "",
       }),
@@ -65,8 +77,8 @@ export function Board({ section, miniId }: BoardDialogProps) {
   })
 
   useEffect(() => {
-    setArticleId(miniId)
-  }, [miniId])
+    setArticleId(queryId || null)
+  }, [queryId])
 
   useEffect(() => {
     if (!boardsResult) {
@@ -82,6 +94,7 @@ export function Board({ section, miniId }: BoardDialogProps) {
       return
     }
     setArticle(articleResult)
+    setOriArticle(articleResult)
   }, [articleResult])
 
   const hasAuth = useMemo(() => {
@@ -100,27 +113,30 @@ export function Board({ section, miniId }: BoardDialogProps) {
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, "0") // 월은 0부터 시작하므로 +1 필요
     const day = String(date.getDate()).padStart(2, "0")
-    // const hours = String(date.getHours()).padStart(2, "0")
-    // const minutes = String(date.getMinutes()).padStart(2, "0")
+    const hours = String(date.getHours()).padStart(2, "0")
+    const minutes = String(date.getMinutes()).padStart(2, "0")
+    const seconds = String(date.getSeconds()).padStart(2, "0")
 
-    return `${year}-${month}-${day}`
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
   }
 
   const handleAdd = () => {
     setArticleId("")
+    setArticle({})
     setIsEditable(true)
   }
 
-  const handleView = (id: string) => {
-    setArticleId(id)
-  }
-
   const handleArticleBack = () => {
-    if (!isEditable || !articleId) {
+    if (!isEditable) {
+      router.push(`/board/${section}`)
+    } else if (!articleId) {
       setArticleId(null)
       setArticle({})
+      setIsEditable(false)
+    } else {
+      setArticle(oriArticle)
+      setIsEditable(false)
     }
-    setIsEditable(false)
   }
 
   const handleGoEdit = () => {
@@ -132,6 +148,7 @@ export function Board({ section, miniId }: BoardDialogProps) {
       onSuccess: () => {
         toast.success("저장했습니다.")
         queryClient.invalidateQueries({ queryKey: ["board", section] })
+        queryClient.invalidateQueries({ queryKey: ["article", articleId] })
         handleArticleBack()
       },
       onError: (error) => {
@@ -159,6 +176,21 @@ export function Board({ section, miniId }: BoardDialogProps) {
 
   const handlePageChange = (c: number) => {
     setPage(c)
+  }
+
+  if (isLoadingBoards || isLoadingArticle) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "10rem",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    )
   }
 
   return (
@@ -204,44 +236,33 @@ export function Board({ section, miniId }: BoardDialogProps) {
                     >
                       날짜
                     </TableCell>
-                    {/* <TableCell align="right" sx={{ paddingY: "0px" }} className="dark:text-white">
-                      수정
-                    </TableCell>
-                    <TableCell align="right" sx={{ paddingY: "0px" }} className="dark:text-white">
-                      삭제
-                    </TableCell> */}
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {boards.map((board) => (
                     <TableRow
-                      key={board.board_seq}
-                      onClick={() => handleView(board.board_seq ?? "")}
                       className="h-10 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
+                      key={board.board_seq}
                     >
                       <TableCell sx={{ paddingY: "0px" }}>
-                        <Typography className="w-128 truncate dark:text-white">
-                          {board.title}
-                        </Typography>
+                        <Link href={`/board/${section}?id=${board.board_seq}`}>
+                          <Typography className="w-128 truncate dark:text-white">
+                            {board.title}
+                          </Typography>
+                        </Link>
                       </TableCell>
                       <TableCell sx={{ paddingY: "0px" }}>
-                        <Typography className="truncate dark:text-white">
-                          {board.create_user_name}
-                        </Typography>
+                        <Link href={`/board/${section}?id=${board.board_seq}`}>
+                          <Typography className="truncate dark:text-white">
+                            {board.create_user_name}
+                          </Typography>
+                        </Link>
                       </TableCell>
                       <TableCell align="right" sx={{ paddingY: "0px" }} className="dark:text-white">
-                        {formatDate(board.create_date ?? "")}
+                        <Link href={`/board/${section}?id=${board.board_seq}`}>
+                          {formatDate(board.create_date ?? "")}
+                        </Link>
                       </TableCell>
-                      {/* <TableCell align="right" sx={{ paddingY: "0px" }}>
-                        <IconButton onClick={() => handleEdit(board.id ?? "")}>
-                          <Edit />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell align="right" sx={{ paddingY: "0px" }}>
-                        <IconButton onClick={() => handleDelete(board.id ?? "")}>
-                          <Delete />
-                        </IconButton>
-                      </TableCell> */}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -275,6 +296,7 @@ export function Board({ section, miniId }: BoardDialogProps) {
         <>
           <Box className="dark:bg-black dark:text-white">수정</Box>
           <Box
+            key={`${String(isEditable)}${articleId ?? "new"}`}
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -283,36 +305,26 @@ export function Board({ section, miniId }: BoardDialogProps) {
             }}
             className="dark:bg-black dark:text-white"
           >
-            {/* 제목 */}
-            {isEditable ? ( // articleId === ""
-              <TextField
-                label="제목"
-                variant="outlined"
-                fullWidth
-                value={article.title || ""}
-                onChange={(e) => setArticle({ ...article, title: e.target.value })}
-              />
-            ) : (
-              // <Typography variant="h6" component="h2" gutterBottom>
-              //   {article.title || "제목 없음"}
-              // </Typography>
-              <TextField
-                label="제목"
-                variant="outlined"
-                fullWidth
-                value={article.title || ""}
-                onChange={(e) => setArticle({ ...article, title: e.target.value })}
-                slotProps={{
-                  input: {
-                    readOnly: true,
-                  },
-                }}
-              />
+            {article.create_user_name && (
+              <Typography variant="caption">{`${article.create_user_name} / ${formatDate(article.create_date ?? "")}`}</Typography>
             )}
+
+            {/* 제목 */}
+            <TextField
+              label="제목"
+              variant="outlined"
+              fullWidth
+              value={article.title || ""}
+              onChange={(e) => setArticle({ ...article, title: e.target.value })}
+              slotProps={{
+                input: {
+                  readOnly: !isEditable,
+                },
+              }}
+            />
 
             {/* 내용 */}
             <SnmsCKEditor
-              key={String(isEditable)}
               content={article.content ?? ""}
               isEditable={isEditable}
               handleSave={(c) => {
@@ -325,18 +337,38 @@ export function Board({ section, miniId }: BoardDialogProps) {
           </Box>
 
           {/* Dialog Actions */}
-          <Box className="p-4 pt-0 dark:bg-black">
-            {isEditable && <Button onClick={handleSave}>저장</Button>}
-            {articleId !== "" && hasAuth && !isEditable && (
-              <Button onClick={handleGoEdit}>수정</Button>
+          <Box className="p-4 pt-0 dark:bg-black" display="flex" gap={1} flexWrap="wrap">
+            {isEditable && (
+              <Button onClick={handleSave} color="primary" variant="outlined">
+                저장
+              </Button>
             )}
             {articleId !== "" && hasAuth && !isEditable && (
-              <Button onClick={handleDelete}>삭제</Button>
+              <Button onClick={handleGoEdit} color="primary" variant="outlined">
+                수정
+              </Button>
             )}
-            <Button onClick={handleArticleBack} color="primary" className="dark:text-white">
+            {articleId !== "" && hasAuth && !isEditable && (
+              <Button onClick={handleDelete} color="error" variant="outlined">
+                삭제
+              </Button>
+            )}
+            <Button
+              onClick={handleArticleBack}
+              color="warning"
+              variant="outlined"
+              className="dark:text-white"
+            >
               뒤로
             </Button>
           </Box>
+
+          {!isEditable && (
+            <>
+              <Divider sx={{ my: 2 }} />
+              <Comment boardId={articleId} />
+            </>
+          )}
         </>
       )}
     </Box>
