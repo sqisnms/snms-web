@@ -8,5 +8,5 @@ export default function Page() {
 
   const { section } = params as { section: string }
 
-  return <Board section={section.toUpperCase()} label="공지사항" miniId={null} />
+  return <Board section={section.toUpperCase()} miniId={null} />
 }

@@ -16,17 +16,21 @@ import {
   Typography,
 } from "@mui/material"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useSession } from "next-auth/react"
+import dynamic from "next/dynamic"
 import { useEffect, useMemo, useState } from "react"
 import { toast } from "react-toastify"
 
+const SnmsCKEditor = dynamic(() => import("./CKEditor"), {
+  loading: () => <div>...loading</div>,
+  ssr: false,
+})
+
 type BoardDialogProps = {
   section: string
-  label: string
   miniId: string | null
 }
 
-export function Board({ section, label, miniId }: BoardDialogProps) {
+export function Board({ section, miniId }: BoardDialogProps) {
   const [boards, setBoards] = useState<Partial<BoardType>[]>([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
@@ -34,7 +38,8 @@ export function Board({ section, label, miniId }: BoardDialogProps) {
   const rowsPerPage = 10
   const [articleId, setArticleId] = useState<string | null>(miniId)
   const [article, setArticle] = useState<Partial<BoardType>>({})
-  const user = useSession()
+  const [isEditable, setIsEditable] = useState<boolean>(false)
+
   const currentUser = useUser()
   const { data: boardsResult } = useQuery({
     queryKey: ["board", section, "BoardDialog", page], // 캐시 키
@@ -79,8 +84,8 @@ export function Board({ section, label, miniId }: BoardDialogProps) {
     setArticle(articleResult)
   }, [articleResult])
 
-  const isEditable = useMemo(() => {
-    return currentUser?.role_ids?.find((r) => r.toLowerCase() === "admin")
+  const hasAuth = useMemo(() => {
+    return currentUser?.role_ids?.some((r) => r.toLowerCase() === "admin") ?? false
   }, [currentUser])
 
   const formatDate = (dateString: string | null) => {
@@ -103,6 +108,7 @@ export function Board({ section, label, miniId }: BoardDialogProps) {
 
   const handleAdd = () => {
     setArticleId("")
+    setIsEditable(true)
   }
 
   const handleView = (id: string) => {
@@ -110,8 +116,15 @@ export function Board({ section, label, miniId }: BoardDialogProps) {
   }
 
   const handleArticleBack = () => {
-    setArticleId(null)
-    setArticle({})
+    if (!isEditable || !articleId) {
+      setArticleId(null)
+      setArticle({})
+    }
+    setIsEditable(false)
+  }
+
+  const handleGoEdit = () => {
+    setIsEditable(true)
   }
 
   const handleSave = () => {
@@ -250,7 +263,7 @@ export function Board({ section, label, miniId }: BoardDialogProps) {
                 shape="rounded"
               />
             </Box>
-            {isEditable && (
+            {hasAuth && (
               <Box className="p-4 pt-0 dark:bg-black">
                 <Button onClick={handleAdd}>추가</Button>
               </Box>
@@ -271,7 +284,7 @@ export function Board({ section, label, miniId }: BoardDialogProps) {
             className="dark:bg-black dark:text-white"
           >
             {/* 제목 */}
-            {isEditable ? ( //articleId === ""
+            {isEditable ? ( // articleId === ""
               <TextField
                 label="제목"
                 variant="outlined"
@@ -298,51 +311,28 @@ export function Board({ section, label, miniId }: BoardDialogProps) {
             )}
 
             {/* 내용 */}
-            {isEditable ? ( //articleId === ""
-              <TextField
-                label="내용"
-                variant="outlined"
-                fullWidth
-                multiline
-                rows={16}
-                value={article.content || ""}
-                onChange={(e) => setArticle({ ...article, content: e.target.value })}
-              />
-            ) : (
-              // <Box
-              //   sx={{
-              //     flexGrow: 1,
-              //     overflowY: "auto", // 내용이 길어질 경우 스크롤 가능하게 설정
-              //     padding: 2,
-              //     borderRadius: 1,
-              //     backgroundColor: "#f5f5f5", // 배경색 추가
-              //     minHeight: "200px", // 최소 높이 설정
-              //   }}
-              // >
-              //   <Typography variant="body1">{article.content || "내용 없음"}</Typography>
-              // </Box>
-              <TextField
-                label="내용"
-                variant="outlined"
-                fullWidth
-                multiline
-                rows={15}
-                value={article.content || ""}
-                onChange={(e) => setArticle({ ...article, content: e.target.value })}
-                slotProps={{
-                  input: {
-                    readOnly: true,
-                  },
-                }}
-              />
-            )}
+            <SnmsCKEditor
+              key={String(isEditable)}
+              content={article.content ?? ""}
+              isEditable={isEditable}
+              handleSave={(c) => {
+                setArticle((prevArticle) => {
+                  if (prevArticle.content === c) return prevArticle // 상태가 동일하면 업데이트 방지
+                  return { ...prevArticle, content: c }
+                })
+              }}
+            />
           </Box>
 
           {/* Dialog Actions */}
           <Box className="p-4 pt-0 dark:bg-black">
-            {articleId === "" && isEditable && <Button onClick={handleSave}>저장</Button>}
-            {articleId !== "" && isEditable && <Button onClick={handleSave}>수정</Button>}
-            {articleId !== "" && isEditable && <Button onClick={handleDelete}>삭제</Button>}
+            {isEditable && <Button onClick={handleSave}>저장</Button>}
+            {articleId !== "" && hasAuth && !isEditable && (
+              <Button onClick={handleGoEdit}>수정</Button>
+            )}
+            {articleId !== "" && hasAuth && !isEditable && (
+              <Button onClick={handleDelete}>삭제</Button>
+            )}
             <Button onClick={handleArticleBack} color="primary" className="dark:text-white">
               뒤로
             </Button>
