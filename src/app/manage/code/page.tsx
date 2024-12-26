@@ -161,9 +161,30 @@ export default function CodeManager() {
   }
 
   return (
-    <Box display="flex" gap={2}>
+    <Box
+      display="flex"
+      gap={2}
+      sx={[
+        (theme) => ({
+          flexDirection: "column",
+          [theme.breakpoints.up("md")]: {
+            flexDirection: "row",
+          },
+        }),
+      ]}
+    >
       {/* 좌측: 카테고리 목록 */}
-      <Box width="20%">
+      <Box
+        sx={[
+          (theme) => ({
+            width: "100%",
+            [theme.breakpoints.up("md")]: {
+              minWidth: "300px",
+              width: "20%",
+            },
+          }),
+        ]}
+      >
         <Box display="flex" alignItems="center" gap={1} className="dark:bg-black">
           <TextField
             variant="outlined"
@@ -187,6 +208,7 @@ export default function CodeManager() {
           </IconButton>
         </Box>
         <Divider className="dark:border-gray-400" sx={{ mt: 1, mb: 1 }} />
+
         {isLoading || isFetching ? (
           <Box
             sx={{
@@ -242,6 +264,37 @@ export default function CodeManager() {
               ))}
           </ul>
         )}
+
+        <Box display="flex" flexDirection="column" alignItems="center" gap={1} mb={2} mt={2}>
+          <TextField
+            variant="outlined"
+            size="small"
+            placeholder="새 카테고리"
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+            className="mt-0 w-full"
+          />
+          <Button
+            variant="contained"
+            onClick={handleAddCategory}
+            className="h-9 w-full"
+            sx={[
+              (theme) => ({
+                background: theme.palette.secondary.main,
+                fontSize: "1.25rem",
+                lineHeight: "1.75rem",
+                boxShadow: "none",
+                color: theme.palette.primary.contrastText,
+                "&:hover": {
+                  background: theme.palette.secondary.dark,
+                  boxShadow: "none",
+                },
+              }),
+            ]}
+          >
+            +
+          </Button>
+        </Box>
       </Box>
 
       {/* 우측: 코드 목록 및 검색 */}
@@ -249,33 +302,44 @@ export default function CodeManager() {
         width="80%"
         sx={[
           (theme) => ({
-            borderLeftWidth: "2px",
-            paddingLeft: "1rem",
-            minHeight: "30vh",
+            width: "100%",
+            borderTopWidth: "2px",
+            paddingTop: "1rem",
             ...theme.applyStyles("dark", {
               borderColor: "rgb(75, 85, 99)",
             }),
+            [theme.breakpoints.up("md")]: {
+              maxWidth: "calc(100% - 316px)",
+              width: "80%",
+              borderTopWidth: "0",
+              borderLeftWidth: "2px",
+              paddingTop: "0",
+              paddingLeft: "1rem",
+            },
           }),
         ]}
         className="code_wrap"
       >
-        <Box display="flex" alignItems="center" gap={1} mb={2}>
-          <TextField
-            variant="outlined"
-            size="small"
-            placeholder="새 카테고리"
-            value={newCategory}
-            onChange={(e) => setNewCategory(e.target.value)}
-            className="mt0"
-          />
+        <Box display="flex" gap={1} justifyContent="flex-end" mb={1}>
           <Button
             variant="contained"
-            onClick={handleAddCategory}
-            className="bg-primary"
+            color="primary"
+            onClick={() =>
+              handleAdd({
+                category: selectedCategory ?? "",
+                code: "",
+                code_name: "",
+                use_yn: "Y",
+                sort_order: 0,
+                remarks: "",
+                key: v4(),
+              })
+            }
             sx={[
               (theme) => ({
+                width: "80px",
                 background: theme.palette.primary.main,
-                fontSize: "1.25rem",
+                fontSize: "14px",
                 lineHeight: "1.75rem",
                 boxShadow: "none",
                 color: theme.palette.primary.contrastText,
@@ -286,64 +350,32 @@ export default function CodeManager() {
               }),
             ]}
           >
-            +
+            추가
           </Button>
-
-          <Box display="flex" gap={1} ml="auto">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() =>
-                handleAdd({
-                  category: selectedCategory ?? "",
-                  code: "",
-                  code_name: "",
-                  use_yn: "Y",
-                  sort_order: 0,
-                  remarks: "",
-                  key: v4(),
-                })
-              }
-              sx={[
-                (theme) => ({
-                  background: theme.palette.primary.main,
-                  fontSize: "14px",
-                  lineHeight: "1.75rem",
+          <Button
+            variant="contained"
+            onClick={() => handleSave()}
+            sx={[
+              (theme) => ({
+                width: "80px",
+                background: theme.palette.secondary.main,
+                fontSize: "14px",
+                lineHeight: "1.75rem",
+                boxShadow: "none",
+                color: theme.palette.secondary.contrastText,
+                "&:hover": {
+                  background: theme.palette.secondary.dark,
                   boxShadow: "none",
-                  color: theme.palette.primary.contrastText,
-                  "&:hover": {
-                    background: theme.palette.primary.dark,
-                    boxShadow: "none",
-                  },
-                }),
-              ]}
-            >
-              추가
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => handleSave()}
-              sx={[
-                (theme) => ({
-                  background: theme.palette.secondary.main,
-                  fontSize: "14px",
-                  lineHeight: "1.75rem",
-                  boxShadow: "none",
-                  color: theme.palette.secondary.contrastText,
-                  "&:hover": {
-                    background: theme.palette.secondary.dark,
-                    boxShadow: "none",
-                  },
-                }),
-              ]}
-            >
-              저장
-            </Button>
-          </Box>
+                },
+              }),
+            ]}
+          >
+            저장
+          </Button>
         </Box>
 
         {/* 코드 테이블 */}
-        <div className="overflow-hidden rounded-md">
+        <div className="overflow-y-auto rounded-md">
           <Table
             sx={[
               (theme) => ({
