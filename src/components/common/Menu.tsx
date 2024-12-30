@@ -182,7 +182,7 @@ export default function Menu({
       if (menu.pop_up_yn_code === "T") {
         return (
           <Link
-            className="block w-full py-3 pl-4 indent-4 text-[15px] leading-5 text-gray-800 hover:bg-gray-100 hover:text-primary dark:text-white dark:hover:bg-gray-900 md:p-0 md:indent-0 md:text-base md:hover:!bg-transparent"
+            className="block w-full py-3 pl-4 indent-4 text-[15px] leading-5 text-gray-800 hover:bg-gray-100 hover:text-primary dark:text-white dark:hover:bg-gray-900 dark:hover:text-point md:p-0 md:indent-0 md:text-base md:hover:!bg-transparent"
             href={menu.url ?? ""}
             target={menu.url ?? ""}
           >
@@ -193,7 +193,7 @@ export default function Menu({
       // 현재 탭 링크 이동
       return (
         <Link
-          className="menu block w-full py-3 pl-4 indent-4 text-[15px] leading-5 text-gray-800 hover:bg-gray-100 hover:text-primary dark:text-white dark:hover:bg-gray-900 md:p-0 md:indent-0 md:text-base md:hover:!bg-transparent"
+          className="menu md:dark:hover:text-pointZ block w-full py-3 pl-4 indent-4 text-[15px] leading-5 text-gray-800 hover:bg-gray-100 hover:text-primary dark:text-white dark:hover:bg-gray-900 dark:hover:text-point md:p-0 md:indent-0 md:text-base md:hover:!bg-transparent"
           href={menu.url ?? ""}
         >
           {menu.menu_name}
@@ -218,7 +218,7 @@ export default function Menu({
     ]
 
     const depthLiStyle = [
-      "text-gray-800 hover:text-primary relative cursor-pointer dark:hover:text-point",
+      "text-gray-800 hover:text-primary relative cursor-pointer dark:hover:text-point md:dark:text-white dark:bg-gray-900 dark:hover:bg-gray-900",
       "hover:text-primary dark:bg-gray-900 dark:hover:bg-gray-800 dark:hover:text-point md:relative md:hover:bg-gray-100",
       "dark:bg-gray-900 dark:hover:bg-gray-800 dark:hover:text-point md:relative md:hover:bg-gray-100",
     ]
@@ -233,7 +233,7 @@ export default function Menu({
               onMouseEnter={!isMobile ? () => handleMouseEnter(menu.menu_id, depth) : undefined}
               onMouseLeave={!isMobile ? handleMouseLeave : undefined}
             >
-              <span className="block cursor-pointer indent-5 text-sm leading-9 text-gray-500 dark:bg-gray-800 dark:text-gray-400 md:relative md:indent-0 md:text-base md:leading-6 md:text-gray-800 md:hover:text-primary md:dark:hover:text-point">
+              <span className="block cursor-pointer indent-5 text-sm leading-9 text-gray-500 dark:bg-gray-900 dark:text-white md:relative md:indent-0 md:text-base md:leading-6 md:text-gray-800 md:hover:text-primary md:dark:hover:text-point">
                 {renderMenuLink(menu)}
               </span>
               {renderSubMenu(menu.menu_id, depth + 1)}
