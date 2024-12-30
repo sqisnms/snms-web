@@ -153,12 +153,89 @@ export function MenuTable({ selectedCode, tempMenu, setTempMenu }: TableProps) {
   }
 
   return (
-    <Box>
+    <Box className="menu_wrap">
       {!datas ? (
-        <Box>메뉴를 선택해주세요</Box>
+        <Box
+          className="p-3 text-center font-semibold"
+          sx={[
+            (theme) => ({
+              background: "#fafafa",
+              ...theme.applyStyles("dark", {
+                background: "#1f2937",
+              }),
+            }),
+          ]}
+        >
+          <Typography
+            variant="body1"
+            sx={{
+              color: "#9b9b9b",
+            }}
+          >
+            메뉴를 선택해주세요
+          </Typography>
+        </Box>
       ) : (
         <>
-          <Box display="flex" flexWrap="wrap" gap={1}>
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+            {/* 선택된 항목의 타이틀 표시 */}
+            {editDatas?.menu_name && (
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: "bold",
+                  color: (theme) => theme.palette.text.primary,
+                }}
+              >
+                {editDatas.menu_name}
+              </Typography>
+            )}
+            <Box display="flex" gap={1}>
+              <Button
+                variant="contained"
+                onClick={() => handleSave()}
+                sx={[
+                  (theme) => ({
+                    width: "80px",
+                    background: theme.palette.secondary.main,
+                    fontSize: "14px",
+                    lineHeight: "1.75rem",
+                    boxShadow: "none",
+                    color: theme.palette.secondary.contrastText,
+                    "&:hover": {
+                      background: theme.palette.secondary.dark,
+                      boxShadow: "none",
+                    },
+                  }),
+                ]}
+              >
+                저장
+              </Button>
+              {!tempMenu && (
+                <Button
+                  variant="contained"
+                  onClick={() => handleDelete()}
+                  sx={[
+                    (theme) => ({
+                      width: "80px",
+                      background: theme.palette.primary.main,
+                      fontSize: "14px",
+                      lineHeight: "1.75rem",
+                      boxShadow: "none",
+                      color: theme.palette.primary.contrastText,
+                      "&:hover": {
+                        background: theme.palette.primary.dark,
+                        boxShadow: "none",
+                      },
+                    }),
+                  ]}
+                >
+                  삭제
+                </Button>
+              )}
+            </Box>
+          </Box>
+          <Box display="flex" flexWrap="wrap" gap={2}>
             {columns.map((column) => {
               const value = editDatas?.[column.name as keyof MenuType]
               return (
@@ -175,16 +252,42 @@ export function MenuTable({ selectedCode, tempMenu, setTempMenu }: TableProps) {
                   }
                   sx={{
                     height: "40px",
-                    width: "45%",
+                    width: "calc(50% - 10px)",
                   }}
                 />
               )
             })}
           </Box>
           {!tempMenu && (
-            <Box display="flex" flexWrap="wrap" gap={3} height="3rem">
-              <Box display="flex" alignItems="center" gap={1}>
+            <Box display="flex" flexWrap="wrap" gap={1} height="3rem" mt={1}>
+              <Box display="flex" alignItems="center">
                 <Typography>권한</Typography>
+              </Box>
+              <List
+                sx={{
+                  display: "flex",
+                  gap: 1,
+                }}
+              >
+                {((editDatas?.role_ids ?? []) as string[]).map((v) => {
+                  if (v) {
+                    return (
+                      <Chip
+                        key={v}
+                        label={(editDatas?.role_names ?? [])[editDatas?.role_ids?.indexOf(v) ?? 0]}
+                        color="secondary"
+                        size="medium"
+                        variant="outlined"
+                        onDelete={() => handleRoleDelete(editDatas?.menu_id ?? "", v)}
+                        deleteIcon={<Close />}
+                        sx={{
+                          fontSize: "14px",
+                        }}
+                      />
+                    )
+                  }
+                  return undefined
+                })}
                 <IconButton
                   size="small"
                   onClick={() => {
@@ -199,67 +302,10 @@ export function MenuTable({ selectedCode, tempMenu, setTempMenu }: TableProps) {
                     color="secondary"
                   />
                 </IconButton>
-              </Box>
-              <List>
-                {((editDatas?.role_ids ?? []) as string[]).map((v) => {
-                  if (v) {
-                    return (
-                      <Chip
-                        key={v}
-                        label={(editDatas?.role_names ?? [])[editDatas?.role_ids?.indexOf(v) ?? 0]}
-                        color="secondary"
-                        size="medium"
-                        variant="outlined"
-                        onDelete={() => handleRoleDelete(editDatas?.menu_id ?? "", v)}
-                        deleteIcon={<Close />}
-                      />
-                    )
-                  }
-                  return undefined
-                })}
               </List>
             </Box>
           )}
-          <Button
-            variant="contained"
-            onClick={() => handleSave()}
-            sx={[
-              (theme) => ({
-                background: theme.palette.secondary.main,
-                fontSize: "14px",
-                lineHeight: "1.75rem",
-                boxShadow: "none",
-                color: theme.palette.secondary.contrastText,
-                "&:hover": {
-                  background: theme.palette.secondary.dark,
-                  boxShadow: "none",
-                },
-              }),
-            ]}
-          >
-            저장
-          </Button>
-          {!tempMenu && (
-            <Button
-              variant="contained"
-              onClick={() => handleDelete()}
-              sx={[
-                (theme) => ({
-                  background: theme.palette.secondary.main,
-                  fontSize: "14px",
-                  lineHeight: "1.75rem",
-                  boxShadow: "none",
-                  color: theme.palette.secondary.contrastText,
-                  "&:hover": {
-                    background: theme.palette.secondary.dark,
-                    boxShadow: "none",
-                  },
-                }),
-              ]}
-            >
-              삭제
-            </Button>
-          )}
+
           <RolePopup
             open={roleOpen}
             handleClose={() => {
