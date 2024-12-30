@@ -182,6 +182,9 @@ export function TeamTable({ selectedCode }: TableProps) {
                                   variant="outlined"
                                   onDelete={() => handleRoleDelete(data.user_id ?? "", v)}
                                   deleteIcon={<Close />}
+                                  sx={{
+                                    fontSize: "14px",
+                                  }}
                                 />
                               )
                             }
@@ -195,11 +198,7 @@ export function TeamTable({ selectedCode }: TableProps) {
                               setRoleOpen(true)
                             }}
                           >
-                            <AddCircleOutlineIcon
-                              className="dark:text-white"
-                              fontSize="small"
-                              color="secondary"
-                            />
+                            <AddCircleOutlineIcon fontSize="small" color="secondary" />
                           </IconButton>
                         </TableCell>
                       )
