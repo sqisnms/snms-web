@@ -161,7 +161,7 @@ export function MenuTable({ selectedCode, tempMenu, setTempMenu }: TableProps) {
             (theme) => ({
               background: "#fafafa",
               ...theme.applyStyles("dark", {
-                background: "#1f2937",
+                background: "#191919",
               }),
             }),
           ]}

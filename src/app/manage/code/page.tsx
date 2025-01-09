@@ -393,7 +393,7 @@ export default function CodeManager() {
                   height: "40px",
                   background: "#e5e7eb",
                   ...theme.applyStyles("dark", {
-                    backgroundColor: "#1f2937",
+                    backgroundColor: "#191919",
                   }),
                 }),
               ]}
