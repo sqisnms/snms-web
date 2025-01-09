@@ -3,23 +3,59 @@ version: "3.8"
 services:
   # PostgreSQL 서비스
   db:
-    image: postgres:14-alpine # PostgreSQL 공식 이미지 사용
+    image: postgres:16-alpine # PostgreSQL 공식 이미지 사용
+    restart: always
     container_name: postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgrespassword
-      POSTGRES_DB: mydatabase
+      POSTGRES_PASSWORD: Q!w2e3r4
+      POSTGRES_DB: postgres
     ports:
       - "5432:5432" # PostgreSQL의 기본 포트
-#     networks:
-#       - mynetwork
-#   grafana:
-#     image: grafana/grafana
-#     container_name: grafana
-#     ports:
-#       - "3003:3000"
-#     networks:
-#       - mynetwork
-# networks:
-#   mynetwork:
-#     driver: bridge
+    networks:
+      - mynetwork
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+    volumes:
+      - ./postgres.dump.sql:/docker-entrypoint-initdb.d/backup.sql # SQL 파일 마운트
+  grafana:
+    image: grafana/grafana
+    restart: always
+    container_name: grafana
+    ports:
+      - "3003:3000"
+    networks:
+      - mynetwork
+  web:
+    image: snms-web5
+    restart: always
+    container_name: snms-web5
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.production.local
+    networks:
+      - mynetwork
+    depends_on:
+      db:
+        condition: service_healthy
+  auth:
+    image: snms-auth5
+    restart: always
+    container_name: snms-auth5
+    ports:
+      - "3300:3000"
+    env_file:
+      - .env.production.local
+    networks:
+      - mynetwork
+    depends_on:
+      db:
+        condition: service_healthy
+networks:
+  mynetwork:
+    driver: bridge
