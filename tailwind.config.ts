@@ -15,6 +15,7 @@ const config: Config = {
         secondary: "#4496e5",
         point: "#49CBFF",
         blue: { 400: "#2589FE", 500: "#0070F3", 600: "#2F6FEB" },
+        gray: { 700: "#333333", 800: "#2c2c2c", 900: "#1a1a1a" },
       },
       keyframes: {
         shimmer: {
