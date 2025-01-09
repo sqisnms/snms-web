@@ -16,6 +16,14 @@ const nextConfig = {
       },
     ]
   },
+  webpack(config) {
+    config.module.rules.push({
+      test: /jest\.config\.ts$/, // jest.config.ts를 타겟으로 설정
+      use: "null-loader", // 해당 파일을 무시
+    })
+
+    return config
+  },
 }
 
 export default nextConfig
