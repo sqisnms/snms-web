@@ -1,6 +1,5 @@
 import { getRoleList, updateRole } from "@/actions/role-actions"
 import { RoleEdit, RoleType } from "@/types/role"
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"
 import DeleteIcon from "@mui/icons-material/Delete"
 import {
   Box,
@@ -158,39 +157,34 @@ export function RoleTable() {
 
   return (
     <>
+      {" "}
       <TableContainer component={Paper}>
         <Table
           aria-label="simple table"
-          sx={{
-            minHeight: "30vh",
-            borderBottom: "none",
-            background: "#fafafa",
-          }}
+          sx={[
+            (theme) => ({
+              background: "#fafafa",
+              ...theme.applyStyles("dark", {
+                background: "#000",
+              }),
+            }),
+          ]}
         >
           <TableHead className="bg-gray-200 dark:bg-gray-800">
             <TableRow>
               {columns.map((column) => (
                 <TableCell
                   key={column.name}
-                  className="whitespace-nowrap font-semibold text-gray-600 dark:text-white"
+                  className="whitespace-nowrap p-2 font-semibold text-gray-600 dark:text-white"
                 >
                   {column.comment}
                 </TableCell>
               ))}
-              <TableCell className="w-4 font-semibold text-gray-600">
-                <IconButton
-                  size="small"
-                  onClick={() =>
-                    handleAdd({
-                      role_id: "",
-                      role_name: "",
-                      role_desc: "",
-                      key: v4(),
-                    })
-                  }
-                >
-                  <AddCircleOutlineIcon className="dark:text-white" fontSize="small" />
-                </IconButton>
+              <TableCell
+                key="actions"
+                className="whitespace-nowrap p-2 font-semibold text-gray-600 dark:text-white"
+              >
+                삭제
               </TableCell>
               {/* <TableCell className="font-semibold text-gray-600">Column 2</TableCell>
             <TableCell className="font-semibold text-gray-600">Column 3</TableCell> */}
@@ -200,7 +194,7 @@ export function RoleTable() {
             {editDatas.length === 0 ? (
               <TableRow>
                 <TableCell
-                  className="dark:bg-black dark:text-white"
+                  className="p-2 dark:bg-black dark:text-white"
                   colSpan={columns.length}
                   align="center"
                   sx={{
@@ -228,7 +222,7 @@ export function RoleTable() {
                       return (
                         <TableCell
                           key={column.name}
-                          className="whitespace-nowrap dark:bg-black dark:text-white"
+                          className="whitespace-nowrap p-2 dark:bg-black dark:text-white"
                         >
                           {formatDate(String(value))}
                         </TableCell>
@@ -238,7 +232,7 @@ export function RoleTable() {
                     // 일반 값 처리
                     // if (value !== null && value !== undefined) {
                     return (
-                      <TableCell className="dark:bg-black dark:text-white" key={column.name}>
+                      <TableCell className="p-2 dark:bg-black dark:text-white" key={column.name}>
                         <TextField
                           variant="outlined"
                           value={String(value ?? "")}
@@ -258,12 +252,12 @@ export function RoleTable() {
 
                     // // 값이 null 또는 undefined인 경우
                     // return (
-                    //   <TableCell className="dark:bg-black dark:text-white" key={column.name}>
+                    //   <TableCell className="dark:bg-black dark:text-white p-2 " key={column.name}>
                     //     N/A
                     //   </TableCell>
                     // )
                   })}
-                  <TableCell className="dark:bg-black dark:text-white" key="edit">
+                  <TableCell className="p-2 dark:bg-black dark:text-white" key="edit">
                     <IconButton size="small" onClick={() => handleDelete(data.key ?? "")}>
                       <DeleteIcon className="dark:text-white" fontSize="small" />
                     </IconButton>
@@ -274,25 +268,56 @@ export function RoleTable() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button
-        variant="contained"
-        onClick={() => handleSave()}
-        sx={[
-          (theme) => ({
-            background: theme.palette.secondary.main,
-            fontSize: "14px",
-            lineHeight: "1.75rem",
-            boxShadow: "none",
-            color: theme.palette.secondary.contrastText,
-            "&:hover": {
-              background: theme.palette.secondary.dark,
+      <Box display="flex" gap={1} justifyContent="flex-end" mt={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() =>
+            handleAdd({
+              role_id: "",
+              role_name: "",
+              role_desc: "",
+              key: v4(),
+            })
+          }
+          sx={[
+            (theme) => ({
+              width: "80px",
+              background: theme.palette.primary.main,
+              fontSize: "14px",
+              lineHeight: "1.75rem",
               boxShadow: "none",
-            },
-          }),
-        ]}
-      >
-        저장
-      </Button>
+              color: theme.palette.primary.contrastText,
+              "&:hover": {
+                background: theme.palette.primary.dark,
+                boxShadow: "none",
+              },
+            }),
+          ]}
+        >
+          추가
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => handleSave()}
+          sx={[
+            (theme) => ({
+              width: "80px",
+              background: theme.palette.secondary.main,
+              fontSize: "14px",
+              lineHeight: "1.75rem",
+              boxShadow: "none",
+              color: theme.palette.secondary.contrastText,
+              "&:hover": {
+                background: theme.palette.secondary.dark,
+                boxShadow: "none",
+              },
+            }),
+          ]}
+        >
+          저장
+        </Button>
+      </Box>
     </>
   )
 }

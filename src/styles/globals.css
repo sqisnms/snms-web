@@ -95,11 +95,11 @@
 
 .dark .MuiTreeItem-content:hover {
   color: #fff;
-  background: #1f2937;
+  background: #191919;
 }
 .dark .MuiTreeItem-content.Mui-selected {
   color: #fff;
-  background: #253447;
+  background: #2f3236;
 }
 
 .code_wrap .MuiFormControl-root {
@@ -120,4 +120,9 @@
 }
 .gnb_menu > button:has(a.menu) > a.menu:hover {
   color: #49cbff;
+}
+
+.menu_wrap .MuiFormControl-root .MuiInputBase-input {
+  height: 42px;
+  font-size: 16px;
 }

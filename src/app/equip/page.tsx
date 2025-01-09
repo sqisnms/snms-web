@@ -23,7 +23,7 @@ export default function Page() {
             padding: "0",
             background: "#fafafa",
             ...theme.applyStyles("dark", {
-              background: "#1f2937",
+              background: "#191919",
             }),
             [theme.breakpoints.up("md")]: {
               minWidth: "300px",

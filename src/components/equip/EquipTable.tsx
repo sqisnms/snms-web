@@ -89,7 +89,7 @@ export function EquipTable({ selectedCodeObj }: EquipTableProps) {
             borderBottom: "none",
             background: "#fafafa",
             ...theme.applyStyles("dark", {
-              background: "#1f2937",
+              background: "#191919",
             }),
           }),
         ]}
