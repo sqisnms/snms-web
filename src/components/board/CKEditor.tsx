@@ -408,7 +408,7 @@ export default function SnmsCKEditor({
   }, [isLayoutReady])
 
   return (
-    <div className="main-container">
+    <div className="main-container rounded-md">
       <div
         className="editor-container editor-container_classic-editor editor-container_include-style editor-container_include-word-count"
         ref={editorContainerRef}

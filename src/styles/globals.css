@@ -126,3 +126,26 @@
   height: 42px;
   font-size: 16px;
 }
+
+.MuiFormControl-root.board-tit {
+  border: none;
+}
+.MuiFormControl-root.board-tit .MuiInputBase-input {
+  font-size: 16px;
+  font-weight: bold;
+  height: 46px;
+  padding-left: 14px;
+}
+.board_con .main-container {
+  margin-top: 10px;
+}
+
+.main-container .editor_container__word-count .ck-word-count {
+  height: 32px;
+}
+.board_con .main-container .ck-editor__main p {
+  min-height: 100px;
+}
+.board_comment_input {
+  width: calc(100% - 88px);
+}
