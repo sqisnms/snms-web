@@ -17,9 +17,11 @@ jobs:
       # 2. .env.production.local 파일 생성
       - name: Create .env.production.local file
         run: |
-          $env:LC_ALL = "C.UTF-8"
-          [System.IO.File]::WriteAllText(".env.production.local", "${{ secrets.ENV_PRODUCTION_LOCAL }}", [System.Text.Encoding]::UTF8)
-
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            powershell -Command "[System.IO.File]::WriteAllText('.env.production.local', '${{ secrets.ENV_PRODUCTION_LOCAL }}', [System.Text.Encoding]::UTF8)"
+          else
+            echo "${{ secrets.ENV_PRODUCTION_LOCAL }}" > .env.production.local
+          fi
       # 3. .env.production.local 내용 출력 (디버깅용)
       - name: Print .env.production.local content
         run: cat .env.production.local
