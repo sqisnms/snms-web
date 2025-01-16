@@ -3,6 +3,7 @@
 import { deleteBoard, getArticleById, getBoardList, updateBoard } from "@/actions/board-action"
 import { useUser } from "@/config/Providers"
 import { BoardType } from "@/types/board"
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft"
 import {
   Box,
   Button,
@@ -285,7 +286,7 @@ export function Board({ section }: BoardDialogProps) {
               />
             </Box>
             {hasAuth && (
-              <Box className="p-4 pt-0 dark:bg-black">
+              <Box className="pt-2 dark:bg-black">
                 <Button onClick={handleAdd}>추가</Button>
               </Box>
             )}
@@ -294,25 +295,53 @@ export function Board({ section }: BoardDialogProps) {
       )}
       {articleId !== null && (
         <>
-          <Box className="dark:bg-black dark:text-white">수정</Box>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center justify-start">
+              <Button onClick={handleArticleBack} className="h-8 w-6 min-w-0 dark:text-white">
+                <ChevronLeftIcon className="text-black" />
+              </Button>
+              <h3 className="ml-1 text-lg font-bold dark:text-white">게시글</h3>
+            </div>
+
+            <Box className="flex items-center justify-end gap-2">
+              {article.create_user_name && (
+                <Typography
+                  variant="caption"
+                  className="text-sm text-gray-400 dark:text-gray-400"
+                >{`${article.create_user_name} / ${formatDate(article.create_date ?? "")}`}</Typography>
+              )}
+
+              {/* Dialog Actions */}
+              <Box className="flex justify-end" gap={1}>
+                {isEditable && (
+                  <Button onClick={handleSave} color="primary" variant="outlined">
+                    저장
+                  </Button>
+                )}
+                {articleId !== "" && hasAuth && !isEditable && (
+                  <Button onClick={handleGoEdit} color="primary" variant="outlined">
+                    수정
+                  </Button>
+                )}
+                {articleId !== "" && hasAuth && !isEditable && (
+                  <Button onClick={handleDelete} color="error" variant="outlined">
+                    삭제
+                  </Button>
+                )}
+              </Box>
+            </Box>
+          </div>
           <Box
             key={`${String(isEditable)}${articleId ?? "new"}`}
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 2, // 요소 간 간격 추가
               // padding: "36px", // 내부 패딩 추가
             }}
-            className="dark:bg-black dark:text-white"
           >
-            {article.create_user_name && (
-              <Typography variant="caption">{`${article.create_user_name} / ${formatDate(article.create_date ?? "")}`}</Typography>
-            )}
-
             {/* 제목 */}
             <TextField
-              label="제목"
-              variant="outlined"
+              className="board-tit mb-1 mt-2"
               fullWidth
               value={article.title || ""}
               onChange={(e) => setArticle({ ...article, title: e.target.value })}
@@ -324,43 +353,18 @@ export function Board({ section }: BoardDialogProps) {
             />
 
             {/* 내용 */}
-            <SnmsCKEditor
-              content={article.content ?? ""}
-              isEditable={isEditable}
-              handleSave={(c) => {
-                setArticle((prevArticle) => {
-                  if (prevArticle.content === c) return prevArticle // 상태가 동일하면 업데이트 방지
-                  return { ...prevArticle, content: c }
-                })
-              }}
-            />
-          </Box>
-
-          {/* Dialog Actions */}
-          <Box className="p-4 pt-0 dark:bg-black" display="flex" gap={1} flexWrap="wrap">
-            {isEditable && (
-              <Button onClick={handleSave} color="primary" variant="outlined">
-                저장
-              </Button>
-            )}
-            {articleId !== "" && hasAuth && !isEditable && (
-              <Button onClick={handleGoEdit} color="primary" variant="outlined">
-                수정
-              </Button>
-            )}
-            {articleId !== "" && hasAuth && !isEditable && (
-              <Button onClick={handleDelete} color="error" variant="outlined">
-                삭제
-              </Button>
-            )}
-            <Button
-              onClick={handleArticleBack}
-              color="warning"
-              variant="outlined"
-              className="dark:text-white"
-            >
-              뒤로
-            </Button>
+            <div className="board_con">
+              <SnmsCKEditor
+                content={article.content ?? ""}
+                isEditable={isEditable}
+                handleSave={(c) => {
+                  setArticle((prevArticle) => {
+                    if (prevArticle.content === c) return prevArticle // 상태가 동일하면 업데이트 방지
+                    return { ...prevArticle, content: c }
+                  })
+                }}
+              />
+            </div>
           </Box>
 
           {!isEditable && (

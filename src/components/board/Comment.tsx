@@ -166,11 +166,96 @@ export function Comment({ boardId }: CommentProps) {
         },
       }}
     >
+      <h3 className="mb-3 ml-1 text-lg font-bold dark:text-white">댓글</h3>
+
+      <div className="flex gap-2">
+        <div className="board_comment_input">
+          <SnmsCKEditor
+            content={article.content ?? ""}
+            isEditable
+            handleSave={(c) => {
+              setArticle((prevArticle) => {
+                if (prevArticle.content === c) return prevArticle // 상태가 동일하면 업데이트 방지
+                return { ...prevArticle, content: c }
+              })
+            }}
+          />
+        </div>
+        <div className="w-20">
+          <Button
+            fullWidth
+            className="h-full"
+            onClick={() => handleSave({ content: article.content })}
+            variant="outlined"
+            size="medium"
+            sx={[
+              (theme) => ({
+                background: theme.palette.primary.main,
+                color: "#fff",
+              }),
+            ]}
+          >
+            작성
+          </Button>
+        </div>
+      </div>
+
+      <Divider sx={{ my: 2 }} />
+
       {comments.map((cm) => {
         return (
           <>
-            <Typography variant="caption">{`${cm.create_user_name} / ${formatDate(cm.create_date ?? "")}`}</Typography>
+            <div className="mb-2 flex items-end justify-between">
+              <Typography
+                variant="caption"
+                className="text-sm text-gray-400 dark:text-gray-400"
+              >{`${cm.create_user_name} / ${formatDate(cm.create_date ?? "")}`}</Typography>
 
+              <Box className="dark:bg-black" display="flex" gap={1} flexWrap="wrap">
+                {currentUser?.user_id === cm.create_user_id && cm.isEditable && (
+                  <Button
+                    onClick={() =>
+                      handleSave({ board_sub_seq: cm.board_sub_seq, content: cm.content })
+                    }
+                    color="primary"
+                    variant="outlined"
+                    size="small"
+                  >
+                    저장
+                  </Button>
+                )}
+                {currentUser?.user_id === cm.create_user_id && cm.isEditable && (
+                  <Button
+                    onClick={handleCancleEdit}
+                    color="primary"
+                    variant="outlined"
+                    size="small"
+                  >
+                    취소
+                  </Button>
+                )}
+                {currentUser?.user_id === cm.create_user_id && !cm.isEditable && (
+                  <Button
+                    onClick={() => handleGoEdit({ board_sub_seq: cm.board_sub_seq })}
+                    color="primary"
+                    variant="outlined"
+                    size="small"
+                  >
+                    수정
+                  </Button>
+                )}
+                {currentUser?.user_id === cm.create_user_id && !cm.isEditable && (
+                  <Button
+                    onClick={() => handleDelete({ board_sub_seq: cm.board_sub_seq })}
+                    color="error"
+                    variant="outlined"
+                    size="small"
+                  >
+                    삭제
+                  </Button>
+                )}
+              </Box>
+            </div>
             <SnmsCKEditor
               key={cm.board_sub_seq + String(cm.isEditable)}
               content={cm.content ?? ""}
@@ -186,45 +271,8 @@ export function Comment({ boardId }: CommentProps) {
                 )
               }}
             />
-            <Box className="p-4 pt-0 dark:bg-black" display="flex" gap={1} flexWrap="wrap">
-              {currentUser?.user_id === cm.create_user_id && cm.isEditable && (
-                <Button
-                  onClick={() =>
-                    handleSave({ board_sub_seq: cm.board_sub_seq, content: cm.content })
-                  }
-                  color="primary"
-                  variant="outlined"
-                  size="small"
-                >
-                  저장
-                </Button>
-              )}
-              {currentUser?.user_id === cm.create_user_id && cm.isEditable && (
-                <Button onClick={handleCancleEdit} color="primary" variant="outlined" size="small">
-                  취소
-                </Button>
-              )}
-              {currentUser?.user_id === cm.create_user_id && !cm.isEditable && (
-                <Button
-                  onClick={() => handleGoEdit({ board_sub_seq: cm.board_sub_seq })}
-                  color="primary"
-                  variant="outlined"
-                  size="small"
-                >
-                  수정
-                </Button>
-              )}
-              {currentUser?.user_id === cm.create_user_id && !cm.isEditable && (
-                <Button
-                  onClick={() => handleDelete({ board_sub_seq: cm.board_sub_seq })}
-                  color="error"
-                  variant="outlined"
-                  size="small"
-                >
-                  삭제
-                </Button>
-              )}
-            </Box>
+
+            <Divider sx={{ my: 2 }} />
           </>
         )
       })}
@@ -244,29 +292,6 @@ export function Comment({ boardId }: CommentProps) {
           className="dark:text-white"
           shape="rounded"
         />
-      </Box>
-
-      <Divider sx={{ my: 2 }} />
-
-      <SnmsCKEditor
-        content={article.content ?? ""}
-        isEditable
-        handleSave={(c) => {
-          setArticle((prevArticle) => {
-            if (prevArticle.content === c) return prevArticle // 상태가 동일하면 업데이트 방지
-            return { ...prevArticle, content: c }
-          })
-        }}
-      />
-      <Box className="p-4 pt-0 dark:bg-black">
-        <Button
-          onClick={() => handleSave({ content: article.content })}
-          color="primary"
-          variant="outlined"
-          size="small"
-        >
-          저장
-        </Button>
       </Box>
     </Box>
   )
