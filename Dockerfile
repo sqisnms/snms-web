@@ -24,6 +24,9 @@ RUN rm -f .env.local
 # .env.production.local을 .env로 복사
 COPY .env.production.local .env
 
+# npm 버전 확인
+RUN npm -version
+
 # Next.js 빌드
 RUN npm run build
 
