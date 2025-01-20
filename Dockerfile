@@ -9,6 +9,7 @@ COPY package.json package-lock.json ./
 
 # npm 버전 확인
 RUN npm -version
+RUN node --version
 
 # 의존성 설치 (production only)
 #RUN npm install --production
