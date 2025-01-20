@@ -7,6 +7,9 @@ WORKDIR /app
 # package.json 및 package-lock.json 복사
 COPY package.json package-lock.json ./
 
+RUN nvm install 22.5.1
+RUN nvm use 22.5.1
+RUN nvm list
 # npm 버전 확인
 RUN npm -version
 RUN node --version
