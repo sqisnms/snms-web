@@ -45,7 +45,7 @@ WORKDIR /app
 COPY --from=builder /app /app
 
 # 노드 모듈 확인
-RUN ls -la node_modules
+# RUN ls -la node_modules
 
 # 기본 실행 명령어 설정
 CMD ["npm", "start"]
