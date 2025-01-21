@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 53000",
+    "start": "next start",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --passWithNoTests --watch",
     "format": "prettier --cache --write .",
