@@ -7,13 +7,12 @@ WORKDIR /app
 # package.json 및 package-lock.json 복사
 COPY package.json package-lock.json ./
 
-RUN nvm install 22.5.1
-RUN nvm use 22.5.1
-RUN nvm list
+# 캐시 무효화를 위한 ARG 추가 (1은 ARG 전달되지 않을 경우 기본값)
+ARG CACHEBUST=1
 # npm 버전 확인
-RUN npm -version
-RUN node --version
-RUN npm cache clean --force
+RUN echo "$CACHEBUST" && npm -version
+RUN echo "$CACHEBUST" && node --version
+RUN echo "$CACHEBUST" && npm cache clean --force
 RUN rm -rf node_modules
 
 # 의존성 설치 (production only)
