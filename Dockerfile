@@ -1,5 +1,5 @@
 # 빌드 단계
-FROM node:22-alpine AS builder
+FROM node:22.5.1-alpine AS builder
 
 # 작업 디렉토리 설정
 WORKDIR /app
@@ -36,7 +36,7 @@ COPY .env.production.local .env
 RUN npm run build
 
 # 실행 이미지 단계
-FROM node:22-alpine
+FROM node:22.5.1-alpine
 
 # 작업 디렉토리 설정
 WORKDIR /app
