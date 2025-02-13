@@ -55,7 +55,6 @@
     "http-proxy-middleware": "^3.0.3",
     "jotai": "^2.10.1",
     "jotai-devtools": "^0.10.1",
-    "kafkajs": "^2.2.4",
     "mysql2": "^3.11.3",
     "next": "^14",
     "next-auth": "^5.0.0-beta.21",
