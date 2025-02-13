@@ -1,11 +1,8 @@
 "use client"
 
-import { getIncidentList } from "@/actions/incident-action"
 import { IncidentLogType } from "@/types/incident"
 import {
   Box,
-  CircularProgress,
-  Pagination,
   Paper,
   Table,
   TableBody,
@@ -13,68 +10,49 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from "@mui/material"
-import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
+import { DisconnectReason } from "socket.io"
+// @ts-expect-error Module '"socket.io-client"' has no exported member 'io'.
+import { io } from "socket.io-client"
 import { v4 } from "uuid"
 
-// eslint-disable-next-line react/function-component-definition
-export default function IncidentList() {
-  const [incidents, setIncidents] = useState<Partial<IncidentLogType>[]>([])
+export default function SocketClient() {
+  const [incidents, setIncidents] = useState<IncidentLogType[]>([])
   const [columnKeys, setColumnKeys] = useState<(keyof IncidentLogType)[]>([])
-  const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(0)
-  const [totalCounts, setTotalCounts] = useState(0)
-  const rowsPerPage = 10
-
-  const { data: incidentResult, isFetching: isLoadingBoards } = useQuery({
-    queryKey: ["incidentList", page], // 캐시 키
-    queryFn: () => getIncidentList({ page, rowsPerPage }),
-    // refetchInterval: 1000,
-  })
 
   useEffect(() => {
-    if (!incidentResult) {
+    const socketInstance = io({
+      path: "/api/socket",
+      reconnection: true,
+      reconnectionAttempts: 10,
+      reconnectionDelay: 1000,
+    })
+
+    socketInstance.on("incident", (msg: IncidentLogType) => {
+      // console.log("incident 인입", msg)
+      setIncidents((prev) => [msg, ...prev].slice(0, 100))
+    })
+
+    socketInstance.on("disconnect", (reason: DisconnectReason) => {
+      console.warn("WebSocket disconnected:", reason)
+    })
+
+    return () => {
+      socketInstance.disconnect()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!incidents || columnKeys.length !== 0) {
       return
     }
-    setIncidents(incidentResult.data)
-    setTotalPages(incidentResult.totalPages)
-    setPage(incidentResult.currentPage)
-    setTotalCounts(incidentResult.totalCounts)
-    setColumnKeys(Object.keys(incidentResult?.data[0] ?? {}) as (keyof IncidentLogType)[])
-  }, [incidentResult])
-
-  const handlePageChange = (c: number) => {
-    setPage(c)
-  }
-
-  if (totalCounts === 0 && isLoadingBoards) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "10rem",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    )
-  }
+    setColumnKeys(Object.keys(incidents?.[0] ?? {}) as (keyof IncidentLogType)[])
+  }, [incidents, columnKeys.length])
 
   return (
     <Box className="p-0">
       <Paper className="mb-6 w-full p-0 shadow-md dark:bg-black">
-        <Box display="flex" alignItems="center" justifyContent="space-between" className="w-full">
-          <Box display="flex" alignItems="center">
-            <Typography variant="body1" className="ml-6 text-sm text-gray-700 dark:text-white">
-              조회건수 <span className="font-bold"> {totalCounts}건</span>
-            </Typography>
-          </Box>
-        </Box>
-
         <TableContainer className="mt-5 rounded-md">
           <Table
             aria-label="simple table"
@@ -133,22 +111,6 @@ export default function IncidentList() {
             </TableBody>
           </Table>
         </TableContainer>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            mt: 2,
-          }}
-        >
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={(_, value) => handlePageChange(value)}
-            color="primary"
-            className="dark:text-white"
-            shape="rounded"
-          />
-        </Box>
       </Paper>
     </Box>
   )
