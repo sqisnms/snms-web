@@ -1,4 +1,5 @@
 import { sendIncidentToSocket } from "@/batch/socket/incident"
+import { sendIncidentSysToSocket } from "@/batch/socket/incidentSys"
 import { Server as NetServer } from "http"
 import { NextApiRequest, NextApiResponse } from "next"
 import { Server as SocketIOServer } from "socket.io"
@@ -15,7 +16,10 @@ let globalIo: SocketIOServer
 const startSocketBatch = () => {
   console.log("Starting startSocketBatch...")
   sendIncidentToSocket(globalIo, 10000).catch((error) => {
-    console.error("❌ sendLogsToWS 실행 중 오류 발생:", error)
+    console.error("❌ sendIncidentToSocket 실행 중 오류 발생:", error)
+  })
+  sendIncidentSysToSocket(globalIo, 10000).catch((error) => {
+    console.error("❌ sendIncidentSysToSocket 실행 중 오류 발생:", error)
   })
 }
 
