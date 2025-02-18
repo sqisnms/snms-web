@@ -1,8 +1,12 @@
 "use client"
 
-import { getIncidentList } from "@/actions/incident-action"
-import { IncidentPopup } from "@/components/incident/IncidentPopup"
-import { IncidentLogColumnType, IncidentLogType, IncidentLogTypeKor } from "@/types/incident"
+import { getIncidentSysList } from "@/actions/incident-action"
+import { IncidentSysPopup } from "@/components/incident/IncidentSysPopup"
+import {
+  IncidentSysLogColumnType,
+  IncidentSysLogType,
+  IncidentSysLogTypeKor,
+} from "@/types/incident"
 import {
   Box,
   Button,
@@ -29,13 +33,15 @@ import { toast } from "react-toastify"
 export default function IncidentList() {
   const [page, setPage] = useState(1)
   const [incidentInfo, setIncidentInfo] = useState<{
-    incidents: Partial<IncidentLogType>[]
+    incidents: Partial<IncidentSysLogType>[]
     currentPage: number
     totalPages: number
     totalCounts: number
+    emerg: number
+    alert: number
     crit: number
     err: number
-    warn: number
+    warning: number
   } | null>(null)
   const rowsPerPage = 10
   const [startDate, setStartDate] = useState<string>("")
@@ -48,12 +54,12 @@ export default function IncidentList() {
     searchTime: 0, // 조회 버튼 여러번 눌러도 계속 조회되도록 하는 임시 인자값. 조회조건에는 포함안됨
   })
   const [openDialog, setOpenDialog] = useState(false)
-  const [incidentForPopup, setIncidentForPopup] = useState<Partial<IncidentLogType> | null>(null)
+  const [incidentForPopup, setIncidentForPopup] = useState<Partial<IncidentSysLogType> | null>(null)
 
   const { data: incidentResult, isFetching } = useQuery({
-    queryKey: ["incidentList", page, searchParams], // 캐시 키
+    queryKey: ["incidentSysList", page, searchParams], // 캐시 키
     queryFn: () =>
-      getIncidentList({
+      getIncidentSysList({
         page,
         rowsPerPage,
         startDate: searchParams.startDate,
@@ -74,7 +80,7 @@ export default function IncidentList() {
     setPage(c)
   }
 
-  const getColor = (obj: IncidentLogColumnType, row: Partial<IncidentLogType>) => {
+  const getColor = (obj: IncidentSysLogColumnType, row: Partial<IncidentSysLogType>) => {
     if (obj.key === "log_level") {
       if (row.log_level === "CRITICAL") {
         return "red"
@@ -120,7 +126,7 @@ export default function IncidentList() {
     })
   }
 
-  const handleOpenDialog = (incident: Partial<IncidentLogType>) => {
+  const handleOpenDialog = (incident: Partial<IncidentSysLogType>) => {
     setIncidentForPopup(incident)
     setOpenDialog(true)
   }
@@ -144,6 +150,32 @@ export default function IncidentList() {
             </Typography>
 
             <Box display="flex" alignItems="center" className="ml-4">
+              <Box display="flex" alignItems="center" className="mr-4">
+                <div
+                  style={{
+                    width: "12px",
+                    height: "12px",
+                    backgroundColor: "red",
+                    marginRight: "8px",
+                  }}
+                />
+                <span className="text-sm text-gray-800 dark:text-gray-300">
+                  {incidentInfo?.emerg}건
+                </span>
+              </Box>
+              <Box display="flex" alignItems="center" className="mr-4">
+                <div
+                  style={{
+                    width: "12px",
+                    height: "12px",
+                    backgroundColor: "orange",
+                    marginRight: "8px",
+                  }}
+                />
+                <span className="text-sm text-gray-800 dark:text-gray-300">
+                  {incidentInfo?.alert}건
+                </span>
+              </Box>
               <Box display="flex" alignItems="center" className="mr-4">
                 <div
                   style={{
@@ -180,7 +212,7 @@ export default function IncidentList() {
                   }}
                 />
                 <span className="text-sm text-gray-800 dark:text-gray-300">
-                  {incidentInfo?.warn}건
+                  {incidentInfo?.warning}건
                 </span>
               </Box>
             </Box>
@@ -270,14 +302,20 @@ export default function IncidentList() {
                 <MenuItem value="" className="text-sm">
                   전체
                 </MenuItem>
-                <MenuItem value="CRITICAL" className="text-sm">
-                  CRITICAL
+                <MenuItem value="emerg" className="text-sm">
+                  emerg
                 </MenuItem>
-                <MenuItem value="ERROR" className="text-sm">
-                  ERROR
+                <MenuItem value="alert" className="text-sm">
+                  alert
                 </MenuItem>
-                <MenuItem value="WARNING" className="text-sm">
-                  WARNING
+                <MenuItem value="crit" className="text-sm">
+                  crit
+                </MenuItem>
+                <MenuItem value="err" className="text-sm">
+                  err
+                </MenuItem>
+                <MenuItem value="warning" className="text-sm">
+                  warning
                 </MenuItem>
               </Select>
             </div>
@@ -356,7 +394,7 @@ export default function IncidentList() {
               ]}
             >
               <TableRow>
-                {IncidentLogTypeKor.map((obj) => (
+                {IncidentSysLogTypeKor.map((obj) => (
                   <TableCell
                     key={`${obj.key}header`}
                     className="font-semibold text-gray-600 dark:text-white"
@@ -374,7 +412,7 @@ export default function IncidentList() {
                   }}
                 >
                   <TableCell
-                    colSpan={IncidentLogTypeKor.length}
+                    colSpan={IncidentSysLogTypeKor.length}
                     sx={{
                       textAlign: "center",
                     }}
@@ -385,7 +423,7 @@ export default function IncidentList() {
               ) : (
                 incidentInfo?.incidents?.map((d) => (
                   <TableRow key={d.log_time} onClick={() => handleOpenDialog(d)}>
-                    {IncidentLogTypeKor.map((obj) => (
+                    {IncidentSysLogTypeKor.map((obj) => (
                       <TableCell key={`${d.log_time}${obj.key}`} sx={{ color: getColor(obj, d) }}>
                         {d[obj.key]}
                       </TableCell>
@@ -414,7 +452,7 @@ export default function IncidentList() {
         </Box>
       </Paper>
       {incidentForPopup && (
-        <IncidentPopup
+        <IncidentSysPopup
           open={openDialog}
           handleClose={handleCloseDialog}
           incident={incidentForPopup}

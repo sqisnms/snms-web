@@ -1,7 +1,11 @@
 "use client"
 
-import { IncidentPopup } from "@/components/incident/IncidentPopup"
-import { IncidentLogColumnType, IncidentLogType, IncidentLogTypeKor } from "@/types/incident"
+import { IncidentSysPopup } from "@/components/incident/IncidentSysPopup"
+import {
+  IncidentSysLogColumnType,
+  IncidentSysLogType,
+  IncidentSysLogTypeKor,
+} from "@/types/incident"
 import {
   Box,
   CircularProgress,
@@ -19,9 +23,9 @@ import { DisconnectReason } from "socket.io"
 import { io } from "socket.io-client"
 
 export default function SocketClient() {
-  const [incidents, setIncidents] = useState<IncidentLogType[]>([])
+  const [incidents, setIncidents] = useState<IncidentSysLogType[]>([])
   const [openDialog, setOpenDialog] = useState(false)
-  const [incidentForPopup, setIncidentForPopup] = useState<Partial<IncidentLogType> | null>(null)
+  const [incidentForPopup, setIncidentForPopup] = useState<Partial<IncidentSysLogType> | null>(null)
 
   useEffect(() => {
     const socketInstance = io({
@@ -31,7 +35,7 @@ export default function SocketClient() {
       reconnectionDelay: 1000,
     })
 
-    socketInstance.on("incident", (msg: IncidentLogType) => {
+    socketInstance.on("incidentSys", (msg: IncidentSysLogType) => {
       setIncidents((prev) => [msg, ...prev].slice(0, 100))
     })
 
@@ -44,7 +48,7 @@ export default function SocketClient() {
     }
   }, [])
 
-  const getColor = (obj: IncidentLogColumnType, row: Partial<IncidentLogType>) => {
+  const getColor = (obj: IncidentSysLogColumnType, row: Partial<IncidentSysLogType>) => {
     if (obj.key === "log_level") {
       if (row.log_level === "CRITICAL") {
         return "red"
@@ -60,7 +64,7 @@ export default function SocketClient() {
     return "inherit"
   }
 
-  const handleOpenDialog = (incident: Partial<IncidentLogType>) => {
+  const handleOpenDialog = (incident: Partial<IncidentSysLogType>) => {
     setIncidentForPopup(incident)
     setOpenDialog(true)
   }
@@ -97,7 +101,7 @@ export default function SocketClient() {
               ]}
             >
               <TableRow>
-                {IncidentLogTypeKor.map((obj) => (
+                {IncidentSysLogTypeKor.map((obj) => (
                   <TableCell
                     key={`${obj.key}header`}
                     className="font-semibold text-gray-600 dark:text-white"
@@ -115,7 +119,7 @@ export default function SocketClient() {
                   }}
                 >
                   <TableCell
-                    colSpan={IncidentLogTypeKor.length}
+                    colSpan={IncidentSysLogTypeKor.length}
                     sx={{
                       textAlign: "center",
                     }}
@@ -126,7 +130,7 @@ export default function SocketClient() {
               ) : (
                 incidents?.map((d) => (
                   <TableRow key={d.log_time} onClick={() => handleOpenDialog(d)}>
-                    {IncidentLogTypeKor.map((obj) => (
+                    {IncidentSysLogTypeKor.map((obj) => (
                       <TableCell key={`${d.log_time}${obj.key}`} sx={{ color: getColor(obj, d) }}>
                         {d[obj.key]}
                       </TableCell>
@@ -139,7 +143,7 @@ export default function SocketClient() {
         </TableContainer>
       </Paper>
       {incidentForPopup && (
-        <IncidentPopup
+        <IncidentSysPopup
           open={openDialog}
           handleClose={handleCloseDialog}
           incident={incidentForPopup}
