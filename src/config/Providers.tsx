@@ -2,8 +2,12 @@
 
 import { UserType } from "@/types/user"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
+import { LocalizationProvider } from "@mui/x-date-pickers"
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import dayjs from "dayjs"
+import "dayjs/locale/ko"
 import { SessionProvider } from "next-auth/react"
 import { createContext, useContext, useState } from "react"
 import { ToastContainer } from "react-toastify"
@@ -128,6 +132,10 @@ export default function Providers({
   })
   //
 
+  // 달력 언어 설정
+  dayjs.locale("ko")
+  //
+
   // context path 설정
   const contextPath = process.env.NEXT_PUBLIC_CONTEXT_PATH || ""
   //
@@ -138,12 +146,15 @@ export default function Providers({
   // ToastProvider : toast 알림
   // ThemeProvider : mui 버튼에서 자동 대문자변환 방지
   // ReactQueryDevtools: react query 개발도구
+  // LocalizationProvider: mui x-date-picker 사용
   return (
     <QueryClientProvider client={queryClient}>
       <ContextPathContext.Provider value={contextPath}>
         <SessionProvider>
           <ToastProvider />
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          </LocalizationProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </SessionProvider>
       </ContextPathContext.Provider>

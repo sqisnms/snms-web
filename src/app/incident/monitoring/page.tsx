@@ -1,8 +1,10 @@
 "use client"
 
-import { IncidentLogType } from "@/types/incident"
+import { IncidentPopup } from "@/components/incident/IncidentPopup"
+import { IncidentLogColumnType, IncidentLogType, IncidentLogTypeKor } from "@/types/incident"
 import {
   Box,
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -15,11 +17,11 @@ import { useEffect, useState } from "react"
 import { DisconnectReason } from "socket.io"
 // @ts-expect-error Module '"socket.io-client"' has no exported member 'io'.
 import { io } from "socket.io-client"
-import { v4 } from "uuid"
 
 export default function SocketClient() {
   const [incidents, setIncidents] = useState<IncidentLogType[]>([])
-  const [columnKeys, setColumnKeys] = useState<(keyof IncidentLogType)[]>([])
+  const [openDialog, setOpenDialog] = useState(false)
+  const [incidentForPopup, setIncidentForPopup] = useState<Partial<IncidentLogType> | null>(null)
 
   useEffect(() => {
     const socketInstance = io({
@@ -30,7 +32,6 @@ export default function SocketClient() {
     })
 
     socketInstance.on("incident", (msg: IncidentLogType) => {
-      // console.log("incident 인입", msg)
       setIncidents((prev) => [msg, ...prev].slice(0, 100))
     })
 
@@ -43,12 +44,30 @@ export default function SocketClient() {
     }
   }, [])
 
-  useEffect(() => {
-    if (!incidents || columnKeys.length !== 0) {
-      return
+  const getColor = (obj: IncidentLogColumnType, row: Partial<IncidentLogType>) => {
+    if (obj.key === "log_level") {
+      if (row.log_level === "CRITICAL") {
+        return "red"
+      }
+      if (row.log_level === "ERROR") {
+        return "orange"
+      }
+      if (row.log_level === "WARNING") {
+        return "blue"
+      }
+      return "inherit"
     }
-    setColumnKeys(Object.keys(incidents?.[0] ?? {}) as (keyof IncidentLogType)[])
-  }, [incidents, columnKeys.length])
+    return "inherit"
+  }
+
+  const handleOpenDialog = (incident: Partial<IncidentLogType>) => {
+    setIncidentForPopup(incident)
+    setOpenDialog(true)
+  }
+  const handleCloseDialog = () => {
+    setIncidentForPopup(null)
+    setOpenDialog(false)
+  }
 
   return (
     <Box className="p-0">
@@ -78,40 +97,54 @@ export default function SocketClient() {
               ]}
             >
               <TableRow>
-                {/* <TableCell className="font-semibold text-gray-600 dark:text-white">
-                  Column 1
-                </TableCell>
-                <TableCell className="font-semibold text-gray-600 dark:text-white">
-                  Column 2
-                </TableCell>
-                <TableCell className="font-semibold text-gray-600 dark:text-white">
-                  Column 3
-                </TableCell> */}
-                {columnKeys.map((key) => (
+                {IncidentLogTypeKor.map((obj) => (
                   <TableCell
-                    key={`${key}header`}
+                    key={`${obj.key}header`}
                     className="font-semibold text-gray-600 dark:text-white"
                   >
-                    {key}
+                    {obj.name}
                   </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {incidents?.map((d) => (
-                <TableRow key={v4()}>
-                  {columnKeys.map((key) => (
-                    <TableCell key={`${key}body`}>{d[key]}</TableCell>
-                  ))}
-                  {/* <TableCell>{d.event_time}</TableCell>
-                  <TableCell>{d.log_file}</TableCell>
-                  <TableCell>{d.log_time}</TableCell> */}
+              {!incidents || incidents.length === 0 ? (
+                <TableRow
+                  sx={{
+                    height: "10rem",
+                  }}
+                >
+                  <TableCell
+                    colSpan={IncidentLogTypeKor.length}
+                    sx={{
+                      textAlign: "center",
+                    }}
+                  >
+                    <CircularProgress />
+                  </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                incidents?.map((d) => (
+                  <TableRow key={d.log_time} onClick={() => handleOpenDialog(d)}>
+                    {IncidentLogTypeKor.map((obj) => (
+                      <TableCell key={`${d.log_time}${obj.key}`} sx={{ color: getColor(obj, d) }}>
+                        {d[obj.key]}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </Paper>
+      {incidentForPopup && (
+        <IncidentPopup
+          open={openDialog}
+          handleClose={handleCloseDialog}
+          incident={incidentForPopup}
+        />
+      )}
     </Box>
   )
 }
