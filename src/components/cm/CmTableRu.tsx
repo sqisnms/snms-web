@@ -1,13 +1,13 @@
 import {
   Box,
   CircularProgress,
-  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material"
 import { useEffect, useState } from "react"
@@ -22,7 +22,7 @@ type TableProps = {
 
 export function CmTableRu({ selectedCode }: TableProps) {
   const [datas, setDatas] = useState<CMRuDetailType[]>([])
-  const [columns, setColumns] = useState<{ name: string; comment: string }[]>([])
+  const [columns, setColumns] = useState<{ name: string; comment: string; width: string }[]>([])
 
   const {
     data = [],
@@ -37,21 +37,21 @@ export function CmTableRu({ selectedCode }: TableProps) {
   useEffect(() => {
     if (data.length > 0) {
       setColumns([
-        { name: "du_id", comment: "EMS ID" },
-        { name: "ru_id", comment: "장비ID" },
-        { name: "equip_name", comment: "장비명" },
-        { name: "vendor_code", comment: "제조사명" },
-        { name: "generation_code", comment: "세대구분" },
-        { name: "cell_no", comment: "CELL NUM" },
-        { name: "cell_fdd_id", comment: "FDD ID" },
-        { name: "global_cell_id", comment: "GCI" },
-        { name: "upper_team_name", comment: "상위부서명" },
-        { name: "team_name", comment: "팀명" },
-        { name: "open_date", comment: "개통일" },
-        { name: "ip_address", comment: "IP ADDRESS" },
-        { name: "address", comment: "주소명" },
-        { name: "user_name", comment: "정관리자" },
-        { name: "pcsphone", comment: "PHONE" },
+        { name: "du_id", comment: "EMS ID", width: "150px" },
+        { name: "ru_id", comment: "장비ID", width: "150px" },
+        { name: "equip_name", comment: "장비명", width: "150px" },
+        { name: "vendor_code", comment: "제조사명", width: "150px" },
+        { name: "generation_code", comment: "세대구분", width: "150px" },
+        { name: "cell_no", comment: "CELL NUM", width: "150px" },
+        { name: "cell_fdd_id", comment: "FDD ID", width: "150px" },
+        { name: "global_cell_id", comment: "GCI", width: "150px" },
+        { name: "upper_team_name", comment: "상위부서명", width: "200px" },
+        { name: "team_name", comment: "팀명", width: "150px" },
+        { name: "open_date", comment: "개통일", width: "150px" },
+        { name: "ip_address", comment: "IP ADDRESS", width: "150px" },
+        { name: "address", comment: "주소명", width: "250px" },
+        { name: "user_name", comment: "정관리자", width: "150px" },
+        { name: "pcsphone", comment: "PHONE", width: "150px" },
       ])
       // setSelectedRow(data[0].ru_id)
     } else {
@@ -103,7 +103,7 @@ export function CmTableRu({ selectedCode }: TableProps) {
 
   return (
     <TableContainer
-      component={Paper}
+      className="mt-5 rounded-md"
       sx={{
         maxHeight: "400px",
         overflow: "auto",
@@ -112,18 +112,39 @@ export function CmTableRu({ selectedCode }: TableProps) {
     >
       <Table
         aria-label="simple table"
-        sx={{
-          // minHeight: "30vh",
-          borderBottom: "none",
-          background: "#fafafa",
-        }}
+        sx={[
+          (theme) => ({
+            "& .MuiTableCell-root": { padding: "4px 16px", height: "40px" },
+            backgroundColor: "#fafafa",
+            ...theme.applyStyles("dark", {
+              backgroundColor: "#000",
+            }),
+            tableLayout: "fixed",
+          }),
+        ]}
       >
-        <TableHead className="bg-gray-200 dark:bg-gray-800">
+        <TableHead
+          sx={[
+            (theme) => ({
+              height: "40px",
+              background: "#e5e7eb",
+              ...theme.applyStyles("dark", {
+                backgroundColor: "#191919",
+              }),
+            }),
+          ]}
+        >
           <TableRow>
             {columns.map((column) => (
               <TableCell
                 key={column.name}
-                className="whitespace-nowrap font-semibold text-gray-600 dark:text-white"
+                className="font-semibold text-gray-600 dark:text-white"
+                sx={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  width: column.width,
+                }}
               >
                 {column.comment}
               </TableCell>
@@ -135,7 +156,11 @@ export function CmTableRu({ selectedCode }: TableProps) {
         </TableHead>
         <TableBody>
           {datas.length === 0 ? (
-            <TableRow>
+            <TableRow
+              sx={{
+                height: "10rem",
+              }}
+            >
               <TableCell
                 className="dark:bg-black dark:text-white"
                 colSpan={columns.length}
@@ -172,9 +197,17 @@ export function CmTableRu({ selectedCode }: TableProps) {
                     return (
                       <TableCell
                         key={column.name}
-                        className="whitespace-nowrap dark:bg-black dark:text-white"
+                        className="dark:bg-black dark:text-white"
+                        sx={{
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          width: column.width,
+                        }}
                       >
-                        {formatDate(String(value))}
+                        <Tooltip title={formatDate(String(value))} arrow>
+                          <span>{formatDate(String(value))}</span>
+                        </Tooltip>
                       </TableCell>
                     )
                   }
@@ -182,8 +215,19 @@ export function CmTableRu({ selectedCode }: TableProps) {
                   // 일반 값 처리
                   if (value !== null && value !== undefined) {
                     return (
-                      <TableCell className="dark:bg-black dark:text-white" key={column.name}>
-                        {String(value)}
+                      <TableCell
+                        className="dark:bg-black dark:text-white"
+                        key={column.name}
+                        sx={{
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          width: column.width,
+                        }}
+                      >
+                        <Tooltip title={String(value)} arrow>
+                          <span>{String(value)}</span>
+                        </Tooltip>
                       </TableCell>
                     )
                   }
