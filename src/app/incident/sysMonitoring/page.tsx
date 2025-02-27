@@ -86,6 +86,7 @@ export default function SocketClient() {
                 ...theme.applyStyles("dark", {
                   backgroundColor: "#000",
                 }),
+                tableLayout: "fixed",
               }),
             ]}
           >
@@ -105,6 +106,12 @@ export default function SocketClient() {
                   <TableCell
                     key={`${obj.key}header`}
                     className="font-semibold text-gray-600 dark:text-white"
+                    sx={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      width: obj.width,
+                    }}
                   >
                     {obj.name}
                   </TableCell>
@@ -131,7 +138,16 @@ export default function SocketClient() {
                 incidents?.map((d) => (
                   <TableRow key={d.log_time} onClick={() => handleOpenDialog(d)}>
                     {IncidentSysLogTypeKor.map((obj) => (
-                      <TableCell key={`${d.log_time}${obj.key}`} sx={{ color: getColor(obj, d) }}>
+                      <TableCell
+                        key={`${d.log_time}${obj.key}`}
+                        sx={{
+                          color: getColor(obj, d),
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          width: obj.width,
+                        }}
+                      >
                         {d[obj.key]}
                       </TableCell>
                     ))}
