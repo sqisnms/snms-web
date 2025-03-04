@@ -7,6 +7,7 @@ export async function getSystemMonitorList() {
   const logResult = await clickhouse.query({
     query: `
     SELECT * FROM SMDB.VI_SM_SYSTEM_MONITOR_LIST
+    ORDER BY server_id asc
     `,
     format: "JSONEachRow",
   })
