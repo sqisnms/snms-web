@@ -54,7 +54,7 @@ export function SystemMonitorServerTable({ selectedCode, setSelectedCode }: Tabl
   }, [JSON.stringify(data)])
 
   useEffect(() => {
-    setSelectedCode(selectedRow)
+    setSelectedCode(`&var-server_id=${selectedRow}`)
   }, [selectedRow, setSelectedCode])
 
   const formatDate = (dateString: string | null) => {
@@ -79,7 +79,7 @@ export function SystemMonitorServerTable({ selectedCode, setSelectedCode }: Tabl
     <TableContainer
       className="mt-5 rounded-md"
       sx={{
-        maxHeight: "400px",
+        maxHeight: "250px",
         overflow: "auto",
         mb: "1rem",
       }}
@@ -123,9 +123,6 @@ export function SystemMonitorServerTable({ selectedCode, setSelectedCode }: Tabl
                 {column.comment}
               </TableCell>
             ))}
-            {/* <TableCell className="font-semibold text-gray-600">Column 1</TableCell>
-            <TableCell className="font-semibold text-gray-600">Column 2</TableCell>
-            <TableCell className="font-semibold text-gray-600">Column 3</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
