@@ -20,6 +20,7 @@ export default function Page() {
       {/* <ProcessOption /> */}
       {/* <div style={{ width: 50, height: 20 }} /> */}
       <SystemMonitorProcessTable selectedCode={selectedCode} setSelectedCode={setSelectedCode} />
+      <div style={{ width: 50, height: 20 }} />
       <GrafanaIframe
         src="/grafana/d/be1q2wlewne9sc?kiosk"
         selected={selected}

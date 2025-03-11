@@ -59,6 +59,10 @@ export function ProcessMastEditPopup({
   })
 
   const handleSavePopup = () => {
+    if (!editData.server_id || !editData.process_name) {
+      toast.error("Server_ID 와 프로세스명은 필수항목입니다")
+      return
+    }
     if (type === "add") {
       insertMutation.mutate(editData)
     } else {
@@ -89,12 +93,14 @@ export function ProcessMastEditPopup({
       fullWidth
       sx={{
         "& .MuiDialog-paper": {
-          height: "635px",
-          maxHeight: "635px",
+          height: "435px",
+          maxHeight: "435px",
         },
       }}
     >
-      <DialogTitle className="dark:text-white">권한 선택</DialogTitle>
+      <DialogTitle className="dark:text-white">
+        {type === "add" ? "프로세스 등록" : "프로세스 수정"}
+      </DialogTitle>
       <DialogContent>
         {ProcessMastTypeKor.map((obj) => {
           return (
