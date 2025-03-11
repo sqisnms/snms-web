@@ -128,7 +128,7 @@ export function SystemMonitorProcessTable({ selectedCode, setSelectedCode }: Tab
       <TableContainer
         className="mt-5 rounded-md"
         sx={{
-          maxHeight: "250px",
+          maxHeight: "200px",
           overflow: "auto",
           mb: "1rem",
         }}
