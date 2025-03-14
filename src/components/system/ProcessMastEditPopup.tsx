@@ -1,6 +1,24 @@
-import { getProcessMast, insertProcessMast, updateProcessMast } from "@/actions/system-actions"
+import { getCodeCH } from "@/actions/common-actions"
+import {
+  getProcessMast,
+  getProcessName,
+  getServerId,
+  insertProcessMast,
+  updateProcessMast,
+} from "@/actions/system-actions"
 import { defaultProcessMast, ProcessMastType, ProcessMastTypeKor } from "@/types/system"
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material"
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
@@ -25,6 +43,26 @@ export function ProcessMastEditPopup({
     queryKey: ["getProcessMast", param],
     queryFn: () => getProcessMast(param ?? { serverId: "", processName: "" }),
     enabled: type === "mod",
+  })
+
+  const { data: dataServerId } = useQuery({
+    queryKey: ["getServerId"],
+    queryFn: () => getServerId(),
+  })
+
+  const { data: dataProcessName } = useQuery({
+    queryKey: ["getProcessName", editData.server_id],
+    queryFn: () => getProcessName({ serverId: editData.server_id }),
+  })
+
+  const { data: dataProcessKind } = useQuery({
+    queryKey: ["getProcessKind"],
+    queryFn: () => getCodeCH({ category: "process_kind" }),
+  })
+
+  const { data: dataExecuteKind } = useQuery({
+    queryKey: ["getExecuteKind"],
+    queryFn: () => getCodeCH({ category: "execute_kind" }),
   })
 
   const insertMutation = useMutation({
@@ -76,14 +114,21 @@ export function ProcessMastEditPopup({
 
   useEffect(() => {
     if (type === "add") {
-      setEditData(defaultProcessMast)
+      setEditData({
+        // editData.server_id 가 변경되면 dataProcessName 이 재조회되기 때문에 선택된 값을 유지
+        server_id: editData.server_id || (dataServerId?.[0]?.equip_id ?? ""),
+        process_name: dataProcessName?.[0]?.process_name ?? "",
+        process_kind: dataProcessKind?.[0]?.code ?? "",
+        process_directory: "",
+        execute_kind: dataExecuteKind?.[0]?.code ?? "",
+      })
     } else if (data) {
       setEditData(data)
     } else {
       // 여기 들어올 일은 없음
       setEditData(defaultProcessMast)
     }
-  }, [data, type, open])
+  }, [data, type, open, dataServerId, dataProcessName, dataProcessKind, dataExecuteKind])
 
   return (
     <Dialog
@@ -103,6 +148,150 @@ export function ProcessMastEditPopup({
       </DialogTitle>
       <DialogContent>
         {ProcessMastTypeKor.map((obj) => {
+          if (obj.key === "server_id") {
+            return (
+              <FormControl
+                key={`${obj.key}header`}
+                variant="outlined"
+                className="mb-2 mt-2"
+                fullWidth
+              >
+                <InputLabel id={obj.key}>{obj.key}</InputLabel>
+                <Select
+                  value={editData[obj.key]}
+                  onChange={(e) => {
+                    handleChange(obj.key, e.target.value)
+                  }}
+                  label={obj.key}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  className="bg-white text-sm dark:bg-gray-400"
+                  disabled={type === "mod" && !!obj.readOnlyOnUpdate}
+                >
+                  {dataServerId?.map((d) => {
+                    return (
+                      <MenuItem
+                        key={`${obj.key}header${d.equip_id}`}
+                        value={d.equip_id}
+                        className="text-sm"
+                      >
+                        {d.equip_id}
+                      </MenuItem>
+                    )
+                  })}
+                </Select>
+              </FormControl>
+            )
+          }
+          if (obj.key === "process_name") {
+            return (
+              <FormControl
+                key={`${obj.key}header`}
+                variant="outlined"
+                className="mb-2 mt-2"
+                fullWidth
+              >
+                <InputLabel id={obj.key}>{obj.key}</InputLabel>
+                <Select
+                  value={editData[obj.key]}
+                  onChange={(e) => {
+                    handleChange(obj.key, e.target.value)
+                  }}
+                  label={obj.key}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  className="bg-white text-sm dark:bg-gray-400"
+                  disabled={type === "mod" && !!obj.readOnlyOnUpdate}
+                >
+                  {dataProcessName?.map((d) => {
+                    return (
+                      <MenuItem
+                        key={`${obj.key}header${d.process_name}`}
+                        value={d.process_name}
+                        className="text-sm"
+                      >
+                        {d.process_name}
+                      </MenuItem>
+                    )
+                  })}
+                </Select>
+              </FormControl>
+            )
+          }
+          if (obj.key === "process_kind") {
+            return (
+              <FormControl
+                key={`${obj.key}header`}
+                variant="outlined"
+                className="mb-2 mt-2"
+                fullWidth
+              >
+                <InputLabel id={obj.key}>{obj.key}</InputLabel>
+                <Select
+                  value={editData[obj.key]}
+                  onChange={(e) => {
+                    handleChange(obj.key, e.target.value)
+                  }}
+                  label={obj.key}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  className="bg-white text-sm dark:bg-gray-400"
+                  disabled={type === "mod" && !!obj.readOnlyOnUpdate}
+                >
+                  {dataProcessKind?.map((d) => {
+                    return (
+                      <MenuItem
+                        key={`${obj.key}header${d.code}`}
+                        value={d.code}
+                        className="text-sm"
+                      >
+                        {d.code}
+                      </MenuItem>
+                    )
+                  })}
+                </Select>
+              </FormControl>
+            )
+          }
+          if (obj.key === "execute_kind") {
+            return (
+              <FormControl
+                key={`${obj.key}header`}
+                variant="outlined"
+                className="mb-2 mt-2"
+                fullWidth
+              >
+                <InputLabel id={obj.key}>{obj.key}</InputLabel>
+                <Select
+                  value={editData[obj.key]}
+                  onChange={(e) => {
+                    handleChange(obj.key, e.target.value)
+                  }}
+                  label={obj.key}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  className="bg-white text-sm dark:bg-gray-400"
+                  disabled={type === "mod" && !!obj.readOnlyOnUpdate}
+                >
+                  {dataExecuteKind?.map((d) => {
+                    return (
+                      <MenuItem
+                        key={`${obj.key}header${d.code}`}
+                        value={d.code}
+                        className="text-sm"
+                      >
+                        {d.code}
+                      </MenuItem>
+                    )
+                  })}
+                </Select>
+              </FormControl>
+            )
+          }
           return (
             <TextField
               key={`${obj.key}header`}
