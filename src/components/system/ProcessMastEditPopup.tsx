@@ -153,7 +153,7 @@ export function ProcessMastEditPopup({
               <FormControl
                 key={`${obj.key}header`}
                 variant="outlined"
-                className="mb-2 mt-2"
+                sx={{ mb: "0.5rem", mt: "0.5rem" }}
                 fullWidth
               >
                 <InputLabel id={obj.key}>{obj.key}</InputLabel>
@@ -189,7 +189,7 @@ export function ProcessMastEditPopup({
               <FormControl
                 key={`${obj.key}header`}
                 variant="outlined"
-                className="mb-2 mt-2"
+                sx={{ mb: "0.5rem", mt: "0.5rem" }}
                 fullWidth
               >
                 <InputLabel id={obj.key}>{obj.key}</InputLabel>
@@ -225,7 +225,7 @@ export function ProcessMastEditPopup({
               <FormControl
                 key={`${obj.key}header`}
                 variant="outlined"
-                className="mb-2 mt-2"
+                sx={{ mb: "0.5rem", mt: "0.5rem" }}
                 fullWidth
               >
                 <InputLabel id={obj.key}>{obj.key}</InputLabel>
@@ -261,7 +261,7 @@ export function ProcessMastEditPopup({
               <FormControl
                 key={`${obj.key}header`}
                 variant="outlined"
-                className="mb-2 mt-2"
+                sx={{ mb: "0.5rem", mt: "0.5rem" }}
                 fullWidth
               >
                 <InputLabel id={obj.key}>{obj.key}</InputLabel>
