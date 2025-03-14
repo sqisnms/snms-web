@@ -167,3 +167,36 @@ export async function deleteProcessMast({
 
   return logResult
 }
+
+export async function getServerId() {
+  const logResult = await clickhouse.query({
+    query: `
+    SELECT * FROM SMDB.VI_SM_PROCESS_MONITOR_SERVER_ID_COMBO
+    ORDER BY equip_id asc
+    `,
+    format: "JSONEachRow",
+  })
+  const logResultJson = await logResult.json()
+  const logResults = logResultJson as { equip_id: string }[]
+
+  return logResults
+}
+
+export async function getProcessName({ serverId }: { serverId: string }) {
+  const logResult = await clickhouse.query({
+    query: `
+    SELECT * FROM SMDB.VI_SM_PROCESS_MONITOR_PROCESS_NAME_COMBO
+    WHERE server_id = {serverId: String}
+    ORDER BY process_name asc
+    `,
+    format: "JSONEachRow",
+    query_params: {
+      serverId,
+    },
+  })
+  const logResultJson = await logResult.json()
+  console.log(logResultJson)
+  const logResults = logResultJson as { server_id: string; process_name: string }[]
+
+  return logResults
+}
