@@ -1,21 +1,48 @@
 "use client"
 
 import { MiniBoard } from "@/components/main/MiniBoard"
+import { useCms } from "@/config/Providers"
+import { SystemConfigType } from "@/types/systemConfig"
 import { Box, Grid, Typography } from "@mui/material"
 import Image from "next/image"
 
 // 함수 선언 방식으로 컴포넌트 정의
 function DashboardLayout() {
+  const cms = useCms()
+  const cmsInfo = cms?.reduce(
+    (acc, curr) => {
+      acc[curr.config_name as string] = curr
+      return acc
+    },
+    {} as { [key: string]: Partial<SystemConfigType> },
+  )
+  const logo = cmsInfo?.INIT_MAIN_LOGO?.value6
+    ? `/api/file?fileName=${cmsInfo?.INIT_MAIN_LOGO?.value6}`
+    : "/logo_w.png"
+  const bg = cmsInfo?.INIT_MAIN_BG?.value6
+    ? `/api/file?fileName=${cmsInfo?.INIT_MAIN_BG?.value6}`
+    : "/login_bg.png"
+  const mainTitle = cmsInfo?.INIT_MAIN_TITLE?.value6 ?? "미래의 연결, 혁신의 시작"
+  const subTitle =
+    cmsInfo?.INIT_MAIN_SUBTITLE?.value6 ??
+    "첨단 기술로 변화하는 도시와 산업의 동반자, S·NMS가 함께합니다."
   return (
     <div className="flex flex-1 flex-col">
       {/* Banner */}
       <Box className="dark:bg-black dark:text-white">
         <Box
           className="relative h-80 bg-cover bg-center"
-          style={{ backgroundImage: "url('/login_bg.png')" }}
+          style={{ backgroundImage: `url('${bg}')` }}
         >
           <Box className="absolute inset-0 flex flex-col items-center justify-center px-6 pb-2 text-center text-white">
-            <Image src="/logo_w.png" width="130" height="40" alt="로고" className="h-10" />
+            <Image
+              src={logo}
+              width="130"
+              height="40"
+              alt="로고"
+              className="h-10"
+              unoptimized // 이게 있어야 /api/file 이 제대로 먹힘. 최적화 방지.
+            />
             <hr className="mx-auto my-4 w-14 border-t-2 border-gray-300 opacity-60" />
             <Typography
               variant="h4"
@@ -27,7 +54,9 @@ function DashboardLayout() {
                 fontFamily: "Noto Sans KR",
               }}
             >
-              미래의 연결, 혁신의 시작
+              {/* {10 / 10 !== 1 ? "미래의 연결, 혁신의 시작" : "ㅋㅋ"} */}
+              {/* eslint-disable-next-line */}
+              {mainTitle}
             </Typography>
             <Typography
               variant="body1"
@@ -37,7 +66,7 @@ function DashboardLayout() {
                 fontFamily: "Noto Sans KR",
               }}
             >
-              첨단 기술로 변화하는 도시와 산업의 동반자, S·NMS가 함께합니다.
+              {subTitle}
             </Typography>
           </Box>
         </Box>

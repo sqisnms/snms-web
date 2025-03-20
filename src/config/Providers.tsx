@@ -1,5 +1,6 @@
 "use client"
 
+import { SystemConfigType } from "@/types/systemConfig"
 import { UserType } from "@/types/user"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { LocalizationProvider } from "@mui/x-date-pickers"
@@ -45,6 +46,33 @@ export const useUser = () => {
     throw new Error("useUser must be used within a UserProvider")
   }
   return context.currentUser
+}
+//
+
+// CmsProvider 설정. commonLayout 에서 조회 후 데이터 넣어서 provider 감쌈
+// const cms = useCms() 이런식으로 사용하면 됨
+interface CmsContextType {
+  cms: Partial<SystemConfigType>[] | null
+}
+
+const CmsContext = createContext<CmsContextType | undefined>(undefined)
+
+export function CmsProvider({
+  children,
+  value,
+}: {
+  children: React.ReactNode
+  value: CmsContextType
+}) {
+  return <CmsContext.Provider value={value}>{children}</CmsContext.Provider>
+}
+
+export const useCms = () => {
+  const context = useContext(CmsContext)
+  if (!context) {
+    throw new Error("useCms must be used within a CmsProvider")
+  }
+  return context.cms
 }
 //
 
