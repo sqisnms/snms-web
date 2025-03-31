@@ -1,11 +1,30 @@
 import { getCmsMainInfo, updateMainCms } from "@/actions/cms-action"
-import { Box, Button, FormControl, InputLabel, OutlinedInput } from "@mui/material"
+import CloudUploadIcon from "@mui/icons-material/CloudUpload"
+import SaveIcon from "@mui/icons-material/Save"
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  FormControl,
+  Grid,
+  InputLabel,
+  OutlinedInput,
+  Paper,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import Image from "next/image"
 import { ChangeEvent, useEffect, useState } from "react"
 import { toast } from "react-toastify"
 
 function CmsMain() {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+
   type MainCmsType = {
     bg: File | null
     logo: File | null
@@ -25,7 +44,7 @@ function CmsMain() {
   const [cms, setCms] = useState<MainCmsType>(emptyCms)
   const [validToSave, setValidToSave] = useState(false)
 
-  const { data: cmsMainList } = useQuery({
+  const { data: cmsMainList, isLoading } = useQuery({
     queryKey: ["getCmsMainInfo"],
     queryFn: () => getCmsMainInfo(),
   })
@@ -141,97 +160,259 @@ function CmsMain() {
     setValidToSave(true)
   }
 
-  return (
-    <Box>
-      <Box>
-        <FormControl variant="outlined" margin="normal">
-          <InputLabel htmlFor="bg_upload" shrink>
-            배경 업로드
-          </InputLabel>
-          <OutlinedInput
-            id="bg_upload"
-            type="file"
-            label="배경 업로드"
-            notched
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              handleFileChange("bg", e.target.files?.[0] ?? null)
-            }
-          />
-        </FormControl>
-
-        {cms.bgPath && (
-          <Image
-            src={`/api/file?fileName=${cms.bgPath}`}
-            width="130"
-            height="40"
-            alt="로고"
-            className="h-10 border border-solid border-gray-500 bg-gray-100"
-            unoptimized // 이게 있어야 /api/file 이 제대로 먹힘. 최적화 방지.
-          />
-        )}
+  if (isLoading) {
+    return (
+      <Box className="flex min-h-[400px] items-center justify-center">
+        <CircularProgress />
       </Box>
-      <Box>
-        <FormControl variant="outlined" margin="normal">
-          <InputLabel htmlFor="logo_upload" shrink>
-            로고 업로드
-          </InputLabel>
-          <OutlinedInput
-            id="logo_upload"
-            type="file"
-            label="로고 업로드"
-            notched
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              handleFileChange("logo", e.target.files?.[0] ?? null)
-            }
-          />
+    )
+  }
 
-          {cms.logoPath && (
+  return (
+    <Box className="mx-auto">
+      <Paper elevation={3} className="mb-6 rounded-lg bg-gray-100 p-4">
+        <Typography
+          variant="h6"
+          component="h1"
+          className="mb-3 border-b pb-2 font-bold text-gray-800"
+        >
+          메인 페이지 설정
+        </Typography>
+
+        {/* 여기에서 flex-col을 모바일 환경에서 적용하도록 변경 */}
+        <Box className={`flex ${isMobile ? "flex-col" : "flex-row flex-wrap"} gap-4`}>
+          {/* 배경 이미지 */}
+          <Box className={`${isMobile ? "w-full" : "min-w-[30%] flex-1"}`}>
+            <Typography variant="subtitle1" className="mb-2 font-medium text-gray-700">
+              배경 이미지
+            </Typography>
+
+            <Card className="bg-gray-50 transition-shadow duration-300 hover:shadow-md">
+              <CardContent>
+                <Box className="mb-4">
+                  <FormControl variant="outlined" fullWidth>
+                    <OutlinedInput
+                      id="bg_upload"
+                      type="file"
+                      className="bg-white"
+                      notched
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        handleFileChange("bg", e.target.files?.[0] ?? null)
+                      }
+                      startAdornment={<CloudUploadIcon className="mr-2 text-gray-500" />}
+                    />
+                  </FormControl>
+                </Box>
+
+                {cms.bgPath ? (
+                  <Box className="mt-3 rounded-md border border-solid border-gray-300 bg-white p-2">
+                    <Image
+                      src={`/api/file?fileName=${cms.bgPath}`}
+                      width={300}
+                      height={150}
+                      alt="배경 이미지"
+                      className="h-auto w-full rounded object-cover"
+                      unoptimized
+                    />
+                    <Typography variant="caption" className="mt-1 block text-gray-500">
+                      현재 배경 이미지: {cms.bgPath?.split("/").pop()}
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Box className="mt-3 flex h-32 items-center justify-center rounded-md border border-dashed border-gray-300 bg-gray-100 p-4">
+                    <Typography variant="body2" className="text-center text-gray-500">
+                      배경 이미지가 설정되지 않았습니다
+                    </Typography>
+                  </Box>
+                )}
+              </CardContent>
+            </Card>
+          </Box>
+
+          {/* 로고 이미지 */}
+          <Box className={`${isMobile ? "w-full" : "min-w-[30%] flex-1"}`}>
+            <Typography variant="subtitle1" className="mb-2 font-medium text-gray-700">
+              로고 이미지
+            </Typography>
+
+            <Card className="bg-gray-50 transition-shadow duration-300 hover:shadow-md">
+              <CardContent>
+                <Box className="mb-4">
+                  <FormControl variant="outlined" fullWidth>
+                    <OutlinedInput
+                      id="logo_upload"
+                      type="file"
+                      className="bg-white"
+                      notched
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        handleFileChange("logo", e.target.files?.[0] ?? null)
+                      }
+                      startAdornment={<CloudUploadIcon className="mr-2 text-gray-500" />}
+                    />
+                  </FormControl>
+                </Box>
+
+                {cms.logoPath ? (
+                  <Box className="mt-3 rounded-md border border-solid border-gray-300 bg-white p-2">
+                    <Box className="flex h-20 items-center justify-center">
+                      <Image
+                        src={`/api/file?fileName=${cms.logoPath}`}
+                        width={200}
+                        height={60}
+                        alt="로고 이미지"
+                        className="max-h-16 object-contain"
+                        unoptimized
+                      />
+                    </Box>
+                    <Typography variant="caption" className="mt-1 block text-gray-500">
+                      현재 로고 이미지: {cms.logoPath?.split("/").pop()}
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Box className="mt-3 flex h-32 items-center justify-center rounded-md border border-dashed border-gray-300 bg-gray-100 p-4">
+                    <Typography variant="body2" className="text-center text-gray-500">
+                      로고 이미지가 설정되지 않았습니다
+                    </Typography>
+                  </Box>
+                )}
+              </CardContent>
+            </Card>
+          </Box>
+
+          {/* 텍스트 설정 */}
+          <Box className={`${isMobile ? "w-full" : "min-w-[30%] flex-1"}`}>
+            <Typography variant="subtitle1" className="mb-2 font-medium text-gray-700">
+              텍스트 설정
+            </Typography>
+
+            <Card className="bg-gray-50 transition-shadow duration-300 hover:shadow-md">
+              <CardContent>
+                <Grid container spacing={3} direction="column">
+                  {/* 메인 타이틀 */}
+                  <Grid item xs={12}>
+                    <FormControl variant="outlined" fullWidth>
+                      <InputLabel htmlFor="mainTitle" shrink className="bg-gray-50 px-1">
+                        메인 타이틀
+                      </InputLabel>
+                      <OutlinedInput
+                        id="mainTitle"
+                        type="text"
+                        value={cms.mainTitle}
+                        label="메인 타이틀"
+                        className="bg-white"
+                        placeholder="메인 페이지 타이틀을 입력하세요"
+                        notched
+                        onChange={(e) => handleTextChange("mainTitle", e.target.value)}
+                      />
+                      <Typography variant="caption" className="mt-1 text-gray-500">
+                        메인 페이지에 표시될 큰 제목입니다
+                      </Typography>
+                    </FormControl>
+                  </Grid>
+
+                  {/* 서브 타이틀 */}
+                  <Grid item xs={12}>
+                    <FormControl variant="outlined" fullWidth>
+                      <InputLabel htmlFor="subTitle" shrink className="bg-gray-50 px-1">
+                        서브 타이틀
+                      </InputLabel>
+                      <OutlinedInput
+                        id="subTitle"
+                        type="text"
+                        value={cms.subTitle}
+                        label="서브 타이틀"
+                        className="bg-white"
+                        placeholder="서브 타이틀을 입력하세요"
+                        notched
+                        onChange={(e) => handleTextChange("subTitle", e.target.value)}
+                      />
+                      <Typography variant="caption" className="mt-1 text-gray-500">
+                        메인 타이틀 아래에 표시될 부제목입니다
+                      </Typography>
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+          </Box>
+        </Box>
+
+        <Box className="mt-6 flex justify-end">
+          <Button
+            onClick={handleSave}
+            color="primary"
+            variant="contained"
+            size="large"
+            className="bg-blue-600 px-6 py-2 transition-colors hover:bg-blue-700"
+            startIcon={<SaveIcon />}
+            disabled={updateMutation.isPending}
+          >
+            {updateMutation.isPending ? "저장 중..." : "설정 저장"}
+          </Button>
+        </Box>
+      </Paper>
+
+      {/* 미리보기 섹션 */}
+      <Paper elevation={3} className="rounded-lg bg-white p-4">
+        <Typography
+          variant="h6"
+          component="h2"
+          className="mb-4 border-b pb-2 font-medium text-gray-800"
+        >
+          미리보기
+        </Typography>
+
+        <Box
+          className="relative overflow-hidden rounded-lg border border-gray-300"
+          style={{ height: "200px" }}
+        >
+          {cms.bgPath ? (
             <Image
-              src={`/api/file?fileName=${cms.logoPath}`}
-              width="130"
-              height="40"
-              alt="로고"
-              className="h-10 border border-solid border-gray-500 bg-gray-100"
+              src={`/api/file?fileName=${cms.bgPath}`}
+              fill
+              alt="배경 미리보기"
+              className="object-cover"
               unoptimized // 이게 있어야 /api/file 이 제대로 먹힘. 최적화 방지.
             />
+          ) : (
+            <Box className="flex h-full w-full items-center justify-center bg-gray-200">
+              <Typography variant="body2" className="text-gray-500">
+                배경 이미지 미리보기
+              </Typography>
+            </Box>
           )}
-        </FormControl>
-      </Box>
-      <Box>
-        <FormControl variant="outlined" margin="normal">
-          <InputLabel htmlFor="mainTitle" shrink>
-            메인 타이틀
-          </InputLabel>
-          <OutlinedInput
-            id="mainTitle"
-            type="text"
-            value={cms.mainTitle}
-            label="메인 타이틀"
-            notched
-            sx={{ mb: 2 }}
-            onChange={(e) => handleTextChange("mainTitle", e.target.value)}
-          />
-        </FormControl>
-      </Box>
-      <Box>
-        <FormControl variant="outlined" margin="normal">
-          <InputLabel htmlFor="subTitle" shrink>
-            서브 타이틀
-          </InputLabel>
-          <OutlinedInput
-            id="subTitle"
-            type="text"
-            value={cms.subTitle}
-            label="서브 타이틀"
-            notched
-            sx={{ mb: 2 }}
-            onChange={(e) => handleTextChange("subTitle", e.target.value)}
-          />
-        </FormControl>
-      </Box>
-      <Button onClick={handleSave} color="primary" variant="outlined">
-        저장
-      </Button>
+
+          <Box
+            className="absolute inset-0 flex flex-col items-center justify-center p-4 text-white"
+            style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
+          >
+            {cms.logoPath && (
+              <Box className="mb-4 rounded bg-white p-2">
+                <Image
+                  src={`/api/file?fileName=${cms.logoPath}`}
+                  width={180}
+                  height={60}
+                  alt="로고 미리보기"
+                  className="h-12 w-auto object-contain"
+                  unoptimized
+                />
+              </Box>
+            )}
+
+            {cms.mainTitle && (
+              <Typography variant="h4" className="text-shadow mb-2 text-center font-bold">
+                {cms.mainTitle}
+              </Typography>
+            )}
+
+            {cms.subTitle && (
+              <Typography variant="subtitle1" className="text-shadow text-center">
+                {cms.subTitle}
+              </Typography>
+            )}
+          </Box>
+        </Box>
+      </Paper>
     </Box>
   )
 }
