@@ -19,6 +19,14 @@ const nextConfig = {
         source: "/token/:path*",
         destination: `${process.env.AUTH_SERVER_URL}/api/token/:path*`,
       },
+      {
+        source: "/_superset/:path*",
+        destination: `${process.env.SUPERSET_URL}/:path*`,
+      },
+      {
+        source: "/superset/:path*",
+        destination: `${process.env.SUPERSET_URL}/superset/:path*/`,
+      },
     ]
   },
   webpack(config) {
