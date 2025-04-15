@@ -18,7 +18,7 @@ const { CLICKHOUSE_URL } = process.env
 const clickhouse = createClient({ host: CLICKHOUSE_URL })
 
 async function fetchSysLogsFromClickHouse() {
-  console.log(new Date().toTimeString())
+  // console.log(new Date().toTimeString())
   try {
     const query = `
       SELECT event_time, server_id, log_message, log_level, log_time
@@ -42,19 +42,20 @@ export async function sendIncidentSysToSocket(io: SocketIOServer, intervalMs: nu
 
   // 10초마다 실행 (원하는 간격으로 조정 가능)
   setInterval(async () => {
-    console.log("📢 ClickHouse에서 로그 조회 중...")
+    // console.log("📢 ClickHouse에서 로그 조회 중...")
     const logs = await fetchSysLogsFromClickHouse()
 
     if (logs.length === 0 || !io) {
       console.log("⚠️ 가져올 로그 데이터가 없거나 소켓서버가 생성되지 않았습니다.")
     } else {
-      console.log(`📦 ${logs.length}개의 로그를 ws로 전송 중...`)
+      // console.log(`📦 ${logs.length}개의 로그를 ws로 전송 중...sendIncidentSysToSocket`)
+      console.log(`sendIncidentSysToSocket ${logs.length}`)
 
       logs.reverse().forEach((log) => {
         io.emit("incidentSys", log)
       })
 
-      console.log(`✅ ${logs.length}개의 로그가 ws에 전송됨.`)
+      // console.log(`✅ ${logs.length}개의 로그가 ws에 전송됨.`)
     }
   }, intervalMs)
 }

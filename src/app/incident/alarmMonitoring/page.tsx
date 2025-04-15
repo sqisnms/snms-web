@@ -1,7 +1,11 @@
 "use client"
 
-import { IncidentPopup } from "@/components/incident/IncidentPopup"
-import { IncidentLogColumnType, IncidentLogType, IncidentLogTypeKor } from "@/types/incident"
+import { IncidentAlarmPopup } from "@/components/incident/IncidentAlarmPopup"
+import {
+  IncidentAlarmLogColumnType,
+  IncidentAlarmLogType,
+  IncidentAlarmLogTypeKor,
+} from "@/types/incident"
 import {
   Box,
   CircularProgress,
@@ -19,9 +23,11 @@ import { DisconnectReason } from "socket.io"
 import { io } from "socket.io-client"
 
 export default function SocketClient() {
-  const [incidents, setIncidents] = useState<IncidentLogType[]>([])
+  const [incidents, setIncidents] = useState<IncidentAlarmLogType[]>([])
   const [openDialog, setOpenDialog] = useState(false)
-  const [incidentForPopup, setIncidentForPopup] = useState<Partial<IncidentLogType> | null>(null)
+  const [incidentForPopup, setIncidentForPopup] = useState<Partial<IncidentAlarmLogType> | null>(
+    null,
+  )
 
   useEffect(() => {
     const socketInstance = io({
@@ -31,10 +37,18 @@ export default function SocketClient() {
       reconnectionDelay: 1000,
     })
 
-    socketInstance.on("incident", (msg: IncidentLogType) => {
+    socketInstance.on("incidentAlarm", (msg: IncidentAlarmLogType) => {
       setIncidents((prev) => {
-        const index = prev.findIndex((incident) => incident.log_time === msg.log_time)
+        // 같은 데이터
+        const index = prev.findIndex(
+          (incident) =>
+            incident.event_time === msg.event_time &&
+            incident.current_equip_id === msg.current_equip_id &&
+            incident.alarmcode === msg.alarmcode &&
+            incident.severity === msg.severity,
+        )
         if (index !== -1) {
+          // 내용이 변한게 없는지
           if (JSON.stringify(prev[index]) === JSON.stringify(msg)) {
             return prev
           }
@@ -55,15 +69,15 @@ export default function SocketClient() {
     }
   }, [])
 
-  const getColor = (obj: IncidentLogColumnType, row: Partial<IncidentLogType>) => {
-    if (obj.key === "log_level") {
-      if (row.log_level === "CRITICAL") {
+  const getColor = (obj: IncidentAlarmLogColumnType, row: Partial<IncidentAlarmLogType>) => {
+    if (obj.key === "severity") {
+      if (row.severity === "critical") {
         return "red"
       }
-      if (row.log_level === "ERROR") {
+      if (row.severity === "major") {
         return "orange"
       }
-      if (row.log_level === "WARNING") {
+      if (row.severity === "minor") {
         return "blue"
       }
       return "inherit"
@@ -71,7 +85,7 @@ export default function SocketClient() {
     return "inherit"
   }
 
-  const handleOpenDialog = (incident: Partial<IncidentLogType>) => {
+  const handleOpenDialog = (incident: Partial<IncidentAlarmLogType>) => {
     setIncidentForPopup(incident)
     setOpenDialog(true)
   }
@@ -116,7 +130,7 @@ export default function SocketClient() {
               ]}
             >
               <TableRow>
-                {IncidentLogTypeKor.map((obj) => (
+                {IncidentAlarmLogTypeKor.map((obj) => (
                   <TableCell
                     key={`${obj.key}header`}
                     className="font-semibold text-gray-600 dark:text-white"
@@ -140,7 +154,7 @@ export default function SocketClient() {
                   }}
                 >
                   <TableCell
-                    colSpan={IncidentLogTypeKor.length}
+                    colSpan={IncidentAlarmLogTypeKor.length}
                     sx={{
                       textAlign: "center",
                     }}
@@ -151,7 +165,7 @@ export default function SocketClient() {
               ) : (
                 incidents?.map((d) => (
                   <TableRow key={d.log_time} onClick={() => handleOpenDialog(d)}>
-                    {IncidentLogTypeKor.map((obj) => (
+                    {IncidentAlarmLogTypeKor.map((obj) => (
                       <TableCell
                         key={`${d.log_time}${obj.key}`}
                         sx={{
@@ -173,7 +187,7 @@ export default function SocketClient() {
         </TableContainer>
       </Paper>
       {incidentForPopup && (
-        <IncidentPopup
+        <IncidentAlarmPopup
           open={openDialog}
           handleClose={handleCloseDialog}
           incident={incidentForPopup}

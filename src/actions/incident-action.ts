@@ -1,7 +1,8 @@
 "use server"
 
 import { clickhouse } from "@/config/db"
-import { IncidentLogType, IncidentSysLogType } from "@/types/incident"
+import { IncidentAlarmLogType, IncidentLogType, IncidentSysLogType } from "@/types/incident"
+import { getCurrentUser } from "./account-actions"
 
 export async function getIncidentList({
   rowsPerPage,
@@ -160,5 +161,43 @@ export async function getIncidentSysList({
     crit: totalResultFirst.crit,
     err: totalResultFirst.err,
     warning: totalResultFirst.warning,
+  }
+}
+
+export async function updateTerminate({
+  event_time,
+  current_equip_id,
+  alarmcode,
+  severity,
+}: Partial<IncidentAlarmLogType>) {
+  try {
+    const currentUser = await getCurrentUser() // 유저 정보
+    const user_id = currentUser?.user_id
+
+    const logResult = await clickhouse.command({
+      query: `
+        ALTER TABLE FMDB.TBR_FM_ALARM_OBJECT
+        UPDATE
+          terminationtimestamp = now64(6),
+          terminationuserid = {user_id: String},
+          state = 2,
+          log_time = now64(6)
+        WHERE formatDateTime(eventtime, '%Y-%m-%d %H:%i:%S') = {event_time: String}
+          AND equip_id = {current_equip_id: String} AND alarmcode = {alarmcode: String}
+          AND severity = {severity: String}
+      `,
+      query_params: {
+        event_time,
+        current_equip_id,
+        alarmcode,
+        severity,
+        user_id,
+      },
+    })
+
+    return logResult
+  } catch (error) {
+    console.error("Update failed:", error)
+    throw error
   }
 }
