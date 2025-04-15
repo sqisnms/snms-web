@@ -36,7 +36,18 @@ export default function SocketClient() {
     })
 
     socketInstance.on("incidentSys", (msg: IncidentSysLogType) => {
-      setIncidents((prev) => [msg, ...prev].slice(0, 100))
+      setIncidents((prev) => {
+        const index = prev.findIndex((incident) => incident.log_time === msg.log_time)
+        if (index !== -1) {
+          if (JSON.stringify(prev[index]) === JSON.stringify(msg)) {
+            return prev
+          }
+          const updatedPrev = [...prev]
+          updatedPrev[index] = msg
+          return updatedPrev.slice(0, 100)
+        }
+        return [msg, ...prev].slice(0, 100)
+      })
     })
 
     socketInstance.on("disconnect", (reason: DisconnectReason) => {
@@ -76,7 +87,14 @@ export default function SocketClient() {
   return (
     <Box className="p-0">
       <Paper className="mb-6 w-full p-0 shadow-md dark:bg-black">
-        <TableContainer className="mt-5 rounded-md">
+        <TableContainer
+          className="mt-5 rounded-md"
+          sx={{
+            maxHeight: "calc(100vh - 200px)", // 최대 높이 설정, 화면 크기에 맞게 조절
+            overflowX: "auto", // 가로 스크롤 추가
+            overflowY: "auto", // 세로 스크롤 추가
+          }}
+        >
           <Table
             aria-label="simple table"
             sx={[
